@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "HMWeapon.generated.h"
 
+class USkeletalMeshComponent;
+class UDamageType;
+
 UCLASS()
 class HORDEMODE_API AHMWeapon : public AActor
 {
@@ -19,10 +22,17 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	USkeletalMeshComponent * MeshComponent;
+
+	UFUNCTION(BlueprintCallable, Category="Weapon")
+	void Fire();
+
+	// TODO: lookin into
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon")
+	TSubclassOf<UDamageType> DamageType;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	
-	
 };

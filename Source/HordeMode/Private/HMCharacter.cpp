@@ -55,6 +55,15 @@ void AHMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AHMCharacter::JumpAction);
 }
 
+FVector AHMCharacter::GetPawnViewLocation() const
+{
+	if (CameraComponent) {
+		return CameraComponent->GetComponentLocation();
+	}
+	// protection
+	return Super::GetPawnViewLocation();
+}
+
 /*
 		Vector = Length / Magnitude and a Direction.
 		Scalar Multiplication / Scaled the forward vector. 
