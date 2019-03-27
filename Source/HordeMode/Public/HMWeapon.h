@@ -18,6 +18,7 @@ class HORDEMODE_API AHMWeapon : public AActor
 public:	
 	AHMWeapon();
 
+	virtual void Tick(float DeltaTime) override;
 protected:
 	virtual void BeginPlay() override;
 
@@ -25,7 +26,7 @@ protected:
 	USkeletalMeshComponent * MeshComponent;
 
 	UFUNCTION(BlueprintCallable, Category="Weapon")
-	void Fire();
+	virtual void Fire();
 
 	// TODO: Investigate Damage System
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon")
@@ -45,7 +46,4 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	UParticleSystem * BulletTracer;
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 };
