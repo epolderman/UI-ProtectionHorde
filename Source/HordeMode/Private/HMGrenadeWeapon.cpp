@@ -18,17 +18,23 @@ AHMGrenadeWeapon::AHMGrenadeWeapon()
 
 void AHMGrenadeWeapon::Fire()
 {
-	// try and fire a projectile
-	if (ProjectileClass)
+	UE_LOG(LogClass, Log, TEXT("Fire()"));
+
+	AActor * Owner = GetOwner();
+	if (Owner && ProjectileClass) 
 	{
+		UE_LOG(LogClass, Log, TEXT("Inside Owner Fire()"));
+		FVector EyeLocation;
+		FRotator EyeRotation;
+		Owner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
+
 		FVector MuzzleLocation = MeshComponent->GetSocketLocation(MuzzleSocketName);
-		FRotator MuzzleRotation = MeshComponent->GetSocketRotation(MuzzleSocketName);
+	
 
 		//Set Spawn Collision Handling Override
 		FActorSpawnParameters ActorSpawnParams;
-		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-		// ActorSpawnParams.Instigator = this;
-		// spawn the projectile at the muzzle
-		GetWorld()->SpawnActor<AHMProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation, ActorSpawnParams);
+		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	
+		GetWorld()->SpawnActor<AActor>(ProjectileClass, MuzzleLocation, EyeRotation, ActorSpawnParams);
 	}
 }

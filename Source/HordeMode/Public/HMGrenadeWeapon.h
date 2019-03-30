@@ -18,5 +18,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	TSubclassOf<AHMProjectile> ProjectileClass;
 protected:
+
+	//UFUNCTION(BlueprintCallable, Category = "Weapon")
 	virtual void Fire() override;
 };

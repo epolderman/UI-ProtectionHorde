@@ -31,23 +31,13 @@ AHMProjectile::AHMProjectile()
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
 
+	UE_LOG(LogClass, Log, TEXT("Projectile Construction"));
+
 	// Die after 3 seconds by default
 	InitialLifeSpan = 3.0f;
 }
 
-// Called when the game starts or when spawned
-void AHMProjectile::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
 
-// Called every frame
-void AHMProjectile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
 
 void AHMProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
