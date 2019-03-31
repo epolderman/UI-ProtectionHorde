@@ -49,6 +49,7 @@ void AHMProjectile::OnExplode() {
 void AHMProjectile::LifeSpanExpired()
 {
 	OnExplode();
+	// TODO: write test for radial damage
 	UGameplayStatics::ApplyRadialDamage(GetWorld(), 3.0f, GetActorLocation(), 3.0f, DamageType, TArray<AActor*>());
 	Super::LifeSpanExpired();
 }
