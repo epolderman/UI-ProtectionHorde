@@ -71,7 +71,12 @@ FVector AHMCharacter::GetPawnViewLocation() const
 */
 void AHMCharacter::MoveForward(float Value) {
 	
-	AddMovementInput(GetActorForwardVector() * Value);
+	if (Value != 0.0f) {
+		UE_LOG(LogClass, Log, TEXT("move x %F"), GetActorLocation().X);
+		UE_LOG(LogClass, Log, TEXT("move y %F"), GetActorLocation().Y);
+		UE_LOG(LogClass, Log, TEXT("move z %F"), GetActorLocation().Z);
+		AddMovementInput(GetActorForwardVector() * Value);
+	}
 }
 
 void AHMCharacter::MoveRight(float Value) {

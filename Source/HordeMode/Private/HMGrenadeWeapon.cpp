@@ -18,12 +18,12 @@ AHMGrenadeWeapon::AHMGrenadeWeapon()
 
 void AHMGrenadeWeapon::Fire()
 {
-	UE_LOG(LogClass, Log, TEXT("Fire()"));
+	
 
 	AActor * Owner = GetOwner();
 	if (Owner && ProjectileClass) 
 	{
-		UE_LOG(LogClass, Log, TEXT("Inside Owner Fire()"));
+		
 		FVector EyeLocation;
 		FRotator EyeRotation;
 		Owner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
@@ -35,6 +35,6 @@ void AHMGrenadeWeapon::Fire()
 		FActorSpawnParameters ActorSpawnParams;
 		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	
-		GetWorld()->SpawnActor<AActor>(ProjectileClass, MuzzleLocation, EyeRotation, ActorSpawnParams);
+		GetWorld()->SpawnActor<AHMProjectile>(ProjectileClass, MuzzleLocation, EyeRotation, ActorSpawnParams);
 	}
 }
