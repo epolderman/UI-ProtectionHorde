@@ -30,8 +30,6 @@ void AHMGrenadeWeapon::Fire()
 
 		FVector MuzzleLocation = MeshComponent->GetSocketLocation(MuzzleSocketName);
 	
-
-		//Set Spawn Collision Handling Override
 		FActorSpawnParameters ActorSpawnParams;
 		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	

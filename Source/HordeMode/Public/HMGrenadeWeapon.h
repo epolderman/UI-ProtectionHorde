@@ -7,6 +7,8 @@
 #include "HMGrenadeWeapon.generated.h"
 
 class AHMProjectile;
+
+
 UCLASS()
 class HORDEMODE_API AHMGrenadeWeapon : public AHMWeapon
 {

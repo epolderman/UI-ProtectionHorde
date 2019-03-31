@@ -14,11 +14,10 @@ AHMProjectile::AHMProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	// PrimaryActorTick.bCanEverTick = true;
-	// Use a sphere as a simple collision representation
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	CollisionComp->InitSphereRadius(5.0f);
 	CollisionComp->SetCollisionProfileName("Projectile");
-	// CollisionComp->OnComponentHit.AddDynamic(this, &AHMProjectile::OnHit);	// set up a notification for when this component hits something blocking
+	CollisionComp->OnComponentHit.AddDynamic(this, &AHMProjectile::OnHit);
 
 	// Players can't walk on it
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
@@ -35,37 +34,35 @@ AHMProjectile::AHMProjectile()
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
 	
+}
 
-	// Die after 3 seconds by default
-	InitialLifeSpan = 3.0f;
+void AHMProjectile::BeginPlay() {
+	SetLifeSpan(LifeSpan == 0.0f ? 1.0f: LifeSpan);
 }
 
 void AHMProjectile::OnExplode() {
 	if (ExplodeEffect) {
-		// DrawDebugSphere(GetWorld(), GetActorLocation(), 10.0f, 100, FColor::Red, false, 5.0f);
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplodeEffect, GetActorLocation());
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplodeEffect, GetActorLocation(), GetActorRotation());
 	}
 }
 
 void AHMProjectile::LifeSpanExpired()
 {
-	UE_LOG(LogClass, Log, TEXT("lifespanexpired"));
 	OnExplode();
+	UGameplayStatics::ApplyRadialDamage(GetWorld(), 3.0f, GetActorLocation(), 3.0f, DamageType, TArray<AActor*>());
 	Super::LifeSpanExpired();
 }
 
-///* TODO: When grenade hits an actor -> explode. Fix this function*/
-//void AHMProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-//{
-//	// Only add impulse and destroy projectile if we hit a physics
-//	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
-//	{
-//		OnExplode();
-//		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-//	}
-//
-//	MakeNoise(1.0f, Instigator);
-//	
-//	Destroy();
-//}
+void AHMProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	// Only add impulse and destroy projectile if we hit a physics
+	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
+	{
+		OnExplode();
+		Destroy();
+		// OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+	}
+
+	// MakeNoise(1.0f, Instigator);
+}
 
