@@ -16,11 +16,10 @@ class HORDEMODE_API AHMGrenadeWeapon : public AHMWeapon
 
 public:
 	AHMGrenadeWeapon();
-	/** Projectile class to spawn */
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	TSubclassOf<AHMProjectile> ProjectileClass;
 protected:
 
-	//UFUNCTION(BlueprintCallable, Category = "Weapon")
 	virtual void Fire() override;
 };

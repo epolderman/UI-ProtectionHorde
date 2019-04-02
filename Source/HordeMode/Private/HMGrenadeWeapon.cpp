@@ -7,7 +7,6 @@
 
 AHMGrenadeWeapon::AHMGrenadeWeapon()
 {
-	PrimaryActorTick.bCanEverTick = true;
 	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComponentz"));
 	RootComponent = MeshComponent;
 	MuzzleSocketName = "MuzzleSocket";

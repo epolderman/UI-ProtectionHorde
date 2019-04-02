@@ -62,10 +62,3 @@ void AHMProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPri
 	}
 }
 
-USphereComponent * AHMProjectile::GetCollisionComp() const {
-	return CollisionComp;
-}
-
-UProjectileMovementComponent * AHMProjectile::GetProjectileMovement() const {
-	return ProjectileMovement;
-}

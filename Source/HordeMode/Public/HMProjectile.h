@@ -24,20 +24,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Effects")
 	void OnExplode();
 
-	USphereComponent* GetCollisionComp() const;
-
-	UProjectileMovementComponent* GetProjectileMovement() const;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	UParticleSystem * ExplodeEffect;
-
-	virtual void LifeSpanExpired() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage")
 	TSubclassOf<UDamageType> DamageType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LifeSpan")
 	float LifeSpan;
+
+	virtual void LifeSpanExpired() override;
 
 	virtual void BeginPlay() override;
 protected:
