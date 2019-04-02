@@ -12,30 +12,22 @@
 // Root Component = Capsule
 // Blueprint values can override C++ values (Example: bUsePawnControlRotation)
 
-
-// Sets default values
 AHMCharacter::AHMCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
 	SpringArmComponent->bUsePawnControlRotation = true;
 	SpringArmComponent->SetupAttachment(RootComponent);
-	
 	GetMovementComponent()->GetNavAgentPropertiesRef().bCanCrouch = true;
 	GetMovementComponent()->GetNavAgentPropertiesRef().bCanJump = true;
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
 }
 
-// Called when the game starts or when spawned
 void AHMCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-// Called every frame
 void AHMCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -72,15 +64,14 @@ FVector AHMCharacter::GetPawnViewLocation() const
 void AHMCharacter::MoveForward(float Value) {
 	
 	if (Value != 0.0f) {
-		UE_LOG(LogClass, Log, TEXT("move x %F"), GetActorLocation().X);
-		UE_LOG(LogClass, Log, TEXT("move y %F"), GetActorLocation().Y);
-		UE_LOG(LogClass, Log, TEXT("move z %F"), GetActorLocation().Z);
 		AddMovementInput(GetActorForwardVector() * Value);
 	}
 }
 
 void AHMCharacter::MoveRight(float Value) {
-	AddMovementInput(GetActorRightVector() * Value);
+	if (Value != 0.0f) {
+		AddMovementInput(GetActorRightVector() * Value);
+	}
 }
 
 void AHMCharacter::BeginCrouch()

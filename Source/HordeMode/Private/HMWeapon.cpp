@@ -11,10 +11,8 @@
 
 const int DISTANCE = 10000;
 
-// Sets default values
 AHMWeapon::AHMWeapon()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComponent"));
 	RootComponent = MeshComponent;
@@ -22,7 +20,6 @@ AHMWeapon::AHMWeapon()
 	TracerTargetName = "Target";
 }
 
-// Called when the game starts or when spawned
 void AHMWeapon::BeginPlay()
 {
 	Super::BeginPlay();
@@ -61,7 +58,7 @@ void AHMWeapon::Fire()
 			TracerEndPoint = Hit.ImpactPoint;
 			
 		}
-		// DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::White, false, 1.0f, 0, 1.0f);
+	
 		//Fname == lookups, FText = localizable
 		if (MuzzleEffect) {
 			UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, MeshComponent, MuzzleSocketName);
@@ -79,7 +76,6 @@ void AHMWeapon::Fire()
 	
 }
 
-// Called every frame
 void AHMWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

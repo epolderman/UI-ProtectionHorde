@@ -8,8 +8,6 @@
 AHMGrenadeWeapon::AHMGrenadeWeapon()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	// Note: figure out inheriting mesh components from a parent, find out the build error!
-	// Why does it need a different FName for the mesh component
 	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComponentz"));
 	RootComponent = MeshComponent;
 	MuzzleSocketName = "MuzzleSocket";
@@ -18,8 +16,6 @@ AHMGrenadeWeapon::AHMGrenadeWeapon()
 
 void AHMGrenadeWeapon::Fire()
 {
-	
-
 	AActor * Owner = GetOwner();
 	if (Owner && ProjectileClass) 
 	{

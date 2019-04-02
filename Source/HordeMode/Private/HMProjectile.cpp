@@ -8,12 +8,8 @@
 #include <Particles/ParticleSystem.h>
 #include <Particles/ParticleSystemComponent.h>
 
-
-// Sets default values
 AHMProjectile::AHMProjectile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	// PrimaryActorTick.bCanEverTick = true;
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	CollisionComp->InitSphereRadius(5.0f);
 	CollisionComp->SetCollisionProfileName("Projectile");
@@ -29,15 +25,17 @@ AHMProjectile::AHMProjectile()
 	// Use a ProjectileMovementComponent to govern this projectile's movement
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileMovement->UpdatedComponent = CollisionComp;
-	ProjectileMovement->InitialSpeed = 3000.f;
-	ProjectileMovement->MaxSpeed = 3000.f;
+	ProjectileMovement->InitialSpeed = 3000.0f;
+	ProjectileMovement->MaxSpeed = 3000.0f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
 	
+	// default to 1
+	LifeSpan = 1.0f;
 }
 
 void AHMProjectile::BeginPlay() {
-	SetLifeSpan(LifeSpan == 0.0f ? 1.0f: LifeSpan);
+	SetLifeSpan(LifeSpan);
 }
 
 void AHMProjectile::OnExplode() {
@@ -49,7 +47,6 @@ void AHMProjectile::OnExplode() {
 void AHMProjectile::LifeSpanExpired()
 {
 	OnExplode();
-	// TODO: write test for radial damage
 	UGameplayStatics::ApplyRadialDamage(GetWorld(), 3.0f, GetActorLocation(), 3.0f, DamageType, TArray<AActor*>());
 	Super::LifeSpanExpired();
 }
@@ -63,7 +60,12 @@ void AHMProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPri
 		Destroy();
 		// OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 	}
-
-	// MakeNoise(1.0f, Instigator);
 }
 
+USphereComponent * AHMProjectile::GetCollisionComp() const {
+	return CollisionComp;
+}
+
+UProjectileMovementComponent * AHMProjectile::GetProjectileMovement() const {
+	return ProjectileMovement;
+}
