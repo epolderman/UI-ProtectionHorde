@@ -11,7 +11,6 @@ const int DISTANCE = 10000;
 
 AHMWeapon::AHMWeapon()
 {
-	PrimaryActorTick.bCanEverTick = true;
 	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComponent"));
 	RootComponent = MeshComponent;
 	MuzzleSocketName = "MuzzleSocket";
