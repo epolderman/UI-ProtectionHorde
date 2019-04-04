@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "HordeMode/Public/HMCharacter.h"
 #include <Components/InputComponent.h>
 #include <Camera/CameraComponent.h>

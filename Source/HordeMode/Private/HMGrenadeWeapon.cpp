@@ -1,5 +1,3 @@
-
-
 #include "HordeMode/Public/HMGrenadeWeapon.h"
 #include "HordeMode/Public/HMProjectile.h"
 #include "Animation/AnimInstance.h"

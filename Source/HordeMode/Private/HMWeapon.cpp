@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "HordeMode/Public/HMWeapon.h"
 #include <Components/SkeletalMeshComponent.h>
 #include <DrawDebugHelpers.h>
