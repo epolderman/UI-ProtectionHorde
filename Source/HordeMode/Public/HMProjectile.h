@@ -19,8 +19,6 @@ public:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
-	void OnExplode();
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	UParticleSystem * ExplodeEffect;
 
@@ -33,6 +31,8 @@ public:
 	virtual void LifeSpanExpired() override;
 
 	virtual void BeginPlay() override;
+
+	void OnExplode();
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile")
 	USphereComponent* CollisionComp;
