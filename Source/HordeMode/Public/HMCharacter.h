@@ -36,8 +36,8 @@ protected:
 	void JumpAction();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-		UCameraComponent * CameraComponent;
+	UCameraComponent * CameraComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-		USpringArmComponent * SpringArmComponent;
+	USpringArmComponent * SpringArmComponent;
 };
