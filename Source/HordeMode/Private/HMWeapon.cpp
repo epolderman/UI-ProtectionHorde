@@ -22,6 +22,11 @@ void AHMWeapon::BeginPlay()
 	Super::BeginPlay();
 }
 
+void AHMWeapon::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
 void AHMWeapon::Fire()
 {	
 	AActor * Owner = GetOwner();
@@ -72,9 +77,3 @@ void AHMWeapon::Fire()
 
 	
 }
-
-void AHMWeapon::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
