@@ -9,6 +9,7 @@ class USphereComponent;
 class UParticleSystem;
 class UDamageType;
 
+
 UCLASS()
 class HORDEMODE_API AHMProjectile : public AActor
 {
@@ -28,6 +29,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LifeSpan")
 	float LifeSpan;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Velocity")
+	float LaunchVelocity;
+
 	virtual void LifeSpanExpired() override;
 
 	virtual void BeginPlay() override;
@@ -36,13 +40,7 @@ public:
 
 	/** Returns CollisionComp subobject **/
 	USphereComponent* GetCollisionComp() const { return CollisionComp; }
-
-	/** Returns ProjectileMovement subobject **/
-	UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile")
 	USphereComponent* CollisionComp;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
-	UProjectileMovementComponent* ProjectileMovement;
 };
