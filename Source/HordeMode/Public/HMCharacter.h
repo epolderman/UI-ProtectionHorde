@@ -35,6 +35,20 @@ protected:
 
 	void JumpAction();
 
+	void BeginZoomAction();
+
+	void EndZoomAction();
+
+	bool isZooming;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Zoom")
+	float zoomedFOV;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Zoom")
+	float zoomSpeed;
+
+	float defaultFOV;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UCameraComponent * CameraComponent;
 

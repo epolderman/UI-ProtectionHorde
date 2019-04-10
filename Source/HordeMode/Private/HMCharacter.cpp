@@ -19,16 +19,26 @@ AHMCharacter::AHMCharacter()
 	GetMovementComponent()->GetNavAgentPropertiesRef().bCanJump = true;
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	zoomedFOV = 65.0f;
+	zoomSpeed = 5.0f;
 }
 
 void AHMCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	defaultFOV = CameraComponent->FieldOfView;
 }
 
 void AHMCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	float targetFOV = isZooming ? zoomedFOV : defaultFOV;
+	float currentFOV = FMath::FInterpTo(CameraComponent->FieldOfView,targetFOV,DeltaTime,zoomSpeed);
+
+	CameraComponent->SetFieldOfView(currentFOV);
 }
 
 // Called to bind functionality to input
@@ -40,9 +50,11 @@ void AHMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("MoveRight", this, &AHMCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("LookUp", this, &AHMCharacter::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("Turn", this, &AHMCharacter::AddControllerYawInput);
-	PlayerInputComponent->BindAction("Crouch", IE_Pressed,this, &AHMCharacter::BeginCrouch);
-	PlayerInputComponent->BindAction("Crouch", IE_Released,this, &AHMCharacter::EndCrouch);
+	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AHMCharacter::BeginCrouch);
+	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &AHMCharacter::EndCrouch);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AHMCharacter::JumpAction);
+	PlayerInputComponent->BindAction("BeginZoom", IE_Pressed, this, &AHMCharacter::BeginZoomAction);
+	PlayerInputComponent->BindAction("BeginZoom", IE_Released, this, &AHMCharacter::EndZoomAction);
 }
 
 FVector AHMCharacter::GetPawnViewLocation() const
@@ -84,5 +96,17 @@ void AHMCharacter::EndCrouch()
 
 void AHMCharacter::JumpAction() {
 	Jump();
+}
+
+void AHMCharacter::BeginZoomAction() {
+	if (!isZooming) {
+		isZooming = true;
+	}
+}
+
+void AHMCharacter::EndZoomAction() {
+	if (isZooming) {
+		isZooming = false;
+	}
 }
 
