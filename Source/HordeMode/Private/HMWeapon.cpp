@@ -17,16 +17,6 @@ AHMWeapon::AHMWeapon()
 	TracerTargetName = "Target";
 }
 
-void AHMWeapon::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
-void AHMWeapon::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
 void AHMWeapon::Fire()
 {	
 	AActor * Owner = GetOwner();
@@ -58,22 +48,26 @@ void AHMWeapon::Fire()
 			}
 
 			TracerEndPoint = Hit.ImpactPoint;
-			
 		}
 	
-		//Fname == lookups, FText = localizable
-		if (MuzzleEffect) {
-			UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, MeshComponent, MuzzleSocketName);
-		}
-		if (BulletTracer) {
-			FVector MuzzleLocation = MeshComponent->GetSocketLocation(MuzzleSocketName);
-			UParticleSystemComponent * TracerComp = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BulletTracer, MuzzleLocation);
-			if (TracerComp) {
-				TracerComp->SetVectorParameter(TracerTargetName, TracerEndPoint);
-			}
-		}
-		
+		PlayerWeaponFireEffects(TracerEndPoint);
 	}
 
 	
+}
+void AHMWeapon::PlayerWeaponFireEffects(FVector &TracerEndPoint) {
+
+	//Fname == lookups, FText = localizable
+	if (MuzzleEffect) {
+		UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, MeshComponent, MuzzleSocketName);
+	}
+
+	if (BulletTracer) {
+		FVector MuzzleLocation = MeshComponent->GetSocketLocation(MuzzleSocketName);
+		UParticleSystemComponent * TracerComp = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BulletTracer, MuzzleLocation);
+		if (TracerComp) {
+			TracerComp->SetVectorParameter(TracerTargetName, TracerEndPoint);
+		}
+	}
+
 }

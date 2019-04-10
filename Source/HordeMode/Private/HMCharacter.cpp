@@ -3,6 +3,9 @@
 #include <Camera/CameraComponent.h>
 #include <GameFramework/SpringArmComponent.h>
 #include <GameFramework/PawnMovementComponent.h>
+#include "HordeMode/Public/HMWeapon.h"
+#include <Engine/World.h>
+#include <Components/SkeletalMeshComponent.h>
 
 // Notes
 // TEXT macro helps us construct strings
@@ -21,7 +24,8 @@ AHMCharacter::AHMCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
 	zoomedFOV = 65.0f;
-	zoomSpeed = 5.0f;
+	zoomSpeed = 10.0f;
+	WeaponAttachmentSocketName = "WeaponSocket";
 }
 
 void AHMCharacter::BeginPlay()
@@ -29,6 +33,14 @@ void AHMCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	defaultFOV = CameraComponent->FieldOfView;
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	currentWeapon = GetWorld()->SpawnActor<AHMWeapon>(StarterWeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+	if (currentWeapon) {
+		currentWeapon->SetOwner(this);
+		currentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponAttachmentSocketName);
+		
+	}
 }
 
 void AHMCharacter::Tick(float DeltaTime)
@@ -50,11 +62,16 @@ void AHMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("MoveRight", this, &AHMCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("LookUp", this, &AHMCharacter::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("Turn", this, &AHMCharacter::AddControllerYawInput);
+
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AHMCharacter::BeginCrouch);
 	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &AHMCharacter::EndCrouch);
+
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AHMCharacter::JumpAction);
+
 	PlayerInputComponent->BindAction("BeginZoom", IE_Pressed, this, &AHMCharacter::BeginZoomAction);
 	PlayerInputComponent->BindAction("BeginZoom", IE_Released, this, &AHMCharacter::EndZoomAction);
+
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AHMCharacter::Fire);
 }
 
 FVector AHMCharacter::GetPawnViewLocation() const
@@ -107,6 +124,13 @@ void AHMCharacter::BeginZoomAction() {
 void AHMCharacter::EndZoomAction() {
 	if (isZooming) {
 		isZooming = false;
+	}
+}
+
+void AHMCharacter::Fire()
+{
+	if (currentWeapon) {
+		currentWeapon->Fire();
 	}
 }
 

@@ -6,18 +6,17 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class AHMWeapon;
 
 UCLASS()
 class HORDEMODE_API AHMCharacter : public ACharacter
 {
 	GENERATED_BODY()
 public:
-	// Sets default values for this character's properties
 	AHMCharacter();	
-	// Called every frame
+
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual FVector GetPawnViewLocation() const override;
@@ -44,10 +43,21 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Zoom")
 	float zoomedFOV;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Zoom")
+	UPROPERTY(EditDefaultsOnly, Category = "Zoom", meta = (ClampMin = 0.1, ClampMax = 100))
 	float zoomSpeed;
 
 	float defaultFOV;
+
+	AHMWeapon * currentWeapon;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Player Weapon")
+	TSubclassOf<AHMWeapon> StarterWeaponClass;
+
+	UPROPERTY(VisibleDefaultsOnly, Category="Player Weapon")
+	FName WeaponAttachmentSocketName;
+
+	UFUNCTION(BlueprintCallable, Category="Player Weapon")
+	void Fire();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UCameraComponent * CameraComponent;
