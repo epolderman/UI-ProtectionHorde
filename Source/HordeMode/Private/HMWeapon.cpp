@@ -70,4 +70,13 @@ void AHMWeapon::PlayerWeaponFireEffects(FVector &TracerEndPoint) {
 		}
 	}
 
+	APawn * myOwner = Cast<APawn>(GetOwner());
+	AActor * GunOwner = GetOwner();
+	if (myOwner) {
+		APlayerController * controller = Cast<APlayerController>(myOwner->GetController());
+		if (controller && FireCameraShake) {
+			controller->ClientPlayCameraShake(FireCameraShake);
+		}
+	}
+
 }

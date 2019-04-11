@@ -2,6 +2,7 @@
 #include "HordeMode/Public/HMProjectile.h"
 #include "Animation/AnimInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include <GameFramework/PlayerController.h>
 
 AHMGrenadeWeapon::AHMGrenadeWeapon()
 {
@@ -9,7 +10,6 @@ AHMGrenadeWeapon::AHMGrenadeWeapon()
 	RootComponent = MeshComponent;
 	MuzzleSocketName = "MuzzleSocket";
 }
-
 
 void AHMGrenadeWeapon::Fire()
 {
@@ -32,5 +32,21 @@ void AHMGrenadeWeapon::Fire()
 		if (MuzzleEffect) {
 			UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, MeshComponent, MuzzleSocketName);
 		}
+		
+		PlayerWeaponFireEffects(EyeLocation);
 	}
 }
+
+void AHMGrenadeWeapon::PlayerWeaponFireEffects(FVector &TracerEndPoint) {
+
+	APawn * myOwner = Cast<APawn>(GetOwner());
+	if (myOwner) {
+		APlayerController * controller = Cast<APlayerController>(myOwner->GetController());
+		if (controller && FireCameraShake) {
+			UE_LOG(LogClass, Log, TEXT("Shake N Bake"));
+			controller->ClientPlayCameraShake(FireCameraShake);
+		}
+	}
+
+}
+

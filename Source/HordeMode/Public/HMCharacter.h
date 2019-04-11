@@ -50,6 +50,7 @@ protected:
 
 	AHMWeapon * currentWeapon;
 
+	// TODO: How does this subclass work in regards so setting up current weapon?
 	UPROPERTY(EditDefaultsOnly, Category = "Player Weapon")
 	TSubclassOf<AHMWeapon> StarterWeaponClass;
 

@@ -18,6 +18,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	TSubclassOf<AHMProjectile> ProjectileClass;
 protected:
-
 	virtual void Fire() override;
+
+	virtual void PlayerWeaponFireEffects(FVector &TracerEndPoint) override;
 };

@@ -7,6 +7,7 @@
 class USkeletalMeshComponent;
 class UDamageType;
 class UParticleSystem;
+class UCameraShake;
 
 UCLASS()
 class HORDEMODE_API AHMWeapon : public AActor
@@ -16,7 +17,7 @@ class HORDEMODE_API AHMWeapon : public AActor
 public:	
 	AHMWeapon();
 
-	void PlayerWeaponFireEffects(FVector &TracerEndPoint);
+	virtual void PlayerWeaponFireEffects(FVector &TracerEndPoint);
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	virtual void Fire();
@@ -42,4 +43,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	UParticleSystem * BulletTracer;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	TSubclassOf<UCameraShake> FireCameraShake;
 };
