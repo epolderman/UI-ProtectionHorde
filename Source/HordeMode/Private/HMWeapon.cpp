@@ -5,7 +5,10 @@
 #include <Particles/ParticleSystem.h>
 #include <Components/SkeletalMeshComponent.h>
 #include <Particles/ParticleSystemComponent.h>
+#include "HordeMode/HordeMode.h"
+#include <PhysicalMaterials/PhysicalMaterial.h>
 
+//Notes: Shift + Alt + R = quick rename
 
 const int DISTANCE = 10000;
 
@@ -31,6 +34,7 @@ void AHMWeapon::Fire()
 		FCollisionQueryParams QParams;
 		QParams.AddIgnoredActor(Owner);
 		QParams.AddIgnoredActor(this);
+		QParams.bReturnPhysicalMaterial = true;
 		QParams.bTraceComplex = true; // more expensive, but nails the polygon on the mesh(accurate)
 
 		// tracer particle
@@ -43,8 +47,28 @@ void AHMWeapon::Fire()
 			//blocking hit! process damage
 			AActor * HitActor = Hit.GetActor();
 			UGameplayStatics::ApplyPointDamage(HitActor, 1.0f, ShotDirection, Hit, Owner->GetInstigatorController(), this, DamageType);
-			if (ImpactEffect) {
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.ImpactPoint, Hit.ImpactNormal.Rotation());
+			/*if (DefaultImpactEffect) {
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DefaultImpactEffect, Hit.ImpactPoint, Hit.ImpactNormal.Rotation());
+			}
+*/
+			EPhysicalSurface SurfaceType = UPhysicalMaterial::DetermineSurfaceType(Hit.PhysMaterial.Get());
+			UParticleSystem * SelectedEffect = nullptr;
+
+			switch (SurfaceType)
+			{
+			case SURFACE_FLESH_DEFAULT:
+				SelectedEffect = FleshImpactEffect;
+				break;
+			case SURFACE_FLESH_VULNERABLE:
+				SelectedEffect = FleshImpactEffect;
+				break;
+			default:
+				SelectedEffect = DefaultImpactEffect;
+				break;
+			}
+
+			if (SelectedEffect) {
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SelectedEffect, Hit.ImpactPoint, Hit.ImpactNormal.Rotation());
 			}
 
 			TracerEndPoint = Hit.ImpactPoint;
