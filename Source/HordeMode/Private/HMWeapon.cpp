@@ -43,14 +43,10 @@ void AHMWeapon::Fire()
 		// struct that holds our hit data, normal, etc..
 		// ECC_Visibility = channel to check our trace, anything that steps in its way, will collide
 		FHitResult Hit;
-		if(GetWorld()->LineTraceSingleByChannel(Hit, EyeLocation, TraceEnd, ECC_Visibility, QParams)){
+		if(GetWorld()->LineTraceSingleByChannel(Hit, EyeLocation, TraceEnd, COLLISION_HMWEAPON, QParams)){
 			//blocking hit! process damage
 			AActor * HitActor = Hit.GetActor();
 			UGameplayStatics::ApplyPointDamage(HitActor, 1.0f, ShotDirection, Hit, Owner->GetInstigatorController(), this, DamageType);
-			/*if (DefaultImpactEffect) {
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DefaultImpactEffect, Hit.ImpactPoint, Hit.ImpactNormal.Rotation());
-			}
-*/
 			EPhysicalSurface SurfaceType = UPhysicalMaterial::DetermineSurfaceType(Hit.PhysMaterial.Get());
 			UParticleSystem * SelectedEffect = nullptr;
 

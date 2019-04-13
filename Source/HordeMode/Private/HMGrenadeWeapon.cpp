@@ -43,7 +43,6 @@ void AHMGrenadeWeapon::PlayerWeaponFireEffects(FVector &TracerEndPoint) {
 	if (myOwner) {
 		APlayerController * controller = Cast<APlayerController>(myOwner->GetController());
 		if (controller && FireCameraShake) {
-			UE_LOG(LogClass, Log, TEXT("Shake N Bake"));
 			controller->ClientPlayCameraShake(FireCameraShake);
 		}
 	}
