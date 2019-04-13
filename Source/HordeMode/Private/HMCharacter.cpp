@@ -39,7 +39,6 @@ void AHMCharacter::BeginPlay()
 	if (currentWeapon) {
 		currentWeapon->SetOwner(this);
 		currentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponAttachmentSocketName);
-		
 	}
 }
 
@@ -53,7 +52,6 @@ void AHMCharacter::Tick(float DeltaTime)
 	CameraComponent->SetFieldOfView(currentFOV);
 }
 
-// Called to bind functionality to input
 void AHMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -89,15 +87,17 @@ FVector AHMCharacter::GetPawnViewLocation() const
 		Scalar Multiplication / Scaled the forward vector. 
 		https://www.khanacademy.org/math/linear-algebra/vectors-and-spaces/vectors/v/multiplying-vector-by-scalar
 */
-void AHMCharacter::MoveForward(float Value) {
-	
+void AHMCharacter::MoveForward(float Value) 
+{
 	if (Value != 0.0f) {
 		AddMovementInput(GetActorForwardVector() * Value);
 	}
 }
 
-void AHMCharacter::MoveRight(float Value) {
-	if (Value != 0.0f) {
+void AHMCharacter::MoveRight(float Value) 
+{
+	if (Value != 0.0f) 
+	{
 		AddMovementInput(GetActorRightVector() * Value);
 	}
 }
@@ -112,16 +112,19 @@ void AHMCharacter::EndCrouch()
 	UnCrouch();
 }
 
-void AHMCharacter::JumpAction() {
+void AHMCharacter::JumpAction() 
+{
 	Jump();
 }
 
-void AHMCharacter::BeginZoomAction() {
+void AHMCharacter::BeginZoomAction() 
+{
 	if (!isZooming) 
 	isZooming = true;
 }
 
-void AHMCharacter::EndZoomAction() {
+void AHMCharacter::EndZoomAction() 
+{
 	if (isZooming) 
 	isZooming = false;
 }

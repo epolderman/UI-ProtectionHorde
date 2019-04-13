@@ -35,13 +35,19 @@ void AHMProjectile::BeginPlay() {
 void AHMProjectile::OnExplode() {
 	if (ExplodeEffect) {
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplodeEffect, GetActorLocation(), GetActorRotation());
+
+	}
+	const bool onExplodeDamage = UGameplayStatics::ApplyRadialDamage(GetWorld(), 3.0f, GetActorLocation(), 10.0f, DamageType, TArray<AActor*>());
+
+	if (onExplodeDamage) {
+		UE_LOG(LogClass, Log, TEXT("This hit some actor"));
 	}
 }
 
 void AHMProjectile::LifeSpanExpired()
 {
 	OnExplode();
-	UGameplayStatics::ApplyRadialDamage(GetWorld(), 3.0f, GetActorLocation(), 3.0f, DamageType, TArray<AActor*>());
+	// TODO: Fix this
 	Super::LifeSpanExpired();
 }
 

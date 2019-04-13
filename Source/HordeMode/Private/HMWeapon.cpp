@@ -20,18 +20,30 @@ AHMWeapon::AHMWeapon()
 	MuzzleSocketName = "MuzzleSocket";
 	TracerTargetName = "Target";
 	BaseHitPointDamage = 20.0f;
-	RateOfFire = 600;
+	RateOfFire = 600.0f;
 }
 
 void AHMWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 
-	TimeBetweenShots = 60 / RateOfFire;
+	TimeBetweenShots = 60.0f / RateOfFire;
+}
+
+void AHMWeapon::StartFire()
+{
+	// Note: Guarantee's delay of TimeBetwenShots between single shots, automatic fire for everything else
+	float FirstDelay = FMath::Max(LastFireTime + TimeBetweenShots - GetWorld()->TimeSeconds, 0.0f);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_TimeBtwnShots,this, &AHMWeapon::Fire, TimeBetweenShots, true, FirstDelay);
+}
+void AHMWeapon::StopFire()
+{
+	GetWorldTimerManager().ClearTimer(TimerHandle_TimeBtwnShots);
 }
 
 void AHMWeapon::Fire()
-{	
+{
 	AActor * Owner = GetOwner();
 	if (Owner) {
 		FVector EyeLocation;
@@ -53,7 +65,7 @@ void AHMWeapon::Fire()
 		// struct that holds our hit data, normal, etc..
 		// ECC_Visibility = channel to check our trace, anything that steps in its way, will collide
 		FHitResult Hit;
-		if(GetWorld()->LineTraceSingleByChannel(Hit, EyeLocation, TraceEnd, COLLISION_HMWEAPON, QParams)){
+		if (GetWorld()->LineTraceSingleByChannel(Hit, EyeLocation, TraceEnd, COLLISION_HMWEAPON, QParams)) {
 			//blocking hit! process damage
 			AActor * HitActor = Hit.GetActor();
 			EPhysicalSurface SurfaceType = UPhysicalMaterial::DetermineSurfaceType(Hit.PhysMaterial.Get());
@@ -62,14 +74,12 @@ void AHMWeapon::Fire()
 			if (SurfaceType == SURFACE_FLESH_VULNERABLE) {
 				damageApplied = 40.0f;
 			}
-			UGameplayStatics::ApplyPointDamage(HitActor, damageApplied, ShotDirection, Hit, Owner->GetInstigatorController(), this,DamageType);
-	
+			UGameplayStatics::ApplyPointDamage(HitActor, damageApplied, ShotDirection, Hit, Owner->GetInstigatorController(), this, DamageType);
+
 			UParticleSystem * SelectedEffect = nullptr;
 			switch (SurfaceType)
 			{
 			case SURFACE_FLESH_DEFAULT:
-				SelectedEffect = FleshImpactEffect;
-				break;
 			case SURFACE_FLESH_VULNERABLE:
 				SelectedEffect = FleshImpactEffect;
 				break;
@@ -84,25 +94,13 @@ void AHMWeapon::Fire()
 
 			TracerEndPoint = Hit.ImpactPoint;
 		}
-	
+
 		PlayerWeaponFireEffects(TracerEndPoint);
 
 		LastFireTime = GetWorld()->TimeSeconds;
 	}
-
-	
 }
 
-void AHMWeapon::StartFire()
-{
-	float FirstDelay = FMath::Max(LastFireTime + TimeBetweenShots - GetWorld()->TimeSeconds, 0.0f);
-
-	GetWorldTimerManager().SetTimer(TimerHandle_TimeBtwnShots,this, &AHMWeapon::Fire, TimeBetweenShots, true, FirstDelay);
-}
-void AHMWeapon::StopFire()
-{
-	GetWorldTimerManager().ClearTimer(TimerHandle_TimeBtwnShots);
-}
 void AHMWeapon::PlayerWeaponFireEffects(FVector &TracerEndPoint) {
 
 	//Fname == lookups, FText = localizable
