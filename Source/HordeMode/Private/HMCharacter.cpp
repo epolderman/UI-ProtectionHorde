@@ -71,7 +71,8 @@ void AHMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("BeginZoom", IE_Pressed, this, &AHMCharacter::BeginZoomAction);
 	PlayerInputComponent->BindAction("BeginZoom", IE_Released, this, &AHMCharacter::EndZoomAction);
 
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AHMCharacter::Fire);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AHMCharacter::StartFire);
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AHMCharacter::StopFire);
 }
 
 FVector AHMCharacter::GetPawnViewLocation() const
@@ -116,21 +117,25 @@ void AHMCharacter::JumpAction() {
 }
 
 void AHMCharacter::BeginZoomAction() {
-	if (!isZooming) {
-		isZooming = true;
-	}
+	if (!isZooming) 
+	isZooming = true;
 }
 
 void AHMCharacter::EndZoomAction() {
-	if (isZooming) {
-		isZooming = false;
-	}
+	if (isZooming) 
+	isZooming = false;
 }
 
-void AHMCharacter::Fire()
+void AHMCharacter::StartFire()
 {
-	if (currentWeapon) {
-		currentWeapon->Fire();
-	}
+	if (currentWeapon)
+	currentWeapon->StartFire();
 }
+
+void AHMCharacter::StopFire()
+{
+	if (currentWeapon)
+	currentWeapon->StopFire();
+}
+
 

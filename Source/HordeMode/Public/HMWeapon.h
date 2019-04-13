@@ -17,10 +17,11 @@ class HORDEMODE_API AHMWeapon : public AActor
 public:	
 	AHMWeapon();
 
-	virtual void PlayerWeaponFireEffects(FVector &TracerEndPoint);
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	virtual void StartFire();
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	virtual void Fire();
+	virtual void StopFire();
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USkeletalMeshComponent * MeshComponent;
@@ -49,4 +50,23 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	TSubclassOf<UCameraShake> FireCameraShake;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	float BaseHitPointDamage;
+
+	virtual void PlayerWeaponFireEffects(FVector &TracerEndPoint);
+
+	virtual void Fire();
+
+	FTimerHandle TimerHandle_TimeBtwnShots;
+
+	float LastFireTime;
+
+	/* RPM = Bullets Per Minute */
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	float RateOfFire;
+
+	float TimeBetweenShots;
+
+	virtual void BeginPlay() override;
 };

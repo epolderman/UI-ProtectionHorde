@@ -7,6 +7,7 @@
 #include <Particles/ParticleSystemComponent.h>
 #include "HordeMode/HordeMode.h"
 #include <PhysicalMaterials/PhysicalMaterial.h>
+#include <TimerManager.h>
 
 //Notes: Shift + Alt + R = quick rename
 
@@ -18,6 +19,15 @@ AHMWeapon::AHMWeapon()
 	RootComponent = MeshComponent;
 	MuzzleSocketName = "MuzzleSocket";
 	TracerTargetName = "Target";
+	BaseHitPointDamage = 20.0f;
+	RateOfFire = 600;
+}
+
+void AHMWeapon::BeginPlay()
+{
+	Super::BeginPlay();
+
+	TimeBetweenShots = 60 / RateOfFire;
 }
 
 void AHMWeapon::Fire()
@@ -46,10 +56,15 @@ void AHMWeapon::Fire()
 		if(GetWorld()->LineTraceSingleByChannel(Hit, EyeLocation, TraceEnd, COLLISION_HMWEAPON, QParams)){
 			//blocking hit! process damage
 			AActor * HitActor = Hit.GetActor();
-			UGameplayStatics::ApplyPointDamage(HitActor, 1.0f, ShotDirection, Hit, Owner->GetInstigatorController(), this, DamageType);
 			EPhysicalSurface SurfaceType = UPhysicalMaterial::DetermineSurfaceType(Hit.PhysMaterial.Get());
-			UParticleSystem * SelectedEffect = nullptr;
 
+			float damageApplied = BaseHitPointDamage;
+			if (SurfaceType == SURFACE_FLESH_VULNERABLE) {
+				damageApplied = 40.0f;
+			}
+			UGameplayStatics::ApplyPointDamage(HitActor, damageApplied, ShotDirection, Hit, Owner->GetInstigatorController(), this,DamageType);
+	
+			UParticleSystem * SelectedEffect = nullptr;
 			switch (SurfaceType)
 			{
 			case SURFACE_FLESH_DEFAULT:
@@ -71,9 +86,22 @@ void AHMWeapon::Fire()
 		}
 	
 		PlayerWeaponFireEffects(TracerEndPoint);
+
+		LastFireTime = GetWorld()->TimeSeconds;
 	}
 
 	
+}
+
+void AHMWeapon::StartFire()
+{
+	float FirstDelay = FMath::Max(LastFireTime + TimeBetweenShots - GetWorld()->TimeSeconds, 0.0f);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_TimeBtwnShots,this, &AHMWeapon::Fire, TimeBetweenShots, true, FirstDelay);
+}
+void AHMWeapon::StopFire()
+{
+	GetWorldTimerManager().ClearTimer(TimerHandle_TimeBtwnShots);
 }
 void AHMWeapon::PlayerWeaponFireEffects(FVector &TracerEndPoint) {
 

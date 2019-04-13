@@ -58,7 +58,10 @@ protected:
 	FName WeaponAttachmentSocketName;
 
 	UFUNCTION(BlueprintCallable, Category="Player Weapon")
-	void Fire();
+	void StartFire();
+
+	UFUNCTION(BlueprintCallable, Category = "Player Weapon")
+	void StopFire();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UCameraComponent * CameraComponent;
