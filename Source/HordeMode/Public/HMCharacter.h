@@ -38,6 +38,8 @@ protected:
 
 	void EndZoomAction();
 
+	void SwitchWeapon();
+
 	bool isZooming;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Zoom")
@@ -50,17 +52,23 @@ protected:
 
 	AHMWeapon * currentWeapon;
 
-	// TODO: How does this subclass work in regards so setting up current weapon?
-	UPROPERTY(EditDefaultsOnly, Category = "Player Weapon")
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	TSubclassOf<AHMWeapon> StarterWeaponClass;
 
-	UPROPERTY(VisibleDefaultsOnly, Category="Player Weapon")
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	TSubclassOf<AHMWeapon> SecondaryWeaponClass;
+
+	TArray<TSubclassOf<AHMWeapon>> Weapons;
+
+	UPROPERTY(VisibleDefaultsOnly, Category="Weapon")
 	FName WeaponAttachmentSocketName;
 
-	UFUNCTION(BlueprintCallable, Category="Player Weapon")
+	void SpawnWeapon(int weaponIndex);
+
+	UFUNCTION(BlueprintCallable, Category="Weapon")
 	void StartFire();
 
-	UFUNCTION(BlueprintCallable, Category = "Player Weapon")
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void StopFire();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
@@ -68,4 +76,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USpringArmComponent * SpringArmComponent;
+private:
+	int currentWeaponIndex;
 };

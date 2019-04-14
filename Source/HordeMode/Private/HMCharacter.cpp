@@ -26,6 +26,7 @@ AHMCharacter::AHMCharacter()
 	zoomedFOV = 65.0f;
 	zoomSpeed = 10.0f;
 	WeaponAttachmentSocketName = "WeaponSocket";
+	currentWeaponIndex = 0;
 }
 
 void AHMCharacter::BeginPlay()
@@ -33,13 +34,30 @@ void AHMCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	defaultFOV = CameraComponent->FieldOfView;
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	currentWeapon = GetWorld()->SpawnActor<AHMWeapon>(StarterWeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+	Weapons.Add(StarterWeaponClass);
+	Weapons.Add(SecondaryWeaponClass);
+	SpawnWeapon(currentWeaponIndex);
+}
+
+void AHMCharacter::SpawnWeapon(int weaponIndex) 
+{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		currentWeapon = GetWorld()->SpawnActor<AHMWeapon>(Weapons[weaponIndex], FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+		if (currentWeapon) {
+
+			currentWeapon->SetOwner(this);
+			currentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponAttachmentSocketName);
+		}
+}
+
+void AHMCharacter::SwitchWeapon()
+{
 	if (currentWeapon) {
-		currentWeapon->SetOwner(this);
-		currentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponAttachmentSocketName);
+		currentWeapon->Destroy();
 	}
+	currentWeaponIndex = currentWeaponIndex == 0 ? 1 : 0;
+	SpawnWeapon(currentWeaponIndex);
 }
 
 void AHMCharacter::Tick(float DeltaTime)
@@ -71,13 +89,15 @@ void AHMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AHMCharacter::StartFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AHMCharacter::StopFire);
+
+	PlayerInputComponent->BindAction("SwitchWeapon", IE_Pressed, this, &AHMCharacter::SwitchWeapon);
 }
 
 FVector AHMCharacter::GetPawnViewLocation() const
 {
-	if (CameraComponent) {
-		return CameraComponent->GetComponentLocation();
-	}
+	if (CameraComponent)
+	return CameraComponent->GetComponentLocation();
+
 	// protection
 	return Super::GetPawnViewLocation();
 }
@@ -89,17 +109,14 @@ FVector AHMCharacter::GetPawnViewLocation() const
 */
 void AHMCharacter::MoveForward(float Value) 
 {
-	if (Value != 0.0f) {
-		AddMovementInput(GetActorForwardVector() * Value);
-	}
+	if (Value != 0.0f)
+	AddMovementInput(GetActorForwardVector() * Value);
 }
 
 void AHMCharacter::MoveRight(float Value) 
 {
 	if (Value != 0.0f) 
-	{
-		AddMovementInput(GetActorRightVector() * Value);
-	}
+	AddMovementInput(GetActorRightVector() * Value);
 }
 
 void AHMCharacter::BeginCrouch()

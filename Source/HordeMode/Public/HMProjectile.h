@@ -20,11 +20,14 @@ public:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
-	UParticleSystem * ExplodeEffect;
+	virtual void LifeSpanExpired() override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage")
-	TSubclassOf<UDamageType> DamageType;
+	virtual void BeginPlay() override;
+
+	void OnExplode();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
+	UParticleSystem * ExplodeEffect;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LifeSpan")
 	float LifeSpan;
@@ -32,11 +35,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Velocity")
 	float LaunchVelocity;
 
-	virtual void LifeSpanExpired() override;
-
-	virtual void BeginPlay() override;
-
-	void OnExplode();
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage")
+	TSubclassOf<UDamageType> DamageType;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	float BaseDamage;
