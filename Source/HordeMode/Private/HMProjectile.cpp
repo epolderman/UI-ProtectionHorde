@@ -18,12 +18,20 @@ AHMProjectile::AHMProjectile()
 	RootComponent = CollisionComp;
 	LifeSpan = 1.0f;
 	LaunchVelocity = 350.0f;
+	BaseDamage = 20.0f;
+	DamageRadius = 300.0f;
 }
 
 void AHMProjectile::BeginPlay() {
+
+	Super::BeginPlay();
+
 	SetLifeSpan(LifeSpan);
+
 	const AActor * GunOwner = GetOwner();
-	if (GunOwner ) {
+
+	if (GunOwner ) 
+	{
 		FVector EyeLocation;
 		FRotator EyeRotation;
 		GunOwner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
@@ -33,27 +41,25 @@ void AHMProjectile::BeginPlay() {
 }
 
 void AHMProjectile::OnExplode() {
+
 	if (ExplodeEffect) {
+
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplodeEffect, GetActorLocation(), GetActorRotation());
 
 	}
-	const bool onExplodeDamage = UGameplayStatics::ApplyRadialDamage(GetWorld(), 3.0f, GetActorLocation(), 10.0f, DamageType, TArray<AActor*>());
 
-	if (onExplodeDamage) {
-		UE_LOG(LogClass, Log, TEXT("This hit some actor"));
-	}
+	UGameplayStatics::ApplyRadialDamage(GetWorld(), BaseDamage, GetActorLocation(), DamageRadius, DamageType, TArray<AActor*>(), this, this->GetInstigatorController(),true,ECC_Visibility);
 }
 
 void AHMProjectile::LifeSpanExpired()
 {
-	OnExplode();
-	// TODO: Fix this
 	Super::LifeSpanExpired();
+
+	OnExplode();
 }
 
 void AHMProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogClass, Log, TEXT("OnHit() onhit onhit"));
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
 	{
 		OnExplode();

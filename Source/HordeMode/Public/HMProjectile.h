@@ -38,8 +38,11 @@ public:
 
 	void OnExplode();
 
-	/** Returns CollisionComp subobject **/
-	USphereComponent* GetCollisionComp() const { return CollisionComp; }
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	float BaseDamage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	float DamageRadius; 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile")
 	USphereComponent* CollisionComp;
