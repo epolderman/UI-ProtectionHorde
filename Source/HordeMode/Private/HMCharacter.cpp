@@ -6,10 +6,14 @@
 #include "HordeMode/Public/HMWeapon.h"
 #include <Engine/World.h>
 #include <Components/SkeletalMeshComponent.h>
+#include <Components/CapsuleComponent.h>
+#include <HordeMode/HordeMode.h>
+#include "HordeMode/Components/SHealthComponent.h"
 
-// Notes
-// TEXT macro helps us construct strings
+// Notes / Hot keys
 // Shift + Alt + O = Search entire source
+// Alt + G => Takes you to the function definition in the Engine. 
+// Shift + F1 => While playing game, can regain focus back in editor. 
 // Root Component = Capsule
 // Blueprint values can override C++ values (Example: bUsePawnControlRotation)
 
@@ -23,6 +27,8 @@ AHMCharacter::AHMCharacter()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
+	GetCapsuleComponent()->SetCollisionResponseToChannel(COLLISION_HMWEAPON, ECR_Ignore);
+	HealthComponent = CreateDefaultSubobject<USHealthComponent>(TEXT("HealthComponent"));
 	zoomedFOV = 65.0f;
 	zoomSpeed = 10.0f;
 	WeaponAttachmentSocketName = "WeaponSocket";
@@ -37,6 +43,7 @@ void AHMCharacter::BeginPlay()
 	Weapons.Add(StarterWeaponClass);
 	Weapons.Add(SecondaryWeaponClass);
 	SpawnWeapon(currentWeaponIndex);
+	HealthComponent->OnHealthChanged.AddDynamic(this, &AHMCharacter::OnHealthChanged);
 }
 
 void AHMCharacter::SpawnWeapon(int weaponIndex) 
@@ -156,6 +163,21 @@ void AHMCharacter::StopFire()
 {
 	if (currentWeapon)
 	currentWeapon->StopFire();
+}
+
+void AHMCharacter::OnHealthChanged(USHealthComponent* HealthComp, float Health, float HealthDelta, 
+	const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
+{
+	if (Health <= 0.0f && !isDead) {
+		isDead = true;
+		//Death Animation
+		currentWeapon->Destroy();
+		GetMovementComponent()->StopMovementImmediately();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		DetachFromControllerPendingDestroy();
+		SetLifeSpan(10.0f);
+	
+	}
 }
 
 

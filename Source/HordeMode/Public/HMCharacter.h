@@ -7,6 +7,7 @@
 class UCameraComponent;
 class USpringArmComponent;
 class AHMWeapon;
+class USHealthComponent;
 
 UCLASS()
 class HORDEMODE_API AHMCharacter : public ACharacter
@@ -24,6 +25,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	/* Inputs && Movement */
 	void MoveForward(float Value);
 
 	void MoveRight(float Value);
@@ -49,6 +51,7 @@ protected:
 	float zoomSpeed;
 
 	float defaultFOV;
+	/* End Inputs && Movement */
 
 	AHMWeapon * currentWeapon;
 
@@ -76,6 +79,17 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USpringArmComponent * SpringArmComponent;
+
+	/* Health */
+	USHealthComponent * HealthComponent;
+
+	UFUNCTION()
+		void OnHealthChanged(USHealthComponent* HealthComp, float Health, float HealthDelta,
+			const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+	UPROPERTY(BlueprintReadOnly, Category="Player")
+	bool isDead;
+	/* End Health */
 private:
 	int currentWeaponIndex;
 };
