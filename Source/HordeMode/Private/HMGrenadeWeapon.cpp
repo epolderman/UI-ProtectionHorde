@@ -13,19 +13,19 @@ AHMGrenadeWeapon::AHMGrenadeWeapon()
 
 void AHMGrenadeWeapon::Fire()
 {
-	AActor * GunOwner = GetOwner();
-	if (GunOwner && ProjectileClass) 
+	AActor * WeaponOwner = GetOwner();
+	if (WeaponOwner && ProjectileClass) 
 	{
 		
 		FVector EyeLocation;
 		FRotator EyeRotation;
-		GunOwner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
+		WeaponOwner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
 
 		FVector MuzzleLocation = MeshComponent->GetSocketLocation(MuzzleSocketName);
 	
 		FActorSpawnParameters ActorSpawnParams;
 		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-		ActorSpawnParams.Owner = GunOwner;
+		ActorSpawnParams.Owner = WeaponOwner;
 
 		GetWorld()->SpawnActor<AHMProjectile>(ProjectileClass, MuzzleLocation, EyeRotation, ActorSpawnParams);
 

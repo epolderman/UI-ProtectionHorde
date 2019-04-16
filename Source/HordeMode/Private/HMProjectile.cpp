@@ -34,9 +34,11 @@ void AHMProjectile::BeginPlay() {
 	{
 		FVector EyeLocation;
 		FRotator EyeRotation;
+
 		GunOwner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
+
 		FVector ShotDirection = EyeRotation.Vector();
-		CollisionComp->AddImpulseAtLocation(ShotDirection * LaunchVelocity, GetActorLocation());
+		CollisionComp->AddImpulseAtLocation(EyeLocation + (ShotDirection * LaunchVelocity), GetActorLocation());
 	}
 }
 

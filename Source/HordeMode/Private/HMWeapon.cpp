@@ -63,7 +63,6 @@ void AHMWeapon::Fire()
 		FVector TracerEndPoint = TraceEnd;
 
 		// struct that holds our hit data, normal, etc..
-		// ECC_Visibility = channel to check our trace, anything that steps in its way, will collide
 		FHitResult Hit;
 		if (GetWorld()->LineTraceSingleByChannel(Hit, EyeLocation, TraceEnd, COLLISION_HMWEAPON, QParams)) {
 			//blocking hit! process damage
@@ -93,6 +92,7 @@ void AHMWeapon::Fire()
 			}
 
 			TracerEndPoint = Hit.ImpactPoint;
+			
 		}
 
 		PlayerWeaponFireEffects(TracerEndPoint);
