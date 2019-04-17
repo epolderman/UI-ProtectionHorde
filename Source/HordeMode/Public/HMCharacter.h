@@ -53,6 +53,7 @@ protected:
 	float defaultFOV;
 	/* End Inputs && Movement */
 
+	/* Weapons */
 	AHMWeapon * currentWeapon;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
@@ -74,22 +75,24 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void StopFire();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	UCameraComponent * CameraComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	USpringArmComponent * SpringArmComponent;
+	int currentWeaponIndex;
+	/* End Weapons */
 
 	/* Health */
-	USHealthComponent * HealthComponent;
-
 	UFUNCTION()
 		void OnHealthChanged(USHealthComponent* HealthComp, float Health, float HealthDelta,
 			const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
 	UPROPERTY(BlueprintReadOnly, Category="Player")
 	bool isDead;
-	/* End Health */
-private:
-	int currentWeaponIndex;
+	/* End Health */	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	USHealthComponent * HealthComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UCameraComponent * CameraComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	USpringArmComponent * SpringArmComponent;
 };

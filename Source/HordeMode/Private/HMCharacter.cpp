@@ -170,13 +170,11 @@ void AHMCharacter::OnHealthChanged(USHealthComponent* HealthComp, float Health, 
 {
 	if (Health <= 0.0f && !isDead) {
 		isDead = true;
-		//Death Animation
 		currentWeapon->Destroy();
 		GetMovementComponent()->StopMovementImmediately();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		DetachFromControllerPendingDestroy();
 		SetLifeSpan(10.0f);
-	
 	}
 }
 
