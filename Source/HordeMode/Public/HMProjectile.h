@@ -8,7 +8,7 @@ class UProjectileMovementComponent;
 class USphereComponent;
 class UParticleSystem;
 class UDamageType;
-
+class URadialForceComponent;
 
 UCLASS()
 class HORDEMODE_API AHMProjectile : public AActor
@@ -46,4 +46,7 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile")
 	USphereComponent* CollisionComp;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Force")
+	URadialForceComponent * RadialFoceComponent;
 };
