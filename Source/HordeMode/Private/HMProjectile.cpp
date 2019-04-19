@@ -33,6 +33,10 @@ void AHMProjectile::BeginPlay() {
 
 	Super::BeginPlay();
 
+	RadialFoceComponent->ForceStrength = ForceStrength;
+	RadialFoceComponent->ImpulseStrength = ImpulseStrength;
+	RadialFoceComponent->Radius = RadialForceRadius;
+
 	SetLifeSpan(LifeSpan);
 
 	const AActor * GunOwner = GetOwner();

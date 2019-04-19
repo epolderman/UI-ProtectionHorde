@@ -43,6 +43,15 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	float DamageRadius; 
+
+	UPROPERTY(EditDefaultsOnly, Category = "Force")
+	float ForceStrength;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Force")
+	float ImpulseStrength;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Force")
+	float RadialForceRadius;
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile")
 	USphereComponent* CollisionComp;
