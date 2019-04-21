@@ -9,6 +9,14 @@ class USpringArmComponent;
 class AHMWeapon;
 class USHealthComponent;
 
+UENUM(BlueprintType)
+enum class EWeaponState : uint8 {
+	Grenade UMETA(DisplayName = "Grenade"),
+	Regular UMETA(DisplayName = "Rifle"),
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponChangeSignature, AHMCharacter *, owningChar, EWeaponState, currentWeaponIndex);
+
 UCLASS()
 class HORDEMODE_API AHMCharacter : public ACharacter
 {
@@ -21,7 +29,11 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual FVector GetPawnViewLocation() const override;
+
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FOnWeaponChangeSignature OnWeaponChange;
 protected:
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -67,7 +79,7 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, Category="Weapon")
 	FName WeaponAttachmentSocketName;
 
-	void SpawnWeapon(int weaponIndex);
+	void SpawnWeapon(EWeaponState weaponIndex);
 
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	void StartFire();
@@ -75,7 +87,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void StopFire();
 
-	int currentWeaponIndex;
+	EWeaponState currentWeaponIndex;
 	/* End Weapons */
 
 	/* Health */
@@ -95,4 +107,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USpringArmComponent * SpringArmComponent;
+
+	UFUNCTION()
+	void HandleWeaponChange(AHMCharacter * owningChar, EWeaponState currentWeaponIndex);
 };

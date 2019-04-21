@@ -32,7 +32,7 @@ AHMCharacter::AHMCharacter()
 	zoomedFOV = 65.0f;
 	zoomSpeed = 10.0f;
 	WeaponAttachmentSocketName = "WeaponSocket";
-	currentWeaponIndex = 0;
+	currentWeaponIndex = EWeaponState::Grenade;
 }
 
 void AHMCharacter::BeginPlay()
@@ -44,17 +44,21 @@ void AHMCharacter::BeginPlay()
 	Weapons.Add(SecondaryWeaponClass);
 	SpawnWeapon(currentWeaponIndex);
 	HealthComponent->OnHealthChanged.AddDynamic(this, &AHMCharacter::OnHealthChanged);
+	// OnWeaponChange.AddDynamic(this, &AHMCharacter::HandleWeaponChange);
 }
 
-void AHMCharacter::SpawnWeapon(int weaponIndex) 
+void AHMCharacter::SpawnWeapon(EWeaponState weaponIndex) 
 {
+		int index = weaponIndex == EWeaponState::Grenade ? 0 : 1;
+
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		currentWeapon = GetWorld()->SpawnActor<AHMWeapon>(Weapons[weaponIndex], FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+		currentWeapon = GetWorld()->SpawnActor<AHMWeapon>(Weapons[index], FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 		if (currentWeapon) {
 
 			currentWeapon->SetOwner(this);
 			currentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponAttachmentSocketName);
+			HandleWeaponChange(this, weaponIndex);
 		}
 }
 
@@ -63,8 +67,15 @@ void AHMCharacter::SwitchWeapon()
 	if (currentWeapon) {
 		currentWeapon->Destroy();
 	}
-	currentWeaponIndex = currentWeaponIndex == 0 ? 1 : 0;
+	currentWeaponIndex = currentWeaponIndex == EWeaponState::Regular ? EWeaponState::Grenade : EWeaponState::Regular;
 	SpawnWeapon(currentWeaponIndex);
+}
+
+void AHMCharacter::HandleWeaponChange(AHMCharacter* owningChar, EWeaponState currentWeaponIndex) {
+	
+	if (OnWeaponChange.IsBound()) {
+		OnWeaponChange.Broadcast(this, currentWeaponIndex);
+	}
 }
 
 void AHMCharacter::Tick(float DeltaTime)
@@ -170,10 +181,10 @@ void AHMCharacter::OnHealthChanged(USHealthComponent* HealthComp, float Health, 
 {
 	if (Health <= 0.0f && !isDead) {
 		isDead = true;
-		currentWeapon->Destroy();
 		GetMovementComponent()->StopMovementImmediately();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		DetachFromControllerPendingDestroy();
+		currentWeapon->SetLifeSpan(10.0f);
 		SetLifeSpan(10.0f);
 	}
 }
