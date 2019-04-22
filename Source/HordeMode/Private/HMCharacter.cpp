@@ -44,7 +44,6 @@ void AHMCharacter::BeginPlay()
 	Weapons.Add(SecondaryWeaponClass);
 	SpawnWeapon(currentWeaponIndex);
 	HealthComponent->OnHealthChanged.AddDynamic(this, &AHMCharacter::OnHealthChanged);
-	// OnWeaponChange.AddDynamic(this, &AHMCharacter::HandleWeaponChange);
 }
 
 void AHMCharacter::SpawnWeapon(EWeaponState weaponIndex) 
@@ -58,7 +57,7 @@ void AHMCharacter::SpawnWeapon(EWeaponState weaponIndex)
 
 			currentWeapon->SetOwner(this);
 			currentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponAttachmentSocketName);
-			HandleWeaponChange(this, weaponIndex);
+			HandleWeaponChange(weaponIndex);
 		}
 }
 
@@ -71,10 +70,10 @@ void AHMCharacter::SwitchWeapon()
 	SpawnWeapon(currentWeaponIndex);
 }
 
-void AHMCharacter::HandleWeaponChange(AHMCharacter* owningChar, EWeaponState currentWeaponIndex) {
+void AHMCharacter::HandleWeaponChange(EWeaponState currentWeaponIndex) {
 	
 	if (OnWeaponChange.IsBound()) {
-		OnWeaponChange.Broadcast(this, currentWeaponIndex);
+		OnWeaponChange.Broadcast( currentWeaponIndex);
 	}
 }
 
@@ -180,12 +179,15 @@ void AHMCharacter::OnHealthChanged(USHealthComponent* HealthComp, float Health, 
 	const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
 	if (Health <= 0.0f && !isDead) {
+
+		const float SPAWN_LIFE_SPAN = 10.0f;
+
 		isDead = true;
 		GetMovementComponent()->StopMovementImmediately();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		DetachFromControllerPendingDestroy();
-		currentWeapon->SetLifeSpan(10.0f);
-		SetLifeSpan(10.0f);
+		currentWeapon->SetLifeSpan(SPAWN_LIFE_SPAN);
+		SetLifeSpan(SPAWN_LIFE_SPAN);
 	}
 }
 

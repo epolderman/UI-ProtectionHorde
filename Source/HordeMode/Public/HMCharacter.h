@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include <DelegateCombinations.h>
 #include "HMCharacter.generated.h"
 
 class UCameraComponent;
@@ -15,8 +16,7 @@ enum class EWeaponState : uint8 {
 	Grenade UMETA(DisplayName = "Grenade"),
 	Regular UMETA(DisplayName = "Rifle"),
 };
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponChangeSignature, AHMCharacter *, owningChar, EWeaponState, currentWeaponIndex);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponChangeSignature, EWeaponState, currentWeaponIndex);
 
 UCLASS()
 class HORDEMODE_API AHMCharacter : public ACharacter
@@ -89,6 +89,9 @@ protected:
 	void StopFire();
 
 	EWeaponState currentWeaponIndex;
+
+	UFUNCTION()
+	void HandleWeaponChange(EWeaponState currentWeaponIndex);
 	/* End Weapons */
 
 	/* Health */
@@ -100,6 +103,8 @@ protected:
 	bool isDead;
 	/* End Health */	
 
+
+	/* Components */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USHealthComponent * HealthComponent;
 
@@ -108,7 +113,5 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USpringArmComponent * SpringArmComponent;
-
-	UFUNCTION()
-	void HandleWeaponChange(AHMCharacter * owningChar, EWeaponState currentWeaponIndex);
+	/* End Components */
 };
