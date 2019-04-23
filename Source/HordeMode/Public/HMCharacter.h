@@ -16,6 +16,7 @@ enum class EWeaponState : uint8 {
 	Grenade UMETA(DisplayName = "Grenade"),
 	Regular UMETA(DisplayName = "Rifle"),
 };
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponChangeSignature, EWeaponState, currentWeaponIndex);
 
 UCLASS()
@@ -102,7 +103,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category="Player")
 	bool isDead;
 	/* End Health */	
-
 
 	/* Components */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")

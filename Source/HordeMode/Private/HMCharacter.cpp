@@ -73,7 +73,7 @@ void AHMCharacter::SwitchWeapon()
 void AHMCharacter::HandleWeaponChange(EWeaponState currentWeaponIndex) {
 	
 	if (OnWeaponChange.IsBound()) {
-		OnWeaponChange.Broadcast( currentWeaponIndex);
+		OnWeaponChange.Broadcast(currentWeaponIndex);
 	}
 }
 
