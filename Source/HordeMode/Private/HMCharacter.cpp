@@ -32,6 +32,7 @@ AHMCharacter::AHMCharacter()
 	// default
 	zoomedFOV = 65.0f;
 	zoomSpeed = 10.0f;
+	timePlayerIsRemovedFromWorld = 10.0f;
 	WeaponAttachmentSocketName = "WeaponSocket";
 }
 
@@ -47,7 +48,7 @@ void AHMCharacter::BeginPlay()
 	HealthComponent->OnHealthChanged.AddDynamic(this, &AHMCharacter::OnHealthChanged);
 }
 
-void AHMCharacter::SpawnWeapon(EWeaponState weaponIndex) 
+void AHMCharacter::SpawnWeapon(EWeaponState &weaponIndex) 
 {
 		int index = weaponIndex == EWeaponState::Grenade ? 1 : 0;
 
@@ -181,15 +182,13 @@ void AHMCharacter::OnHealthChanged(USHealthComponent* HealthComp, float Health, 
 {
 	if (Health <= 0.0f && !isDead) {
 
-		// TODO: Expose to Blueprint
-		const float SPAWN_LIFE_SPAN = 10.0f;
 
 		isDead = true;
 		GetMovementComponent()->StopMovementImmediately();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		DetachFromControllerPendingDestroy();
-		currentWeapon->SetLifeSpan(SPAWN_LIFE_SPAN);
-		SetLifeSpan(SPAWN_LIFE_SPAN);
+		currentWeapon->SetLifeSpan(timePlayerIsRemovedFromWorld);
+		SetLifeSpan(timePlayerIsRemovedFromWorld);
 	}
 }
 

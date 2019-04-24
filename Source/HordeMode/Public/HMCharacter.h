@@ -81,7 +81,7 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, Category="Weapon")
 	FName WeaponAttachmentSocketName;
 
-	void SpawnWeapon(EWeaponState weaponIndex);
+	void SpawnWeapon(EWeaponState &weaponIndex);
 
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	void StartFire();
@@ -114,4 +114,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USpringArmComponent * SpringArmComponent;
 	/* End Components */
+
+	UPROPERTY(EditDefaultsOnly, Category = "Death")
+	float timePlayerIsRemovedFromWorld;
 };
