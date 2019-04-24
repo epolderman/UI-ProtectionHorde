@@ -13,8 +13,8 @@ class USHealthComponent;
 // TODO: Still a WIP on how weapons should communicate with our weapon class to our HUD
 UENUM(BlueprintType)
 enum class EWeaponState : uint8 {
-	Grenade UMETA(DisplayName = "Grenade"),
 	Regular UMETA(DisplayName = "Rifle"),
+	Grenade UMETA(DisplayName = "Grenade"),
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponChangeSignature, EWeaponState, currentWeaponIndex);

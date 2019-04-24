@@ -29,10 +29,10 @@ AHMCharacter::AHMCharacter()
 
 	GetCapsuleComponent()->SetCollisionResponseToChannel(COLLISION_HMWEAPON, ECR_Ignore);
 	HealthComponent = CreateDefaultSubobject<USHealthComponent>(TEXT("HealthComponent"));
+	// default
 	zoomedFOV = 65.0f;
 	zoomSpeed = 10.0f;
 	WeaponAttachmentSocketName = "WeaponSocket";
-	currentWeaponIndex = EWeaponState::Grenade;
 }
 
 void AHMCharacter::BeginPlay()
@@ -42,13 +42,14 @@ void AHMCharacter::BeginPlay()
 	defaultFOV = CameraComponent->FieldOfView;
 	Weapons.Add(StarterWeaponClass);
 	Weapons.Add(SecondaryWeaponClass);
+	currentWeaponIndex = EWeaponState::Regular;
 	SpawnWeapon(currentWeaponIndex);
 	HealthComponent->OnHealthChanged.AddDynamic(this, &AHMCharacter::OnHealthChanged);
 }
 
 void AHMCharacter::SpawnWeapon(EWeaponState weaponIndex) 
 {
-		int index = weaponIndex == EWeaponState::Grenade ? 0 : 1;
+		int index = weaponIndex == EWeaponState::Grenade ? 1 : 0;
 
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -180,6 +181,7 @@ void AHMCharacter::OnHealthChanged(USHealthComponent* HealthComp, float Health, 
 {
 	if (Health <= 0.0f && !isDead) {
 
+		// TODO: Expose to Blueprint
 		const float SPAWN_LIFE_SPAN = 10.0f;
 
 		isDead = true;
