@@ -6,6 +6,7 @@
 #include <Particles/ParticleSystem.h>
 #include <Particles/ParticleSystemComponent.h>
 #include <PhysicsEngine/RadialForceComponent.h>
+#include <GameFramework/Actor.h>
 
 
 AHMProjectile::AHMProjectile()
@@ -43,12 +44,9 @@ void AHMProjectile::BeginPlay() {
 
 	if (GunOwner ) 
 	{
-		
 		FVector EyeLocation;
 		FRotator EyeRotation;
-
 		GunOwner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
-
 		FVector ShotDirection = EyeRotation.Vector();
 		CollisionComp->AddImpulseAtLocation(ShotDirection * LaunchVelocity, GetActorLocation());
 	}
