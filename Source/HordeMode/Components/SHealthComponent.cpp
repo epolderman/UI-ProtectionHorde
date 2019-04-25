@@ -19,6 +19,7 @@ void USHealthComponent::BeginPlay()
 	AActor * myOwner = GetOwner();
 	if (myOwner) {
 
+		// binding a delegate on the OnTakeAnyDamage delegate => which then broadcasts another delegate
 		myOwner->OnTakeAnyDamage.AddDynamic(this, &USHealthComponent::HandleDamage);
 
 	}
