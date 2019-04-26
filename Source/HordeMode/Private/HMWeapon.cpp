@@ -59,12 +59,13 @@ void AHMWeapon::Fire()
 		QParams.bReturnPhysicalMaterial = true;
 		QParams.bTraceComplex = true; // more expensive, but nails the polygon on the mesh(accurate)
 
-		// tracer particle
+		// For Tracer Particle Effect
 		FVector TracerEndPoint = TraceEnd;
 
 		// struct that holds our hit data, normal, etc..
 		FHitResult Hit;
 		if (GetWorld()->LineTraceSingleByChannel(Hit, EyeLocation, TraceEnd, COLLISION_HMWEAPON, QParams)) {
+
 			//blocking hit! process damage
 			AActor * HitActor = Hit.GetActor();
 			EPhysicalSurface SurfaceType = UPhysicalMaterial::DetermineSurfaceType(Hit.PhysMaterial.Get());
