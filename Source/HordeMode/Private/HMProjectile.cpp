@@ -18,12 +18,12 @@ AHMProjectile::AHMProjectile()
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
 	CollisionComp->CanCharacterStepUpOn = ECB_No;
 	RootComponent = CollisionComp;
-	RadialFoceComponent = CreateDefaultSubobject<URadialForceComponent>(TEXT("RadialForceComp"));
-	RadialFoceComponent->ForceStrength = 5000.0f;
-	RadialFoceComponent->ImpulseStrength = 5000.0f;
-	RadialFoceComponent->Radius = 500.0f;
-	RadialFoceComponent->bIgnoreOwningActor = true;
-	RadialFoceComponent->bImpulseVelChange = true;
+	RadialForceComponent = CreateDefaultSubobject<URadialForceComponent>(TEXT("RadialForceComp"));
+	RadialForceComponent->ForceStrength = 5000.0f;
+	RadialForceComponent->ImpulseStrength = 5000.0f;
+	RadialForceComponent->Radius = 500.0f;
+	RadialForceComponent->bIgnoreOwningActor = true;
+	RadialForceComponent->bImpulseVelChange = true;
 	LifeSpan = 1.0f;
 	LaunchVelocity = 350.0f;
 	BaseDamage = 20.0f;
@@ -34,9 +34,9 @@ void AHMProjectile::BeginPlay() {
 
 	Super::BeginPlay();
 
-	RadialFoceComponent->ForceStrength = ForceStrength;
-	RadialFoceComponent->ImpulseStrength = ImpulseStrength;
-	RadialFoceComponent->Radius = RadialForceRadius;
+	RadialForceComponent->ForceStrength = ForceStrength;
+	RadialForceComponent->ImpulseStrength = ImpulseStrength;
+	RadialForceComponent->Radius = RadialForceRadius;
 
 	SetLifeSpan(LifeSpan);
 

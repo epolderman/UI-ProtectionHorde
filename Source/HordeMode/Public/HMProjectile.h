@@ -57,5 +57,5 @@ protected:
 	USphereComponent* CollisionComp;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Force")
-	URadialForceComponent * RadialFoceComponent;
+	URadialForceComponent * RadialForceComponent;
 };
