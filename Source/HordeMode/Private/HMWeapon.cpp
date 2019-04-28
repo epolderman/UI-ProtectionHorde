@@ -9,7 +9,9 @@
 #include <PhysicalMaterials/PhysicalMaterial.h>
 #include <TimerManager.h>
 
-//Notes: Shift + Alt + R = quick rename
+
+/* Rifle Blueprint = Default Weapon */
+
 
 const int DISTANCE = 10000;
 

@@ -16,6 +16,7 @@
 // Shift + F1 => While playing game, can regain focus back in editor. 
 // Root Component = Capsule
 // Blueprint values can override C++ values (Example: bUsePawnControlRotation)
+// Notes: Shift + Alt + R = quick rename
 
 AHMCharacter::AHMCharacter()
 {
@@ -181,8 +182,6 @@ void AHMCharacter::OnHealthChanged(USHealthComponent* HealthComp, float Health, 
 	const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
 	if (Health <= 0.0f && !isDead) {
-
-
 		isDead = true;
 		GetMovementComponent()->StopMovementImmediately();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
