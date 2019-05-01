@@ -73,7 +73,6 @@ void AHMProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPri
 {
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
 	{
-
 		OnExplode();
 		Destroy();
 	}
