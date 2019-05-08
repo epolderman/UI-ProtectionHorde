@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "STrackerBot.generated.h"
-
+class UStaticMeshComponent;
 
 UCLASS()
 class HORDEMODE_API ASTrackerBot : public APawn

@@ -17,6 +17,7 @@
 // Root Component = Capsule
 // Blueprint values can override C++ values (Example: bUsePawnControlRotation)
 // Notes: Shift + Alt + R = quick rename
+// In the UE4 Editor -> End on the keypad will place object on the floor
 
 AHMCharacter::AHMCharacter()
 {
