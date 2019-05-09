@@ -2,6 +2,10 @@
 
 #include "STrackerBot.h"
 #include "Components/StaticMeshComponent.h"
+#include <NavigationSystem/Public/NavigationPath.h>
+#include <NavigationSystem/Public/NavigationSystem.h>
+#include <Kismet/GameplayStatics.h>
+#include <GameFramework/Character.h>
 
 
 ASTrackerBot::ASTrackerBot()
@@ -19,4 +23,17 @@ void ASTrackerBot::BeginPlay()
 	
 }
 
+FVector ASTrackerBot::getNextLocation()
+{
+	// hack to get player location, won't work in multi player
+	ACharacter * playerPawn = UGameplayStatics::GetPlayerCharacter(this, 0);
+	UNavigationPath * navPath = UNavigationSystemV1::FindPathToActorSynchronously(GetWorld(), GetActorLocation(), playerPawn);
+
+	if (navPath->PathPoints.Num() > 1) {
+		// current is at index 0, next is at 1
+		return navPath->PathPoints[1];
+	}
+
+	return GetActorLocation();
+}
 
