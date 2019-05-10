@@ -12,15 +12,36 @@ ASTrackerBot::ASTrackerBot()
 {
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	MeshComponent->SetCanEverAffectNavigation(false);
+	MeshComponent->SetSimulatePhysics(true);
 	RootComponent = MeshComponent;
-	
+	bUseVelocityChange = false;
+	moveMentForce = 1000.0f;
+	requiredDistanceToTarget = 100.0f;
+}
+
+void ASTrackerBot::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	const float distanceToTarget = (GetActorLocation() - NextPathVector).Size();
+
+	if (distanceToTarget <= requiredDistanceToTarget) {
+		NextPathVector = getNextLocation();
+	}
+	else {
+		FVector forceDirection = NextPathVector - GetActorLocation();
+		forceDirection.Normalize(); //get direction
+		forceDirection *= moveMentForce; //scale
+		MeshComponent->AddForce(forceDirection, NAME_None, bUseVelocityChange);
+	}
 }
 
 // Called when the game starts or when spawned
 void ASTrackerBot::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	NextPathVector = getNextLocation();
 }
 
 FVector ASTrackerBot::getNextLocation()
@@ -36,4 +57,5 @@ FVector ASTrackerBot::getNextLocation()
 
 	return GetActorLocation();
 }
+
 

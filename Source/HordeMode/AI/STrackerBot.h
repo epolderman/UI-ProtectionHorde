@@ -11,15 +11,28 @@ UCLASS()
 class HORDEMODE_API ASTrackerBot : public APawn
 {
 	GENERATED_BODY()
-
-public:
-	// Sets default values for this pawn's properties
-	ASTrackerBot();
 protected:
-	// Called when the game starts or when spawned
+	UPROPERTY(VisibleDefaultsOnly, Category = "Display")
+		UStaticMeshComponent * MeshComponent;
+
+
 	virtual void BeginPlay() override;
+
 	FVector getNextLocation();
 public:	
-	UPROPERTY(VisibleDefaultsOnly, Category="Display")
-	UStaticMeshComponent * MeshComponent;
+	ASTrackerBot();
+
+	UPROPERTY(VisibleAnywhere, Category="AI")
+	FVector NextPathVector;
+
+	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	bool bUseVelocityChange;
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	float moveMentForce;
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	float requiredDistanceToTarget;
 };
