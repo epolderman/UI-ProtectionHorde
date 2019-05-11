@@ -7,6 +7,7 @@
 #include <Kismet/GameplayStatics.h>
 #include <GameFramework/Character.h>
 #include <DrawDebugHelpers.h>
+#include "HordeMode/Components/SHealthComponent.h"
 
 
 
@@ -15,6 +16,7 @@ ASTrackerBot::ASTrackerBot()
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	MeshComponent->SetCanEverAffectNavigation(false);
 	MeshComponent->SetSimulatePhysics(true);
+	HealthComponent = CreateDefaultSubobject<USHealthComponent>(TEXT("HealthComponent"));
 	RootComponent = MeshComponent;
 	bUseVelocityChange = false;
 	moveMentForce = 1000.0f;
@@ -27,6 +29,8 @@ void ASTrackerBot::BeginPlay()
 	Super::BeginPlay();
 
 	NextPathVector = getNextLocation();
+
+	HealthComponent->OnHealthChanged.AddDynamic(this, &ASTrackerBot::OnTakeDamage);
 }
 
 void ASTrackerBot::Tick(float DeltaTime)
@@ -66,4 +70,12 @@ FVector ASTrackerBot::getNextLocation()
 	return GetActorLocation();
 }
 
+void ASTrackerBot::OnTakeDamage(USHealthComponent* HealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
+{
+	//explode on death < 0
+
+	//todo: pulse material on hit
+
+	UE_LOG(LogTemp, Log, TEXT("Health %s of %s"), *FString::SanitizeFloat(Health), *GetName());
+}
 
