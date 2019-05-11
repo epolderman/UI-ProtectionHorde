@@ -6,6 +6,8 @@
 #include <NavigationSystem/Public/NavigationSystem.h>
 #include <Kismet/GameplayStatics.h>
 #include <GameFramework/Character.h>
+#include <DrawDebugHelpers.h>
+
 
 
 ASTrackerBot::ASTrackerBot()
@@ -19,6 +21,14 @@ ASTrackerBot::ASTrackerBot()
 	requiredDistanceToTarget = 100.0f;
 }
 
+// Called when the game starts or when spawned
+void ASTrackerBot::BeginPlay()
+{
+	Super::BeginPlay();
+
+	NextPathVector = getNextLocation();
+}
+
 void ASTrackerBot::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -27,21 +37,19 @@ void ASTrackerBot::Tick(float DeltaTime)
 
 	if (distanceToTarget <= requiredDistanceToTarget) {
 		NextPathVector = getNextLocation();
+
+		DrawDebugString(GetWorld(), GetActorLocation(), "TargetReached");
 	}
 	else {
 		FVector forceDirection = NextPathVector - GetActorLocation();
 		forceDirection.Normalize(); //get direction
 		forceDirection *= moveMentForce; //scale
 		MeshComponent->AddForce(forceDirection, NAME_None, bUseVelocityChange);
+
+		DrawDebugDirectionalArrow(GetWorld(), GetActorLocation(), GetActorLocation() + forceDirection, 32, FColor::Green, false, 0.0);
 	}
-}
 
-// Called when the game starts or when spawned
-void ASTrackerBot::BeginPlay()
-{
-	Super::BeginPlay();
-
-	NextPathVector = getNextLocation();
+	DrawDebugSphere(GetWorld(), NextPathVector, 20, 12, FColor::Yellow, false, 0.0f, 1.0f);
 }
 
 FVector ASTrackerBot::getNextLocation()
