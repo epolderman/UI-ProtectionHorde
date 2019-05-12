@@ -8,8 +8,7 @@
 #include <GameFramework/Character.h>
 #include <DrawDebugHelpers.h>
 #include "HordeMode/Components/SHealthComponent.h"
-
-
+#include <Particles/ParticleSystemComponent.h>
 
 ASTrackerBot::ASTrackerBot()
 {
@@ -21,6 +20,9 @@ ASTrackerBot::ASTrackerBot()
 	bUseVelocityChange = false;
 	moveMentForce = 1000.0f;
 	requiredDistanceToTarget = 100.0f;
+	isDead = false;
+	explosionRadius = 300.0f;
+	damageAmount = 80.0f;
 }
 
 // Called when the game starts or when spawned
@@ -56,6 +58,23 @@ void ASTrackerBot::Tick(float DeltaTime)
 	DrawDebugSphere(GetWorld(), NextPathVector, 20, 12, FColor::Yellow, false, 0.0f, 1.0f);
 }
 
+void ASTrackerBot::SelfDestruct()
+{
+	isDead = true;
+
+	if(ExplodeEffect)
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplodeEffect, GetActorLocation(), GetActorRotation());
+
+	TArray<AActor *> IgnoredActors;
+	IgnoredActors.Add(this);
+
+	UGameplayStatics::ApplyRadialDamage(this, damageAmount, GetActorLocation(), explosionRadius, nullptr, IgnoredActors, this, GetInstigatorController(), true);
+	
+	DrawDebugSphere(GetWorld(), GetActorLocation(), explosionRadius, 10, FColor::Green, false, 2.0f, 0, 1.0f);
+
+	Destroy();
+}
+
 FVector ASTrackerBot::getNextLocation()
 {
 	// hack to get player location, won't work in multi player
@@ -72,9 +91,15 @@ FVector ASTrackerBot::getNextLocation()
 
 void ASTrackerBot::OnTakeDamage(USHealthComponent* HealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
-	//explode on death < 0
+	// dynamic instance at runtime, in case of multiple instances
+	if(currentMaterialOnMesh == nullptr)
+	currentMaterialOnMesh = MeshComponent->CreateAndSetMaterialInstanceDynamicFromMaterial(0, MeshComponent->GetMaterial(0));
 
-	//todo: pulse material on hit
+	if (currentMaterialOnMesh != nullptr)
+	currentMaterialOnMesh->SetScalarParameterValue("LastTimeDamageTaken", GetWorld()->TimeSeconds);
+
+	if (Health <= 0.0f && !isDead)
+		SelfDestruct();
 
 	UE_LOG(LogTemp, Log, TEXT("Health %s of %s"), *FString::SanitizeFloat(Health), *GetName());
 }
