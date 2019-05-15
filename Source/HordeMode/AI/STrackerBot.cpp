@@ -12,6 +12,7 @@
 #include <Particles/ParticleSystemComponent.h>
 #include "Public/HMCharacter.h"
 #include <GameFramework/Actor.h>
+#include <Sound/SoundCue.h>
 
 
 
@@ -39,6 +40,8 @@ ASTrackerBot::ASTrackerBot()
 	explosionRadius = 300.0f;
 	damageAmount = 80.0f;
 	bisStartedSelfDestruct = false;
+
+	Timer_Damage_Interval = 0.25f;
 }
 
 // Called when the game starts or when spawned
@@ -78,8 +81,13 @@ void ASTrackerBot::SelfDestruct()
 {
 	isDead = true;
 
-	if(ExplodeEffect)
+	if(ExplodeEffect != nullptr)
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplodeEffect, GetActorLocation(), GetActorRotation());
+
+	if (ExplosionSound != nullptr)
+	UGameplayStatics::SpawnSoundAttached(ExplosionSound, RootComponent);
+
+	
 
 	TArray<AActor *> IgnoredActors;
 	IgnoredActors.Add(this);
@@ -93,7 +101,6 @@ void ASTrackerBot::SelfDestruct()
 
 void ASTrackerBot::NotifyActorBeginOverlap(AActor * otherActor)
 {
-	UE_LOG(LogTemp, Log, TEXT("INNN"));
 	if (bisStartedSelfDestruct) {
 		return;
 	}
@@ -101,9 +108,13 @@ void ASTrackerBot::NotifyActorBeginOverlap(AActor * otherActor)
 	AHMCharacter * PlayerPawn = Cast<AHMCharacter>(otherActor);
 
 	if (PlayerPawn != nullptr) {
-		UE_LOG(LogTemp, Log, TEXT("BOOM"));
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASTrackerBot::DamageSelf, 0.5f, true, 0.0f);
+
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASTrackerBot::DamageSelf, Timer_Damage_Interval, true, 0.0f);
+
 		bisStartedSelfDestruct = true;
+
+		if(SelfDestructSound != nullptr)
+		UGameplayStatics::SpawnSoundAttached(SelfDestructSound, RootComponent);
 	}
 }
 

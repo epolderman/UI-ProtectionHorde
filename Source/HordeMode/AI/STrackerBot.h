@@ -11,6 +11,7 @@ class USHealthComponent;
 class UMaterialInstanceDynamic;
 class UParticleSystem;
 class USphereComponent;
+class USoundCue;
 
 
 UCLASS()
@@ -71,7 +72,16 @@ public:
 	float explosionRadius;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
-		float damageAmount;
+	float damageAmount;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
+		USoundCue * SelfDestructSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
+	USoundCue * ExplosionSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
+	float Timer_Damage_Interval; 
 
 	virtual void NotifyActorBeginOverlap(AActor* otherActor) override;
 };
