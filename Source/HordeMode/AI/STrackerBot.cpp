@@ -2,6 +2,7 @@
 
 #include "STrackerBot.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/SphereComponent.h"
 #include <NavigationSystem/Public/NavigationPath.h>
 #include <NavigationSystem/Public/NavigationSystem.h>
 #include <Kismet/GameplayStatics.h>
@@ -9,20 +10,35 @@
 #include <DrawDebugHelpers.h>
 #include "HordeMode/Components/SHealthComponent.h"
 #include <Particles/ParticleSystemComponent.h>
+#include "Public/HMCharacter.h"
+#include <GameFramework/Actor.h>
+
+
 
 ASTrackerBot::ASTrackerBot()
 {
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	MeshComponent->SetCanEverAffectNavigation(false);
 	MeshComponent->SetSimulatePhysics(true);
-	HealthComponent = CreateDefaultSubobject<USHealthComponent>(TEXT("HealthComponent"));
 	RootComponent = MeshComponent;
+
+	HealthComponent = CreateDefaultSubobject<USHealthComponent>(TEXT("HealthComponent"));
+
+	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent")); 
+	SphereComponent->SetupAttachment(RootComponent);
+	SphereComponent->SetSphereRadius(explosionRadius);
+	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	SphereComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
+	SphereComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+
+
 	bUseVelocityChange = false;
 	moveMentForce = 1000.0f;
 	requiredDistanceToTarget = 100.0f;
 	isDead = false;
 	explosionRadius = 300.0f;
 	damageAmount = 80.0f;
+	bisStartedSelfDestruct = false;
 }
 
 // Called when the game starts or when spawned
@@ -73,6 +89,27 @@ void ASTrackerBot::SelfDestruct()
 	DrawDebugSphere(GetWorld(), GetActorLocation(), explosionRadius, 10, FColor::Green, false, 2.0f, 0, 1.0f);
 
 	Destroy();
+}
+
+void ASTrackerBot::NotifyActorBeginOverlap(AActor * otherActor)
+{
+	UE_LOG(LogTemp, Log, TEXT("INNN"));
+	if (bisStartedSelfDestruct) {
+		return;
+	}
+
+	AHMCharacter * PlayerPawn = Cast<AHMCharacter>(otherActor);
+
+	if (PlayerPawn != nullptr) {
+		UE_LOG(LogTemp, Log, TEXT("BOOM"));
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASTrackerBot::DamageSelf, 0.5f, true, 0.0f);
+		bisStartedSelfDestruct = true;
+	}
+}
+
+void ASTrackerBot::DamageSelf()
+{
+	UGameplayStatics::ApplyDamage(this, 20.0f, GetInstigatorController(), this, nullptr);
 }
 
 FVector ASTrackerBot::getNextLocation()

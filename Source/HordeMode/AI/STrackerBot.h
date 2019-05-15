@@ -10,8 +10,8 @@ class UStaticMeshComponent;
 class USHealthComponent;
 class UMaterialInstanceDynamic;
 class UParticleSystem;
+class USphereComponent;
 
-// todo: add radius damage config to blueprint
 
 UCLASS()
 class HORDEMODE_API ASTrackerBot : public APawn
@@ -34,6 +34,15 @@ protected:
 	UFUNCTION()
 	void OnTakeDamage(USHealthComponent* HealthComp, float Health, float HealthDelta,
 		const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	USphereComponent * SphereComponent;
+
+	FTimerHandle TimerHandle;
+
+	void DamageSelf();
+
+	bool bisStartedSelfDestruct;
 public:	
 	ASTrackerBot();
 
@@ -62,5 +71,7 @@ public:
 	float explosionRadius;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
-	float damageAmount;
+		float damageAmount;
+
+	virtual void NotifyActorBeginOverlap(AActor* otherActor) override;
 };
