@@ -62,7 +62,6 @@ void ASTrackerBot::Tick(float DeltaTime)
 
 	if (distanceToTarget <= requiredDistanceToTarget) {
 		NextPathVector = getNextLocation();
-
 		DrawDebugString(GetWorld(), GetActorLocation(), "TargetReached");
 	}
 	else {
@@ -70,7 +69,6 @@ void ASTrackerBot::Tick(float DeltaTime)
 		forceDirection.Normalize(); //get direction
 		forceDirection *= moveMentForce; //scale
 		MeshComponent->AddForce(forceDirection, NAME_None, bUseVelocityChange);
-
 		DrawDebugDirectionalArrow(GetWorld(), GetActorLocation(), GetActorLocation() + forceDirection, 32, FColor::Green, false, 0.0);
 	}
 
@@ -86,8 +84,6 @@ void ASTrackerBot::SelfDestruct()
 
 	if (ExplosionSound != nullptr)
 	UGameplayStatics::SpawnSoundAttached(ExplosionSound, RootComponent);
-
-	
 
 	TArray<AActor *> IgnoredActors;
 	IgnoredActors.Add(this);
