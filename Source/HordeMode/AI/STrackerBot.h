@@ -75,7 +75,7 @@ public:
 	float damageAmount;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
-		USoundCue * SelfDestructSound;
+	USoundCue * SelfDestructSound;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
 	USoundCue * ExplosionSound;
@@ -84,4 +84,6 @@ public:
 	float Timer_Damage_Interval; 
 
 	virtual void NotifyActorBeginOverlap(AActor* otherActor) override;
+
+	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
 };

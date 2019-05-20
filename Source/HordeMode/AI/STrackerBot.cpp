@@ -13,6 +13,8 @@
 #include "Public/HMCharacter.h"
 #include <GameFramework/Actor.h>
 #include <Sound/SoundCue.h>
+#include <PhysicalMaterials/PhysicalMaterial.h>
+#include <Materials/MaterialInterface.h>
 
 
 
@@ -29,18 +31,16 @@ ASTrackerBot::ASTrackerBot()
 	SphereComponent->SetupAttachment(RootComponent);
 	SphereComponent->SetSphereRadius(explosionRadius);
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	SphereComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
+	SphereComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
 	SphereComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-
-
+	
 	bUseVelocityChange = false;
 	moveMentForce = 1000.0f;
 	requiredDistanceToTarget = 100.0f;
 	isDead = false;
 	explosionRadius = 300.0f;
-	damageAmount = 80.0f;
+	damageAmount = 10.0f;
 	bisStartedSelfDestruct = false;
-
 	Timer_Damage_Interval = 0.25f;
 }
 
@@ -95,23 +95,34 @@ void ASTrackerBot::SelfDestruct()
 	Destroy();
 }
 
+// check for nearby other instances
 void ASTrackerBot::NotifyActorBeginOverlap(AActor * otherActor)
 {
+	ASTrackerBot * otherBot = Cast<ASTrackerBot>(otherActor);
+	if (otherBot != nullptr){
+		// handle material alpha 
+		damageAmount += 10.0f;
+	}
+
 	if (bisStartedSelfDestruct) {
 		return;
 	}
 
 	AHMCharacter * PlayerPawn = Cast<AHMCharacter>(otherActor);
-
 	if (PlayerPawn != nullptr) {
-
 		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASTrackerBot::DamageSelf, Timer_Damage_Interval, true, 0.0f);
-
 		bisStartedSelfDestruct = true;
-
 		if(SelfDestructSound != nullptr)
 		UGameplayStatics::SpawnSoundAttached(SelfDestructSound, RootComponent);
 	}
+}
+
+// check for nearby other instances
+void ASTrackerBot::NotifyActorEndOverlap(AActor * otherActor)
+{
+	ASTrackerBot * otherBot = Cast<ASTrackerBot>(otherActor);
+	if (otherBot != nullptr)
+	damageAmount -= 10.0f;
 }
 
 void ASTrackerBot::DamageSelf()
