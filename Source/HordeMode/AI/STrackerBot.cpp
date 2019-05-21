@@ -121,8 +121,18 @@ void ASTrackerBot::NotifyActorBeginOverlap(AActor * otherActor)
 void ASTrackerBot::NotifyActorEndOverlap(AActor * otherActor)
 {
 	ASTrackerBot * otherBot = Cast<ASTrackerBot>(otherActor);
-	if (otherBot != nullptr)
-	damageAmount -= 10.0f;
+	if (otherBot != nullptr) {
+
+		damageAmount -= 10.0f;
+
+		// todo:: add alpha impulse here
+		if (currentMaterialOnMesh == nullptr)
+			currentMaterialOnMesh = MeshComponent->CreateAndSetMaterialInstanceDynamicFromMaterial(0, MeshComponent->GetMaterial(0));
+
+		if (currentMaterialOnMesh != nullptr)
+			currentMaterialOnMesh->SetScalarParameterValue("LastTimeDamageTaken", GetWorld()->TimeSeconds);
+	}
+	
 }
 
 void ASTrackerBot::DamageSelf()
