@@ -47,6 +47,9 @@ protected:
 public:	
 	ASTrackerBot();
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
+	float maxDamageLevel;
+
 	UPROPERTY(VisibleAnywhere, Category="AI")
 	FVector NextPathVector;
 

@@ -39,8 +39,9 @@ ASTrackerBot::ASTrackerBot()
 	requiredDistanceToTarget = 100.0f;
 	isDead = false;
 	explosionRadius = 300.0f;
-	damageAmount = 10.0f;
+	damageAmount = 80.0f;
 	bisStartedSelfDestruct = false;
+	maxDamageLevel = 100.0f;
 	Timer_Damage_Interval = 0.25f;
 }
 
@@ -100,7 +101,13 @@ void ASTrackerBot::NotifyActorBeginOverlap(AActor * otherActor)
 {
 	ASTrackerBot * otherBot = Cast<ASTrackerBot>(otherActor);
 	if (otherBot != nullptr){
-		// handle material alpha 
+
+		if (currentMaterialOnMesh == nullptr)
+			currentMaterialOnMesh = MeshComponent->CreateAndSetMaterialInstanceDynamicFromMaterial(0, MeshComponent->GetMaterial(0));
+
+		if (currentMaterialOnMesh != nullptr)
+			currentMaterialOnMesh->SetScalarParameterValue("PowerLevelAlpha", damageAmount / maxDamageLevel );
+
 		damageAmount += 10.0f;
 	}
 
@@ -122,15 +129,14 @@ void ASTrackerBot::NotifyActorEndOverlap(AActor * otherActor)
 {
 	ASTrackerBot * otherBot = Cast<ASTrackerBot>(otherActor);
 	if (otherBot != nullptr) {
-
 		damageAmount -= 10.0f;
 
-		// todo:: add alpha impulse here
+		// todo:: clean up
 		if (currentMaterialOnMesh == nullptr)
 			currentMaterialOnMesh = MeshComponent->CreateAndSetMaterialInstanceDynamicFromMaterial(0, MeshComponent->GetMaterial(0));
 
 		if (currentMaterialOnMesh != nullptr)
-			currentMaterialOnMesh->SetScalarParameterValue("LastTimeDamageTaken", GetWorld()->TimeSeconds);
+			currentMaterialOnMesh->SetScalarParameterValue("PowerLevelAlpha", damageAmount / maxDamageLevel);
 	}
 	
 }
