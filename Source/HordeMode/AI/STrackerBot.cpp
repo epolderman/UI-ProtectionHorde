@@ -99,6 +99,8 @@ void ASTrackerBot::SelfDestruct()
 // check for nearby other instances
 void ASTrackerBot::NotifyActorBeginOverlap(AActor * otherActor)
 {
+	Super::NotifyActorBeginOverlap(otherActor);
+
 	ASTrackerBot * otherBot = Cast<ASTrackerBot>(otherActor);
 	if (otherBot != nullptr){
 
