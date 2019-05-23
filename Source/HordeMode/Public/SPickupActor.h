@@ -33,7 +33,7 @@ protected:
 
 	AHMPowerUpActor * CurrentPowerUp;
 
-	UPROPERTY(EditDefaultsOnly, Category = "PowerUps")
+	UPROPERTY(EditInstanceOnly, Category = "PowerUps")
 	TSubclassOf<AHMPowerUpActor> PowerUpClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "PowerUps")
