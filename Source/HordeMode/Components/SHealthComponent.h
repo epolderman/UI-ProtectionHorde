@@ -15,14 +15,17 @@ class HORDEMODE_API USHealthComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
+
 	USHealthComponent();
 
 	UFUNCTION(BlueprintCallable, Category="Heal")
 	void Heal(float HealAmount);
 
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FOnHealthChangedSignature OnHealthChanged;
+
 protected:
-	// Called when the game starts
+	
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadOnly, Category="HealthComponent")
@@ -33,8 +36,4 @@ protected:
 
 	UFUNCTION()
 	void HandleDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
-
-public:	
-	UPROPERTY(BlueprintAssignable, Category="Events")
-	FOnHealthChangedSignature OnHealthChanged;
 };

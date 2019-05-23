@@ -36,7 +36,7 @@ protected:
 	UPROPERTY(EditInstanceOnly, Category = "PowerUps")
 	TSubclassOf<AHMPowerUpActor> PowerUpClass;
 
-	UPROPERTY(EditDefaultsOnly, Category = "PowerUps")
+	UPROPERTY(EditInstanceOnly, Category = "PowerUps")
 	float coolDownDuration;
 
 	FTimerHandle TimerHandle_RespawnTimer;
