@@ -15,13 +15,10 @@ void AHMPowerUpActor::BeginPlay()
 
 void AHMPowerUpActor::OnTickPowerUp()
 {
-	UE_LOG(LogTemp, Warning, TEXT("TickedProcessed before %i"), TickedProcessed);
 
 	TickedProcessed++;
 
 	OnPowerUpTicked();
-
-	UE_LOG(LogTemp, Warning, TEXT("TickedProcessed after %i"), TickedProcessed);
 	
 
 	if (TickedProcessed >= TotalNumberOfTicks) {
@@ -35,11 +32,7 @@ void AHMPowerUpActor::OnTickPowerUp()
 
 void AHMPowerUpActor::ActivatePowerUp()
 {
-	// blueprint implemented
 	OnActivated();
-
-	UE_LOG(LogTemp, Warning, TEXT("PowerupInterval %f"), PowerUpInterval);
-	UE_LOG(LogTemp, Warning, TEXT("total number of ticks %i"), TotalNumberOfTicks);
 
 	if (PowerUpInterval > 0.0f)
 		GetWorldTimerManager().SetTimer(TimerHandle_PowerUpTick, this, &AHMPowerUpActor::OnTickPowerUp, PowerUpInterval, true);
