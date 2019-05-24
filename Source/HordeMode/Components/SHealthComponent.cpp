@@ -22,7 +22,7 @@ void USHealthComponent::BeginPlay()
 	Health = DefaultHealth;
 }
 
-// todo: breakdown this functionality and see why it works under the hood? optmization?
+// todo: breakdown this functionality and see why it works under the hood? optimization?
 void USHealthComponent::Heal(float HealAmount)
 {
 	if (HealAmount <= 0.0f || Health <= 0.0f) {
