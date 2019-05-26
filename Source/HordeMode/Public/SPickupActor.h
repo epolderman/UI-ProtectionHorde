@@ -1,5 +1,3 @@
-
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -9,6 +7,10 @@
 class USphereComponent;
 class UDecalComponent;
 class AHMPowerUpActor;
+
+/*
+	Base for pickups. Handles cool downs, specific power ups. 
+*/
 
 UCLASS()
 class HORDEMODE_API ASPickupActor : public AActor

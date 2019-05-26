@@ -1,11 +1,12 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "HMPowerUpActor.generated.h"
 
+/*
+	Specific Power Ups, total number applied
+*/
 
 UCLASS()
 class HORDEMODE_API AHMPowerUpActor : public AActor
@@ -13,7 +14,6 @@ class HORDEMODE_API AHMPowerUpActor : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	AHMPowerUpActor();
 
 	UFUNCTION(BlueprintImplementableEvent, Category="PowerUps")
