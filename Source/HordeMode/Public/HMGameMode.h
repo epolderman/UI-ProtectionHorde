@@ -37,8 +37,12 @@ protected:
 
 	void CheckWaveState();
 
+	bool IsAnyPlayerAlive() const;
+
+	void GameOver();
+
 	FTimerHandle TimerHandle_NextWaveStart;
-	// easily terminated
+
 	FTimerHandle TimerHandle_BotSpawner;
 
 	int32 NumberOfBotsToSpawnInCurrentWave;

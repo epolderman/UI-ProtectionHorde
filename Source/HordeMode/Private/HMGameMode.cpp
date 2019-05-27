@@ -29,6 +29,10 @@ void AHMGameMode::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	CheckWaveState();
+
+	if (!IsAnyPlayerAlive()) {
+		GameOver();
+	}
 }
 
 void AHMGameMode::StartWave()
@@ -91,4 +95,28 @@ void AHMGameMode::CheckWaveState()
 	}
 	
 
+}
+
+bool AHMGameMode::IsAnyPlayerAlive() const
+{	
+	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It) {
+		APlayerController * CurrentPlayer = It->Get();
+		if (CurrentPlayer != nullptr && CurrentPlayer->GetPawn()) {
+			APawn * Pawn = CurrentPlayer->GetPawn();
+			USHealthComponent * HealthComp = Cast<USHealthComponent>(Pawn->GetComponentByClass(USHealthComponent::StaticClass()));
+			if (ensure(HealthComp) && HealthComp->GetHealth() > 0.0f) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+void AHMGameMode::GameOver()
+{
+	EndWave();
+
+	UE_LOG(LogTemp, Warning, TEXT("Game Over!"));
+	// todo clean up match, menu , etcc.
 }

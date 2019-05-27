@@ -20,6 +20,8 @@
 // Notes: Shift + Alt + R = quick rename
 // In the UE4 Editor -> End on the keypad will place object on the floor
 
+// 121 - 122 const effectiveness in UE
+
 // DebugGameEditor will allows us to play the game but add breakpoints to see where we are breaking.
 // At the top of Visual Studio to the left of Win64
 
