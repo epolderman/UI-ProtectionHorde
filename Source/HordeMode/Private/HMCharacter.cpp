@@ -10,7 +10,8 @@
 #include <HordeMode/HordeMode.h>
 #include "HordeMode/Components/SHealthComponent.h"
 
-// Notes / Hot keys
+// Notes / Hot keys 
+// CTRL Shift F = Search Entire Solution & Replace UI
 // Shift + Alt + O = Search entire source
 // Alt + G => Takes you to the function definition in the Engine. 
 // Shift + F1 => While playing game, can regain focus back in editor. 

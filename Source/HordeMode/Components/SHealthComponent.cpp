@@ -10,6 +10,11 @@ USHealthComponent::USHealthComponent()
 	DefaultHealth = 100.0f;
 }
 
+float USHealthComponent::GetHealth() const
+{
+	return Health;
+}
+
 void USHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();

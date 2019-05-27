@@ -18,6 +18,8 @@ public:
 	AHMGameMode();
 
 	virtual void StartPlay() override;
+
+	virtual void Tick(float DeltaSeconds) override;
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category="GameMode")
 	void SpawnNewBot();
@@ -33,6 +35,9 @@ protected:
 
 	void SpawnBotTimerElapsed();
 
+	void CheckWaveState();
+
+	FTimerHandle TimerHandle_NextWaveStart;
 	// easily terminated
 	FTimerHandle TimerHandle_BotSpawner;
 
