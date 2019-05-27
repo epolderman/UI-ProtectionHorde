@@ -3,6 +3,7 @@
 #include <TimerManager.h>
 #include <GameFramework/Actor.h>
 #include <Engine/World.h>
+#include "HordeMode/Public/HMGameState.h"
 
 
 // Tick Runs 60 times per sec / 1 for each frame
@@ -11,15 +12,26 @@ AHMGameMode::AHMGameMode()
 {
 	TimeBetweenWaves = 2.0f;
 
+	GameStateClass = AHMGameState::StaticClass();
+
 	PrimaryActorTick.bCanEverTick = true;
 
 	// once a second
 	PrimaryActorTick.TickInterval = 1.0f;;
 }
 
+void AHMGameMode::SetWaveState(EWaveState NewState)
+{
+	// template, we can pass in our type, and it handles the cast for us
+	AHMGameState * GS = GetGameState<AHMGameState>();
+	if (ensureAlways(GS)) {
+		GS->CurrentGameState = NewState;
+	}
+}
+
 void AHMGameMode::StartPlay()
 {
-	Super::StartPlay();
+	//Super::StartPlay();
 
 	InitNextWave();
 }
