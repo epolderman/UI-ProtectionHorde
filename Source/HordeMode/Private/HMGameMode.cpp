@@ -18,6 +18,8 @@ AHMGameMode::AHMGameMode()
 
 	// once a second
 	PrimaryActorTick.TickInterval = 1.0f;;
+
+	isGameOver = false;
 }
 
 void AHMGameMode::SetWaveState(EWaveState NewState)
@@ -25,13 +27,15 @@ void AHMGameMode::SetWaveState(EWaveState NewState)
 	// template, we can pass in our type, and it handles the cast for us
 	AHMGameState * GS = GetGameState<AHMGameState>();
 	if (ensureAlways(GS)) {
-		GS->CurrentGameState = NewState;
+
+		GS->SetWaveState(NewState);
+
 	}
 }
 
 void AHMGameMode::StartPlay()
 {
-	//Super::StartPlay();
+	Super::StartPlay();
 
 	InitNextWave();
 }
@@ -40,11 +44,14 @@ void AHMGameMode::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	CheckWaveState();
+	if (isGameOver)
+	return;
 
 	if (!IsAnyPlayerAlive()) {
 		GameOver();
 	}
+
+	CheckWaveState();
 }
 
 void AHMGameMode::StartWave()
@@ -54,15 +61,21 @@ void AHMGameMode::StartWave()
 	NumberOfBotsToSpawnInCurrentWave = 2 * WaveCount;
 
 	GetWorldTimerManager().SetTimer(TimerHandle_BotSpawner, this, &AHMGameMode::SpawnBotTimerElapsed, 1.0f, true, 0.0f);
+
+	SetWaveState(EWaveState::WaveStart);
 }
 
 void AHMGameMode::EndWave()
 {
 	GetWorldTimerManager().ClearTimer(TimerHandle_BotSpawner);
+
+	SetWaveState(EWaveState::WaveInProgress);
 }
 
 void AHMGameMode::InitNextWave()
 {
+	SetWaveState(EWaveState::WaitingToStart);
+	
 	GetWorldTimerManager().SetTimer(TimerHandle_NextWaveStart, this, &AHMGameMode::StartWave, TimeBetweenWaves, false);
 }
 
@@ -72,8 +85,9 @@ void AHMGameMode::SpawnBotTimerElapsed()
 
 	NumberOfBotsToSpawnInCurrentWave--;
 
-	if (NumberOfBotsToSpawnInCurrentWave <= 0)
-	EndWave();
+	if (NumberOfBotsToSpawnInCurrentWave <= 0) {
+		EndWave();
+	}
 }
 
 void AHMGameMode::CheckWaveState()
@@ -102,7 +116,9 @@ void AHMGameMode::CheckWaveState()
 		}
 	}
 
-	if (!bisAnyBotAlive) {
+	if (!bisAnyBotAlive && IsAnyPlayerAlive()) {
+
+		SetWaveState(EWaveState::WaveComplete);;
 		InitNextWave();
 	}
 	
@@ -112,12 +128,14 @@ void AHMGameMode::CheckWaveState()
 bool AHMGameMode::IsAnyPlayerAlive() const
 {	
 	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It) {
+
 		APlayerController * CurrentPlayer = It->Get();
 		if (CurrentPlayer != nullptr && CurrentPlayer->GetPawn()) {
 			APawn * Pawn = CurrentPlayer->GetPawn();
 			USHealthComponent * HealthComp = Cast<USHealthComponent>(Pawn->GetComponentByClass(USHealthComponent::StaticClass()));
 			if (ensure(HealthComp) && HealthComp->GetHealth() > 0.0f) {
 				return true;
+				UE_LOG(LogTemp, Warning, TEXT("Som 1 Is Alive"));
 			}
 		}
 	}
@@ -127,8 +145,9 @@ bool AHMGameMode::IsAnyPlayerAlive() const
 
 void AHMGameMode::GameOver()
 {
-	EndWave();
+	isGameOver = true;
 
-	UE_LOG(LogTemp, Warning, TEXT("Game Over!"));
-	// todo clean up match, menu , etcc.
+	SetWaveState(EWaveState::GameOver);
+
+	EndWave();
 }

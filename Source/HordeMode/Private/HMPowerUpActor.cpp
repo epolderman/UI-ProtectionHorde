@@ -23,7 +23,7 @@ void AHMPowerUpActor::OnTickPowerUp()
 
 	if (TickedProcessed >= TotalNumberOfTicks) {
 		OnExpired();
-		UE_LOG(LogTemp, Warning, TEXT("OnExpired()"));
+		
 
 		// remove timer
 		GetWorldTimerManager().ClearTimer(TimerHandle_PowerUpTick);

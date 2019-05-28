@@ -23,6 +23,7 @@ public:
 	virtual void StartPlay() override;
 
 	virtual void Tick(float DeltaSeconds) override;
+
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category="GameMode")
 	void SpawnNewBot();
@@ -44,7 +45,10 @@ protected:
 
 	void GameOver();
 
+
 	void SetWaveState(EWaveState NewState);
+
+	bool isGameOver;
 
 	FTimerHandle TimerHandle_NextWaveStart;
 

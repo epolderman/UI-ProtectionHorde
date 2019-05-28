@@ -10,9 +10,9 @@
 
 UENUM(BlueprintType)
 enum class EWaveState: uint8 {
-	InitingNextWave,
+	WaitingToStart,
+	WaveStart,
 	WaveInProgress,
-	WaitingToComplete,
 	WaveComplete,
 	GameOver,
 };
@@ -23,12 +23,14 @@ class HORDEMODE_API AHMGameState : public AGameStateBase
 	GENERATED_BODY()
 public:
 
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_WaveState, Category="GameState")
-	EWaveState CurrentGameState;
+	void SetWaveState(EWaveState NewWaveState);
 
-	UFUNCTION(BlueprintImplementableEvent, Category="GameState")
-	void WaveStateChanged(EWaveState NewState, EWaveState OldState);
 protected:
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_WaveState, Category = "GameState")
+		EWaveState CurrentGameState;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "GameState")
+		void WaveStateChanged(EWaveState NewState, EWaveState OldState);
 
 	UFUNCTION()
 	void OnRep_WaveState(EWaveState OldState);
