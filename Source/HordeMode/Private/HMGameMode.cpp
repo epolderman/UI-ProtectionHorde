@@ -69,6 +69,7 @@ void AHMGameMode::EndWave()
 {
 	GetWorldTimerManager().ClearTimer(TimerHandle_BotSpawner);
 
+	if(!isGameOver)
 	SetWaveState(EWaveState::WaveInProgress);
 }
 
@@ -135,7 +136,6 @@ bool AHMGameMode::IsAnyPlayerAlive() const
 			USHealthComponent * HealthComp = Cast<USHealthComponent>(Pawn->GetComponentByClass(USHealthComponent::StaticClass()));
 			if (ensure(HealthComp) && HealthComp->GetHealth() > 0.0f) {
 				return true;
-				UE_LOG(LogTemp, Warning, TEXT("Som 1 Is Alive"));
 			}
 		}
 	}
