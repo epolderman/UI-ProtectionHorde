@@ -3,11 +3,14 @@
 #include "SHealthComponent.h"
 #include <GameFramework/Actor.h>
 #include <UnrealMathUtility.h>
+#include "HMGameMode.h"
+
 
 
 USHealthComponent::USHealthComponent()
 {
 	DefaultHealth = 100.0f;
+	bIsDead = false;
 }
 
 float USHealthComponent::GetHealth() const
@@ -40,10 +43,19 @@ void USHealthComponent::Heal(float HealAmount)
 
 void USHealthComponent::HandleDamage(AActor * DamagedActor, float Damage, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser)
 {
-	if (Damage <= 0.0f) {
+	if (Damage <= 0.0f || bIsDead) {
 		return;
 	}
 
 	Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
+	bIsDead = Health <= 0.0f;
 	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
+
+	if (bIsDead) {
+		// only valid on server
+		AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());
+		if (CurrentGameMode) {
+			CurrentGameMode->OnActorKilled.Broadcast(GetOwner(), DamageCauser, InstigatedBy);
+		}
+	}
 }

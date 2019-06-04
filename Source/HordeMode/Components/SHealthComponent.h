@@ -27,6 +27,8 @@ public:
 	float GetHealth() const;
 
 protected:
+
+	bool bIsDead;
 	
 	virtual void BeginPlay() override;
 

@@ -4,6 +4,7 @@
 #include <GameFramework/Actor.h>
 #include <Engine/World.h>
 #include "HordeMode/Public/HMGameState.h"
+#include "HMPlayerState.h"
 
 
 // Tick Runs 60 times per sec / 1 for each frame
@@ -13,6 +14,7 @@ AHMGameMode::AHMGameMode()
 	TimeBetweenWaves = 2.0f;
 
 	GameStateClass = AHMGameState::StaticClass();
+	PlayerStateClass = AHMPlayerState::StaticClass();
 
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -151,3 +153,4 @@ void AHMGameMode::GameOver()
 
 	EndWave();
 }
+
