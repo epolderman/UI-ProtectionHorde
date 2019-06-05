@@ -9,6 +9,20 @@ class UDamageType;
 class UParticleSystem;
 class UCameraShake;
 
+// Container for information hit scan weapon linetrace
+//USTRUCT()
+//struct FHitScanTrace {
+//
+//	GENERATED_BODY()
+//
+//public:
+//	UPROPERTY()
+//	FVector_NetQuantize TraceFrom;
+//
+//	UPROPERTY()
+//	FVector_NetQuantize TraceEnd;
+//};
+
 UCLASS()
 class HORDEMODE_API AHMWeapon : public AActor
 {
@@ -69,4 +83,10 @@ protected:
 	float TimeBetweenShots;
 
 	virtual void BeginPlay() override;
+
+	//UPROPERTY(ReplicateUsing=OnRep_HitScanTrace)
+	//FHitScanTrace HitScan;
+
+	//UFUNCTION()
+	//void OnRep_HitScanTrace();
 };

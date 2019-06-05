@@ -44,6 +44,7 @@ AHMCharacter::AHMCharacter()
 	WeaponAttachmentSocketName = "WeaponSocket";
 }
 
+// executed on both client and server
 void AHMCharacter::BeginPlay()
 {
 	Super::BeginPlay();

@@ -32,6 +32,12 @@ void AHMWeapon::BeginPlay()
 	TimeBetweenShots = 60.0f / RateOfFire;
 }
 
+//void AHMWeapon::OnRep_HitScanTrace()
+//{
+//	// play cosmetic fx
+//	PlayerWeaponFireEffects(HitScan.TraceEnd);
+//}
+
 void AHMWeapon::StartFire()
 {
 	// Note: Guarantee's delay of TimeBetwenShots between single shots, automatic fire for everything else
@@ -98,7 +104,11 @@ void AHMWeapon::Fire()
 			
 		}
 
-		PlayerWeaponFireEffects(TracerEndPoint);
+	
+
+		/*if (Role == ROLE_Authority) {
+			HitScan.TraceEnd = TracerEndPoint;
+		}*/
 
 		LastFireTime = GetWorld()->TimeSeconds;
 	}
