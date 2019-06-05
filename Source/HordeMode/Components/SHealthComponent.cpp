@@ -52,10 +52,12 @@ void USHealthComponent::HandleDamage(AActor * DamagedActor, float Damage, const 
 	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
 
 	if (bIsDead) {
+		UE_LOG(LogTemp, Warning, TEXT("MADE IT TO DELE"));
 		// only valid on server
 		AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());
 		if (CurrentGameMode) {
-			CurrentGameMode->OnActorKilled.Broadcast(GetOwner(), DamageCauser, InstigatedBy);
+			UE_LOG(LogTemp, Warning, TEXT("Broadcastssss"));
+			CurrentGameMode->OnActorKilled.Broadcast(DamageCauser, GetOwner(), InstigatedBy);
 		}
 	}
 }
