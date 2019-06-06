@@ -35,10 +35,6 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnWeaponChangeSignature OnWeaponChange;
 protected:
-
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const;
-
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	/* Inputs && Movement */

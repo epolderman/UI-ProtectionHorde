@@ -9,7 +9,7 @@
 #include <Components/CapsuleComponent.h>
 #include <HordeMode/HordeMode.h>
 #include "HordeMode/Components/SHealthComponent.h"
-#include <UnrealNetwork.h>
+#include "Net/UnrealNetwork.h"
 
 // Notes / Hot keys 
 // CTRL Shift F = Search Entire Solution & Replace UI

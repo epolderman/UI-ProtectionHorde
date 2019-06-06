@@ -8,6 +8,8 @@
 #include "HordeMode/HordeMode.h"
 #include <PhysicalMaterials/PhysicalMaterial.h>
 #include <TimerManager.h>
+#include "Net/UnrealNetwork.h"
+
 
 
 /* Rifle Blueprint = Default Weapon */
@@ -35,12 +37,6 @@ void AHMWeapon::BeginPlay()
 	TimeBetweenShots = 60.0f / RateOfFire;
 }
 
-//void AHMWeapon::OnRep_HitScanTrace()
-//{
-//	// play cosmetic fx
-//	PlayerWeaponFireEffects(HitScan.TraceEnd);
-//}
-
 void AHMWeapon::StartFire()
 {
 	// Note: Guarantee's delay of TimeBetwenShots between single shots, automatic fire for everything else
@@ -55,6 +51,10 @@ void AHMWeapon::StopFire()
 
 void AHMWeapon::Fire()
 {
+	if (Role < ROLE_Authority) {
+		ServerFire();
+	}
+
 	AActor * Owner = GetOwner();
 	if (Owner) {
 		FVector EyeLocation;
@@ -108,13 +108,24 @@ void AHMWeapon::Fire()
 		}
 
 	
-
-		/*if (Role == ROLE_Authority) {
+		// update this struct,  updates all clients to play effect via calling
+		if (Role == ROLE_Authority) {
 			HitScan.TraceEnd = TracerEndPoint;
-		}*/
+		}
 
 		LastFireTime = GetWorld()->TimeSeconds;
 	}
+}
+
+void AHMWeapon::ServerFire_Implementation()
+{
+	Fire();
+}
+
+// intended for anti-cheat, validates code
+bool AHMWeapon::ServerFire_Validate()
+{
+	return true;
 }
 
 void AHMWeapon::PlayerWeaponFireEffects(FVector &TracerEndPoint) {
@@ -141,3 +152,22 @@ void AHMWeapon::PlayerWeaponFireEffects(FVector &TracerEndPoint) {
 	}
 
 }
+
+void AHMWeapon::OnRep_HitScanTrace()
+{
+	// play cosmetic fx after replication
+	PlayerWeaponFireEffects(HitScan.TraceEnd);
+}
+
+// doesn't need to specified in the header file, unreal header tool auto generates this for us
+
+
+void AHMWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const
+{
+
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME_CONDITION(AHMWeapon, HitScan, COND_SkipOwner);
+}
+
+

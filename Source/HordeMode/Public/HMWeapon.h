@@ -9,19 +9,21 @@ class UDamageType;
 class UParticleSystem;
 class UCameraShake;
 
-// Container for information hit scan weapon linetrace
-//USTRUCT()
-//struct FHitScanTrace {
-//
-//	GENERATED_BODY()
-//
-//public:
-//	UPROPERTY()
-//	FVector_NetQuantize TraceFrom;
-//
-//	UPROPERTY()
-//	FVector_NetQuantize TraceEnd;
-//};
+// Container for information hit scan weapon line trace
+// Vectors are less precise, less data over the network, "NetQuantize"
+
+USTRUCT()
+struct FHitScanTrace {
+
+	GENERATED_BODY()
+
+public:
+	UPROPERTY()
+	FVector_NetQuantize TraceFrom;
+
+	UPROPERTY()
+	FVector_NetQuantize TraceEnd;
+};
 
 UCLASS()
 class HORDEMODE_API AHMWeapon : public AActor
@@ -70,6 +72,11 @@ protected:
 
 	virtual void PlayerWeaponFireEffects(FVector &TracerEndPoint);
 
+	// push request to the hosting server, withValidation = ...
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerFire();
+
+	//todo: clean up inheritance with grenade weapon and replication
 	virtual void Fire();
 
 	FTimerHandle TimerHandle_TimeBtwnShots;
@@ -84,9 +91,10 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	//UPROPERTY(ReplicateUsing=OnRep_HitScanTrace)
-	//FHitScanTrace HitScan;
+	// trigger a function every time this property gets replicated
+	UPROPERTY(ReplicatedUsing=OnRep_HitScanTrace)
+	FHitScanTrace HitScan;
 
-	//UFUNCTION()
-	//void OnRep_HitScanTrace();
+	UFUNCTION()
+	void OnRep_HitScanTrace();
 };
