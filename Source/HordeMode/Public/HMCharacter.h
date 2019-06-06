@@ -36,6 +36,8 @@ public:
 	FOnWeaponChangeSignature OnWeaponChange;
 protected:
 
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -68,6 +70,7 @@ protected:
 	/* End Inputs && Movement */
 
 	/* Weapons */
+	UPROPERTY(Replicated)
 	AHMWeapon * currentWeapon;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")

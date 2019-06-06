@@ -9,6 +9,7 @@
 #include <Components/CapsuleComponent.h>
 #include <HordeMode/HordeMode.h>
 #include "HordeMode/Components/SHealthComponent.h"
+#include <UnrealNetwork.h>
 
 // Notes / Hot keys 
 // CTRL Shift F = Search Entire Solution & Replace UI
@@ -44,17 +45,23 @@ AHMCharacter::AHMCharacter()
 	WeaponAttachmentSocketName = "WeaponSocket";
 }
 
-// executed on both client and server
+// executed on both client and server / executes on server -> replicates weapon on client?
 void AHMCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
 	defaultFOV = CameraComponent->FieldOfView;
+	HealthComponent->OnHealthChanged.AddDynamic(this, &AHMCharacter::OnHealthChanged);
+
 	Weapons.Add(StarterWeaponClass);
 	Weapons.Add(SecondaryWeaponClass);
 	currentWeaponIndex = EWeaponState::Regular;
-	SpawnWeapon(currentWeaponIndex);
-	HealthComponent->OnHealthChanged.AddDynamic(this, &AHMCharacter::OnHealthChanged);
+
+
+	if (Role == ROLE_Authority) {
+		// could be dedicated server, or a client acting as a server
+		SpawnWeapon(currentWeaponIndex);
+	}
 }
 
 void AHMCharacter::SpawnWeapon(EWeaponState &weaponIndex) 
@@ -197,6 +204,14 @@ void AHMCharacter::OnHealthChanged(USHealthComponent* HealthComp, float Health, 
 		currentWeapon->SetLifeSpan(timePlayerIsRemovedFromWorld);
 		SetLifeSpan(timePlayerIsRemovedFromWorld);
 	}
+}
+
+void AHMCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const 
+{
+	
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AHMCharacter, currentWeapon);
 }
 
 

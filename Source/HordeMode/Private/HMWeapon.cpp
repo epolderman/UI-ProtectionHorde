@@ -23,6 +23,9 @@ AHMWeapon::AHMWeapon()
 	TracerTargetName = "Target";
 	BaseHitPointDamage = 20.0f;
 	RateOfFire = 600.0f;
+
+	// spawn on a server, spawn it on clients, sets up actor channel
+	SetReplicates(true);
 }
 
 void AHMWeapon::BeginPlay()

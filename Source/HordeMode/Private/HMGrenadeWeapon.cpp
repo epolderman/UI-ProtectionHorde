@@ -9,6 +9,8 @@ AHMGrenadeWeapon::AHMGrenadeWeapon()
 	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComponentz"));
 	RootComponent = MeshComponent;
 	MuzzleSocketName = "MuzzleSocket";
+	// spawn on a server, spawn it on clients, sets up actor channel
+	SetReplicates(true);
 }
 
 void AHMGrenadeWeapon::Fire()
