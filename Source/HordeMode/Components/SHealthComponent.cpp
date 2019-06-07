@@ -9,6 +9,7 @@
 // todo: Network grenade weapon, look into inheritance hieraarchy via base class weapon
 // todo: look into weapon replicated breaking UI widgets on the clients
 // todo: do explosive barrel challenge networking
+// todo: bug in tracketbot networking on clients
 
 USHealthComponent::USHealthComponent()
 {
