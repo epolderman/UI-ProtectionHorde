@@ -6,7 +6,9 @@
 #include "HMGameMode.h"
 #include <UnrealNetwork.h>
 
-
+// todo: Network grenade weapon, look into inheritance hieraarchy via base class weapon
+// todo: look into weapon replicated breaking UI widgets on the clients
+// todo: do explosive barrel challenge networking
 
 USHealthComponent::USHealthComponent()
 {
@@ -35,6 +37,13 @@ void USHealthComponent::BeginPlay()
 		}
 	}
 	Health = DefaultHealth;
+}
+
+// on rep function trick, gets prev value
+void USHealthComponent::OnRep_Health(float oldHealth)
+{
+	float damage = Health = oldHealth;
+	OnHealthChanged.Broadcast(this, Health, damage, nullptr, nullptr, nullptr);
 }
 
 // todo: breakdown this functionality and see why it works under the hood? optimization?

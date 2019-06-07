@@ -50,6 +50,7 @@ void ASTrackerBot::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if(Role == ROLE_Authority)
 	NextPathVector = getNextLocation();
 
 	HealthComponent->OnHealthChanged.AddDynamic(this, &ASTrackerBot::OnTakeDamage);
@@ -59,21 +60,26 @@ void ASTrackerBot::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	const float distanceToTarget = (GetActorLocation() - NextPathVector).Size();
+	if (Role == ROLE_Authority && !isDead) {
+		const float distanceToTarget = (GetActorLocation() - NextPathVector).Size();
 
-	if (distanceToTarget <= requiredDistanceToTarget) {
-		NextPathVector = getNextLocation();
-		DrawDebugString(GetWorld(), GetActorLocation(), "TargetReached");
-	}
-	else {
-		FVector forceDirection = NextPathVector - GetActorLocation();
-		forceDirection.Normalize(); //get direction
-		forceDirection *= moveMentForce; //scale
-		MeshComponent->AddForce(forceDirection, NAME_None, bUseVelocityChange);
-		DrawDebugDirectionalArrow(GetWorld(), GetActorLocation(), GetActorLocation() + forceDirection, 32, FColor::Green, false, 0.0);
+		if (distanceToTarget <= requiredDistanceToTarget) {
+			NextPathVector = getNextLocation();
+			DrawDebugString(GetWorld(), GetActorLocation(), "TargetReached");
+		}
+		else {
+			FVector forceDirection = NextPathVector - GetActorLocation();
+			forceDirection.Normalize(); //get direction
+			forceDirection *= moveMentForce; //scale
+			MeshComponent->AddForce(forceDirection, NAME_None, bUseVelocityChange);
+			DrawDebugDirectionalArrow(GetWorld(), GetActorLocation(), GetActorLocation() + forceDirection, 32, FColor::Green, false, 0.0);
+		}
+
+
+		DrawDebugSphere(GetWorld(), NextPathVector, 20, 12, FColor::Yellow, false, 0.0f, 1.0f);
 	}
 
-	DrawDebugSphere(GetWorld(), NextPathVector, 20, 12, FColor::Yellow, false, 0.0f, 1.0f);
+	
 }
 
 void ASTrackerBot::SelfDestruct()
@@ -86,14 +92,20 @@ void ASTrackerBot::SelfDestruct()
 	if (ExplosionSound != nullptr)
 	UGameplayStatics::SpawnSoundAttached(ExplosionSound, RootComponent);
 
-	TArray<AActor *> IgnoredActors;
-	IgnoredActors.Add(this);
+	MeshComponent->SetVisibility(false, true);
+	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	UGameplayStatics::ApplyRadialDamage(this, damageAmount, GetActorLocation(), explosionRadius, nullptr, IgnoredActors, this, GetInstigatorController(), true);
-	
-	DrawDebugSphere(GetWorld(), GetActorLocation(), explosionRadius, 10, FColor::Green, false, 2.0f, 0, 1.0f);
+	if (Role = ROLE_Authority) {
+		TArray<AActor *> IgnoredActors;
+		IgnoredActors.Add(this);
 
-	Destroy();
+		UGameplayStatics::ApplyRadialDamage(this, damageAmount, GetActorLocation(), explosionRadius, nullptr, IgnoredActors, this, GetInstigatorController(), true);
+
+		DrawDebugSphere(GetWorld(), GetActorLocation(), explosionRadius, 10, FColor::Green, false, 2.0f, 0, 1.0f);
+
+		SetLifeSpan(2.0f);
+		//Destroy();
+	}
 }
 
 // check for nearby other instances
@@ -102,27 +114,30 @@ void ASTrackerBot::NotifyActorBeginOverlap(AActor * otherActor)
 	Super::NotifyActorBeginOverlap(otherActor);
 
 	ASTrackerBot * otherBot = Cast<ASTrackerBot>(otherActor);
-	if (otherBot != nullptr){
+	if (otherBot != nullptr) {
 
 		if (currentMaterialOnMesh == nullptr)
 			currentMaterialOnMesh = MeshComponent->CreateAndSetMaterialInstanceDynamicFromMaterial(0, MeshComponent->GetMaterial(0));
 
 		if (currentMaterialOnMesh != nullptr)
-			currentMaterialOnMesh->SetScalarParameterValue("PowerLevelAlpha", damageAmount / maxDamageLevel );
+			currentMaterialOnMesh->SetScalarParameterValue("PowerLevelAlpha", damageAmount / maxDamageLevel);
 
 		damageAmount += 10.0f;
 	}
 
-	if (bisStartedSelfDestruct) {
-		return;
-	}
+	if (!bisStartedSelfDestruct && !isDead) {
+	
 
 	AHMCharacter * PlayerPawn = Cast<AHMCharacter>(otherActor);
 	if (PlayerPawn != nullptr) {
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASTrackerBot::DamageSelf, Timer_Damage_Interval, true, 0.0f);
+
+		if (Role == ROLE_Authority)
+			GetWorldTimerManager().SetTimer(TimerHandle, this, &ASTrackerBot::DamageSelf, Timer_Damage_Interval, true, 0.0f);
+
 		bisStartedSelfDestruct = true;
-		if(SelfDestructSound != nullptr)
-		UGameplayStatics::SpawnSoundAttached(SelfDestructSound, RootComponent);
+		if (SelfDestructSound != nullptr)
+			UGameplayStatics::SpawnSoundAttached(SelfDestructSound, RootComponent);
+	}
 	}
 }
 
