@@ -28,6 +28,9 @@ AHMWeapon::AHMWeapon()
 
 	// spawn on a server, spawn it on clients, sets up actor channel
 	SetReplicates(true);
+	// defaults to min = 2.0f, default = 100
+	NetUpdateFrequency = 66.0f;
+	MinNetUpdateFrequency = 33.0f;
 }
 
 void AHMWeapon::BeginPlay()
@@ -73,6 +76,8 @@ void AHMWeapon::Fire()
 		// For Tracer Particle Effect
 		FVector TracerEndPoint = TraceEnd;
 
+		EPhysicalSurface SurfaceType = SurfaceType_Default;
+
 		// struct that holds our hit data, normal, etc..
 		FHitResult Hit;
 		if (GetWorld()->LineTraceSingleByChannel(Hit, EyeLocation, TraceEnd, COLLISION_HMWEAPON, QParams)) {
@@ -87,30 +92,18 @@ void AHMWeapon::Fire()
 			}
 			UGameplayStatics::ApplyPointDamage(HitActor, damageApplied, ShotDirection, Hit, Owner->GetInstigatorController(), this, DamageType);
 
-			UParticleSystem * SelectedEffect = nullptr;
-			switch (SurfaceType)
-			{
-			case SURFACE_FLESH_DEFAULT:
-			case SURFACE_FLESH_VULNERABLE:
-				SelectedEffect = FleshImpactEffect;
-				break;
-			default:
-				SelectedEffect = DefaultImpactEffect;
-				break;
-			}
-
-			if (SelectedEffect) {
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SelectedEffect, Hit.ImpactPoint, Hit.ImpactNormal.Rotation());
-			}
+			PlayImpactEffect(SurfaceType, Hit.ImpactPoint);
 
 			TracerEndPoint = Hit.ImpactPoint;
-			
 		}
 
+		// play on current client
+		PlayerWeaponFireEffects(TracerEndPoint);
 	
 		// update this struct,  updates all clients to play effect via calling
 		if (Role == ROLE_Authority) {
 			HitScan.TraceEnd = TracerEndPoint;
+			HitScan.SurfaceType = SurfaceType;
 		}
 
 		LastFireTime = GetWorld()->TimeSeconds;
@@ -153,10 +146,35 @@ void AHMWeapon::PlayerWeaponFireEffects(FVector &TracerEndPoint) {
 
 }
 
+
+void AHMWeapon::PlayImpactEffect(EPhysicalSurface SurfaceType, FVector ImpactPoint)
+{
+	UParticleSystem * SelectedEffect = nullptr;
+	switch (SurfaceType)
+	{
+	case SURFACE_FLESH_DEFAULT:
+	case SURFACE_FLESH_VULNERABLE:
+		SelectedEffect = FleshImpactEffect;
+		break;
+	default:
+		SelectedEffect = DefaultImpactEffect;
+		break;
+	}
+
+	if (SelectedEffect) {
+		FVector Muzzle = MeshComponent->GetSocketLocation(MuzzleSocketName);
+		FVector shotDirection = ImpactPoint - Muzzle;
+		shotDirection.Normalize();
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SelectedEffect, ImpactPoint, shotDirection.Rotation());
+	}
+}
+ // server play
 void AHMWeapon::OnRep_HitScanTrace()
 {
-	// play cosmetic fx after replication
+
 	PlayerWeaponFireEffects(HitScan.TraceEnd);
+
+	PlayImpactEffect(HitScan.SurfaceType, HitScan.TraceEnd);
 }
 
 // doesn't need to specified in the header file, unreal header tool auto generates this for us

@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include <EnumAsByte.h>
 #include "HMWeapon.generated.h"
 
 class USkeletalMeshComponent;
@@ -19,7 +20,7 @@ struct FHitScanTrace {
 
 public:
 	UPROPERTY()
-	FVector_NetQuantize TraceFrom;
+	TEnumAsByte<EPhysicalSurface> SurfaceType;
 
 	UPROPERTY()
 	FVector_NetQuantize TraceEnd;
@@ -97,4 +98,6 @@ protected:
 
 	UFUNCTION()
 	void OnRep_HitScanTrace();
+
+	void PlayImpactEffect(EPhysicalSurface SurfaceType, FVector ImpactPoint);
 };

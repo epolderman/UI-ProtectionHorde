@@ -4,6 +4,7 @@
 #include <GameFramework/Actor.h>
 #include <UnrealMathUtility.h>
 #include "HMGameMode.h"
+#include <UnrealNetwork.h>
 
 
 
@@ -11,6 +12,8 @@ USHealthComponent::USHealthComponent()
 {
 	DefaultHealth = 100.0f;
 	bIsDead = false;
+
+	SetIsReplicated(true);
 }
 
 float USHealthComponent::GetHealth() const
@@ -22,10 +25,14 @@ void USHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AActor * myOwner = GetOwner();
-	if (myOwner) {
-		// binding a delegate on the OnTakeAnyDamage delegate => which then broadcasts another delegate
-		myOwner->OnTakeAnyDamage.AddDynamic(this, &USHealthComponent::HandleDamage);
+	// health should be dictated only on the server
+	if (GetOwnerRole() == ROLE_Authority) {
+
+		AActor * myOwner = GetOwner();
+		if (myOwner) {
+			// binding a delegate on the OnTakeAnyDamage delegate => which then broadcasts another delegate
+			myOwner->OnTakeAnyDamage.AddDynamic(this, &USHealthComponent::HandleDamage);
+		}
 	}
 	Health = DefaultHealth;
 }
@@ -60,3 +67,12 @@ void USHealthComponent::HandleDamage(AActor * DamagedActor, float Damage, const 
 		}
 	}
 }
+void USHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const
+{
+
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(USHealthComponent, Health);
+}
+
+

@@ -212,6 +212,8 @@ void AHMCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLife
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AHMCharacter, currentWeapon);
+
+	DOREPLIFETIME(AHMCharacter, isDead);
 }
 
 
