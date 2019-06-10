@@ -34,6 +34,12 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnWeaponChangeSignature OnWeaponChange;
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void StartFire();
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void StopFire();
 protected:
 	virtual void BeginPlay() override;
 
@@ -82,11 +88,7 @@ protected:
 
 	void SpawnWeapon(EWeaponState &weaponIndex);
 
-	UFUNCTION(BlueprintCallable, Category="Weapon")
-	void StartFire();
 
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	void StopFire();
 
 	EWeaponState currentWeaponIndex;
 
