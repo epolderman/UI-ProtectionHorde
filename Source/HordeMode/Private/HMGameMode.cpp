@@ -35,6 +35,19 @@ void AHMGameMode::SetWaveState(EWaveState NewState)
 	}
 }
 
+// only runs on the server, grabs all playerControllers
+void AHMGameMode::RestartDeadPlayers()
+{
+	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It) {
+
+		APlayerController * CurrentPlayer = It->Get();
+		if (CurrentPlayer != nullptr && CurrentPlayer->GetPawn() == nullptr) {
+			// respawn
+			RestartPlayer(CurrentPlayer);
+		}
+	}
+}
+
 void AHMGameMode::StartPlay()
 {
 	Super::StartPlay();
@@ -79,6 +92,8 @@ void AHMGameMode::InitNextWave()
 {
 	SetWaveState(EWaveState::WaitingToStart);
 	
+	RestartDeadPlayers();
+
 	GetWorldTimerManager().SetTimer(TimerHandle_NextWaveStart, this, &AHMGameMode::StartWave, TimeBetweenWaves, false);
 }
 

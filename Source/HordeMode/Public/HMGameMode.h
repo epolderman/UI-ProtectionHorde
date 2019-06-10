@@ -67,6 +67,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Wave")
 	float TimeBetweenWaves;
 
-	
+	void RestartDeadPlayers();
 };
 

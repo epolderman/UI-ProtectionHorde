@@ -65,7 +65,6 @@ void ASTrackerBot::Tick(float DeltaTime)
 
 		if (distanceToTarget <= requiredDistanceToTarget) {
 			NextPathVector = getNextLocation();
-			DrawDebugString(GetWorld(), GetActorLocation(), "TargetReached");
 		}
 		else {
 			FVector forceDirection = NextPathVector - GetActorLocation();
@@ -188,7 +187,5 @@ void ASTrackerBot::OnTakeDamage(USHealthComponent* HealthComp, float Health, flo
 
 	if (Health <= 0.0f && !isDead)
 		SelfDestruct();
-
-	UE_LOG(LogTemp, Log, TEXT("Health %s of %s"), *FString::SanitizeFloat(Health), *GetName());
 }
 
