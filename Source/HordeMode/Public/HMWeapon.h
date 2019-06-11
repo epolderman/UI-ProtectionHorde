@@ -100,4 +100,8 @@ protected:
 	void OnRep_HitScanTrace();
 
 	void PlayImpactEffect(EPhysicalSurface SurfaceType, FVector ImpactPoint);
+
+	/* Spread in degrees */
+	UPROPERTY(EditDefaultsOnly, Category = "Bullet Spread", meta = (ClampMin=0.0f))
+	float BulletSpread;
 };

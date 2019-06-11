@@ -9,6 +9,7 @@
 #include <PhysicalMaterials/PhysicalMaterial.h>
 #include <TimerManager.h>
 #include "Net/UnrealNetwork.h"
+#include <UnrealMathUtility.h>
 
 
 
@@ -31,6 +32,7 @@ AHMWeapon::AHMWeapon()
 	// defaults to min = 2.0f, default = 100
 	NetUpdateFrequency = 66.0f;
 	MinNetUpdateFrequency = 33.0f;
+	BulletSpread = 2.0f;
 }
 
 void AHMWeapon::BeginPlay()
@@ -62,11 +64,18 @@ void AHMWeapon::Fire()
 	if (Owner) {
 		FVector EyeLocation;
 		FRotator EyeRotation;
+
+
 		Owner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
 
+		// bullet spread (don't have 100% accuracy
 		FVector ShotDirection = EyeRotation.Vector();
-
+		float halfRad = FMath::DegreesToRadians(BulletSpread);
+		ShotDirection = FMath::VRandCone(ShotDirection, halfRad, halfRad);
 		FVector TraceEnd = EyeLocation + (ShotDirection * DISTANCE);
+
+		
+
 		FCollisionQueryParams QParams;
 		QParams.AddIgnoredActor(Owner);
 		QParams.AddIgnoredActor(this);
@@ -90,7 +99,7 @@ void AHMWeapon::Fire()
 			if (SurfaceType == SURFACE_FLESH_VULNERABLE) {
 				damageApplied = 40.0f;
 			}
-			UGameplayStatics::ApplyPointDamage(HitActor, damageApplied, ShotDirection, Hit, Owner->GetInstigatorController(), this, DamageType);
+			UGameplayStatics::ApplyPointDamage(HitActor, damageApplied, ShotDirection, Hit, Owner->GetInstigatorController(), Owner, DamageType);
 
 			PlayImpactEffect(SurfaceType, Hit.ImpactPoint);
 
