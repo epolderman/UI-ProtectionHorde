@@ -41,9 +41,13 @@ protected:
 
 	FTimerHandle TimerHandle;
 
+	FTimerHandle FindClosestPlayerTimerSearch;
+
 	void DamageSelf();
 
 	bool bisStartedSelfDestruct;
+
+	void RefreshPath();
 public:	
 	ASTrackerBot();
 

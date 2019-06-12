@@ -17,7 +17,6 @@
 #include <Materials/MaterialInterface.h>
 
 
-
 ASTrackerBot::ASTrackerBot()
 {
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
@@ -39,7 +38,7 @@ ASTrackerBot::ASTrackerBot()
 	requiredDistanceToTarget = 100.0f;
 	isDead = false;
 	explosionRadius = 300.0f;
-	damageAmount = 80.0f;
+	damageAmount = 60.0f;;
 	bisStartedSelfDestruct = false;
 	maxDamageLevel = 100.0f;
 	Timer_Damage_Interval = 0.25f;
@@ -128,7 +127,7 @@ void ASTrackerBot::NotifyActorBeginOverlap(AActor * otherActor)
 	
 
 	AHMCharacter * PlayerPawn = Cast<AHMCharacter>(otherActor);
-	if (PlayerPawn != nullptr) {
+	if (PlayerPawn != nullptr && !USHealthComponent::IsFriendly(this, otherActor)) {
 
 		if (Role == ROLE_Authority)
 			GetWorldTimerManager().SetTimer(TimerHandle, this, &ASTrackerBot::DamageSelf, Timer_Damage_Interval, true, 0.0f);
@@ -162,15 +161,53 @@ void ASTrackerBot::DamageSelf()
 	UGameplayStatics::ApplyDamage(this, 20.0f, GetInstigatorController(), this, nullptr);
 }
 
+void ASTrackerBot::RefreshPath()
+{
+	NextPathVector = getNextLocation();
+}
+
 FVector ASTrackerBot::getNextLocation()
 {
-	// hack to get player location, won't work in multi player
-	ACharacter * playerPawn = UGameplayStatics::GetPlayerCharacter(this, 0);
-	UNavigationPath * navPath = UNavigationSystemV1::FindPathToActorSynchronously(GetWorld(), GetActorLocation(), playerPawn);
+	
+	AActor * closestTargetActor = nullptr;
+	// biggest float value
+	float lastDistanceChecked = FLT_MAX;
 
-	if (navPath && navPath->PathPoints.Num() > 1) {
-		// current is at index 0, next is at 1
-		return navPath->PathPoints[1];
+	for (FConstPawnIterator It = GetWorld()->GetPawnIterator(); It; ++It)
+	{
+		APawn * testPawn = It->Get();
+
+		if (testPawn == nullptr || USHealthComponent::IsFriendly(testPawn, this)) {
+			continue; // skips rest of iteration, remaining for loop
+		}
+
+		USHealthComponent * HealthComp = Cast<USHealthComponent>(testPawn->GetComponentByClass(USHealthComponent::StaticClass()));
+
+		if (HealthComp != nullptr && HealthComp->GetHealth() > 0.0f) {
+
+			float distance = (testPawn->GetActorLocation() - this->GetActorLocation()).Size();
+			if (distance < lastDistanceChecked) {
+				closestTargetActor = testPawn;
+				lastDistanceChecked = distance;
+			}
+		
+		}
+	
+	}
+	
+
+	if (closestTargetActor) {
+	
+		
+		UNavigationPath * navPath = UNavigationSystemV1::FindPathToActorSynchronously(GetWorld(), GetActorLocation(), closestTargetActor);
+		
+		GetWorldTimerManager().ClearTimer(FindClosestPlayerTimerSearch);
+		GetWorldTimerManager().SetTimer(FindClosestPlayerTimerSearch, this, &ASTrackerBot::RefreshPath, 5.0f, false);
+		
+		if (navPath && navPath->PathPoints.Num() > 1) {
+			// current is at index 0, next is at 1
+			return navPath->PathPoints[1];
+		}
 	}
 
 	return GetActorLocation();
