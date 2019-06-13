@@ -16,7 +16,7 @@
 #include <PhysicalMaterials/PhysicalMaterial.h>
 #include <Materials/MaterialInterface.h>
 
-
+//TODO: Cleanup on this bot, improve AI, refactor movement
 ASTrackerBot::ASTrackerBot()
 {
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
