@@ -12,15 +12,11 @@
 AHMGameMode::AHMGameMode()
 {
 	TimeBetweenWaves = 2.0f;
-
 	GameStateClass = AHMGameState::StaticClass();
 	PlayerStateClass = AHMPlayerState::StaticClass();
-
 	PrimaryActorTick.bCanEverTick = true;
-
 	// once a second
 	PrimaryActorTick.TickInterval = 1.0f;;
-
 	isGameOver = false;
 }
 
@@ -29,9 +25,7 @@ void AHMGameMode::SetWaveState(EWaveState NewState)
 	// template, we can pass in our type, and it handles the cast for us
 	AHMGameState * GS = GetGameState<AHMGameState>();
 	if (ensureAlways(GS)) {
-
 		GS->SetWaveState(NewState);
-
 	}
 }
 
