@@ -1,16 +1,15 @@
 
 
 #include "HordeMode/Public/HMPowerUpActor.h"
+#include <UnrealNetwork.h>
 
 AHMPowerUpActor::AHMPowerUpActor()
 {	
 	PowerUpInterval = 0.0f;
 	TotalNumberOfTicks = 0;
-}
+	bIsPowerUpActive = false;
 
-void AHMPowerUpActor::BeginPlay()
-{
-	Super::BeginPlay();
+	SetReplicates(true);
 }
 
 void AHMPowerUpActor::OnTickPowerUp()
@@ -23,16 +22,27 @@ void AHMPowerUpActor::OnTickPowerUp()
 
 	if (TickedProcessed >= TotalNumberOfTicks) {
 		OnExpired();
-		
+
+		// notify clients
+		bIsPowerUpActive = false;
+		OnRep_PowerupActive();
 
 		// remove timer
 		GetWorldTimerManager().ClearTimer(TimerHandle_PowerUpTick);
 	}
 }
 
-void AHMPowerUpActor::ActivatePowerUp()
+void AHMPowerUpActor::OnRep_PowerupActive()
 {
-	OnActivated();
+	OnPowerupStateChanged(bIsPowerUpActive);
+}
+
+void AHMPowerUpActor::ActivatePowerUp(AActor * ActivateFor)
+{
+	OnActivated(ActivateFor);
+
+	bIsPowerUpActive = true;
+	OnRep_PowerupActive(); // don't get called on server -> call on client
 
 	if (PowerUpInterval > 0.0f)
 		GetWorldTimerManager().SetTimer(TimerHandle_PowerUpTick, this, &AHMPowerUpActor::OnTickPowerUp, PowerUpInterval, true);
@@ -40,6 +50,16 @@ void AHMPowerUpActor::ActivatePowerUp()
 		OnTickPowerUp();
 
 }
+
+void AHMPowerUpActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const
+{
+
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AHMPowerUpActor, bIsPowerUpActive);
+}
+
+
 
 
 

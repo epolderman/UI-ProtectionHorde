@@ -17,7 +17,7 @@ public:
 	AHMPowerUpActor();
 
 	UFUNCTION(BlueprintImplementableEvent, Category="PowerUps")
-	void OnActivated();
+	void OnActivated(AActor * ActivateFor);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "PowerUps")
 	void OnExpired();
@@ -25,10 +25,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "PowerUps")
 	void OnPowerUpTicked();
 
-	void ActivatePowerUp();
+	void ActivatePowerUp(AActor * ActiveFor);
 protected:
-	
-	virtual void BeginPlay() override;
 
 	/* Total between power up ticks */
 	UPROPERTY(EditDefaultsOnly, Category="PowerUps")
@@ -44,4 +42,14 @@ protected:
 
 	UFUNCTION()
 	void OnTickPowerUp();
+
+	// keeps state of the power up
+	UPROPERTY(ReplicatedUsing = OnRep_PowerupActive)
+	bool bIsPowerUpActive;
+
+	UFUNCTION()
+	void OnRep_PowerupActive();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "PowerUps")
+	void OnPowerupStateChanged(bool bNewIsActive);
 };
