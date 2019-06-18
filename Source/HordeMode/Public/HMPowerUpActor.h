@@ -5,7 +5,9 @@
 #include "HMPowerUpActor.generated.h"
 
 /*
-	Specific Power Ups, total number applied
+	Specific Power Ups, total number applied - REPLICATED
+	// TODO: resync issues, client side walk speed differs form server side walk speed so
+	the server is correcting itself. 
 */
 
 UCLASS()
@@ -44,7 +46,7 @@ protected:
 	void OnTickPowerUp();
 
 	// keeps state of the power up
-	UPROPERTY(ReplicatedUsing = OnRep_PowerupActive)
+	UPROPERTY(ReplicatedUsing=OnRep_PowerupActive)
 	bool bIsPowerUpActive;
 
 	UFUNCTION()

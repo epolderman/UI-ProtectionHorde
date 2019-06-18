@@ -26,8 +26,9 @@ void ASPickupActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(Role == ROLE_Authority)
-	Respawn();
+	if (Role == ROLE_Authority) {
+		Respawn();
+	}
 }
 
 void ASPickupActor::Respawn()
