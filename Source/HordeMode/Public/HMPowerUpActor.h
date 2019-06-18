@@ -7,7 +7,7 @@
 /*
 	Specific Power Ups, total number applied - REPLICATED
 	// TODO: resync issues, client side walk speed differs form server side walk speed so
-	the server is correcting itself. 
+	the server is correcting itself. . Max walk speed is set on the server. 
 */
 
 UCLASS()
