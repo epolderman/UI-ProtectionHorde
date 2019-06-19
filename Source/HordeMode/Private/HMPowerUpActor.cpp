@@ -23,6 +23,7 @@ void AHMPowerUpActor::OnTickPowerUp()
 		// notify clients
 		bIsPowerUpActive = false;
 		OnRep_PowerupActive();
+		
 
 		// remove timer
 		GetWorldTimerManager().ClearTimer(TimerHandle_PowerUpTick);

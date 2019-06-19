@@ -47,6 +47,7 @@ void ASPickupActor::NotifyActorBeginOverlap(AActor * otherActor)
 {
 	Super::NotifyActorBeginOverlap(otherActor);
 	
+	// should we just run this both on client & server?
 	if (Role == ROLE_Authority && CurrentPowerUp != nullptr) {
 
 		CurrentPowerUp->ActivatePowerUp(otherActor);
