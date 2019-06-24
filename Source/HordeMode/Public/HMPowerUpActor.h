@@ -9,7 +9,7 @@
 	// Currently the resync issues are solved. In the blueprint of this component
 	// when onExpired is called if we call the parentOnExpired it will kill the component
 	// and since it is replicated it will die before the client can update its onExpired call
-	// which results in resync issues. 
+	// which results in resync issues. If the parent is not killed, is there any side effects to this?
 */
 
 UCLASS()
