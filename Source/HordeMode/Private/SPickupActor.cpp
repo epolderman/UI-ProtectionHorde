@@ -4,6 +4,7 @@
 #include "Components/DecalComponent.h"
 #include <Engine/World.h>
 #include "HordeMode/Public/HMPowerUpActor.h"
+#include <GameFramework/CharacterMovementComponent.h>
 
 // Sets default values
 ASPickupActor::ASPickupActor()
@@ -43,11 +44,12 @@ void ASPickupActor::Respawn()
 	CurrentPowerUp = GetWorld()->SpawnActor<AHMPowerUpActor>(PowerUpClass, GetTransform(), params);
 }
 
+
+// Function Only Run On Server = Only Called on Server
 void ASPickupActor::NotifyActorBeginOverlap(AActor * otherActor)
 {
 	Super::NotifyActorBeginOverlap(otherActor);
-	
-	// should we just run this both on client & server?
+
 	if (Role == ROLE_Authority && CurrentPowerUp != nullptr) {
 
 		CurrentPowerUp->ActivatePowerUp(otherActor);

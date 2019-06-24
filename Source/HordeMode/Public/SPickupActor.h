@@ -42,4 +42,7 @@ protected:
 	float coolDownDuration;
 
 	FTimerHandle TimerHandle_RespawnTimer;
+
+	//UFUNCTION(Client)
+	//void ClientRPCFunction();
 };

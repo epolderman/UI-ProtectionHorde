@@ -6,8 +6,10 @@
 
 /*
 	Specific Power Ups, total number applied - REPLICATED
-	// TODO: resync issues, client side walk speed differs form server side walk speed so
-	the server is correcting itself. . Max walk speed is set on the server. 
+	// Currently the resync issues are solved. In the blueprint of this component
+	// when onExpired is called if we call the parentOnExpired it will kill the component
+	// and since it is replicated it will die before the client can update its onExpired call
+	// which results in resync issues. 
 */
 
 UCLASS()
@@ -49,9 +51,15 @@ protected:
 	UPROPERTY(ReplicatedUsing=OnRep_PowerupActive)
 	bool bIsPowerUpActive;
 
+	// keeps state of the power up
+	UPROPERTY(ReplicatedUsing=OnRep_PowerupActive)
+	AActor * aActorPowerUp;
+
 	UFUNCTION()
 	void OnRep_PowerupActive();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "PowerUps")
 	void OnPowerupStateChanged(bool bNewIsActive);
+
+
 };
