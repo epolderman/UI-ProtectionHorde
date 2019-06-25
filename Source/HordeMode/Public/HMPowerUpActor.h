@@ -10,6 +10,10 @@
 	// when onExpired is called if we call the parentOnExpired it will kill the component
 	// and since it is replicated it will die before the client can update its onExpired call
 	// which results in resync issues. If the parent is not killed, is there any side effects to this?
+
+	//BUG: There is still a bug where the parent power up actor will respawn from the server & client
+	// so we will have double super speed power ups, there has to be a better architecture to this to 
+	//generically solve this for all power ups
 */
 
 UCLASS()

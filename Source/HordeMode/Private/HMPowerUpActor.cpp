@@ -18,12 +18,11 @@ void AHMPowerUpActor::OnTickPowerUp()
 	OnPowerUpTicked();
 	
 	if (TickedProcessed >= TotalNumberOfTicks) {
-		OnExpired();
-
 		// server update
 		bIsPowerUpActive = false;
 		// update clients
 		OnRep_PowerupActive();
+		OnExpired();
 		// server update
 		aActorPowerUp = nullptr;
 
