@@ -24,6 +24,8 @@ class HORDEMODE_API AHMPowerUpActor : public AActor
 public:	
 	AHMPowerUpActor();
 
+	virtual void BeginPlay() override;
+
 	UFUNCTION(BlueprintImplementableEvent, Category="PowerUps")
 	void OnActivated(AActor * ActivateFor);
 

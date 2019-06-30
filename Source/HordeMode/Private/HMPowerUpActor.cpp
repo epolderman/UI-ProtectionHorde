@@ -11,6 +11,15 @@ AHMPowerUpActor::AHMPowerUpActor()
 	SetReplicates(true);
 }
 
+
+// Called when the game starts or when spawned
+void AHMPowerUpActor::BeginPlay()
+{
+	Super::BeginPlay();
+
+	UE_LOG(LogTemp, Warning, TEXT("AHMPowerAcotr BeginPlay()"));
+}
+
 void AHMPowerUpActor::OnTickPowerUp()
 {
 
@@ -25,7 +34,6 @@ void AHMPowerUpActor::OnTickPowerUp()
 		OnExpired();
 		// server update
 		aActorPowerUp = nullptr;
-
 		// remove timer
 		GetWorldTimerManager().ClearTimer(TimerHandle_PowerUpTick);
 	}

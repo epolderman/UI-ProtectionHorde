@@ -18,7 +18,7 @@ ASPickupActor::ASPickupActor()
 	// thickness
 	DecalComp->DecalSize = FVector(64, 75, 75);
 	DecalComp->SetupAttachment(RootComponent);
-
+	UE_LOG(LogTemp, Warning, TEXT("SPickupActor()"));
 	SetReplicates(true);
 }
 
@@ -28,17 +28,22 @@ void ASPickupActor::BeginPlay()
 	Super::BeginPlay();
 
 	if (Role == ROLE_Authority) {
+
 		Respawn();
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Not Respawning..."));
 	}
 }
 
 void ASPickupActor::Respawn()
 {
+	UE_LOG(LogTemp, Warning, TEXT("<------------Respawn()------------->"));
+
 	if (PowerUpClass == nullptr) {
 		UE_LOG(LogTemp, Warning, TEXT("Warning for Power Up: Please assign PowerUpClass instance."))
 		return;
 	}
-
 	FActorSpawnParameters params;
 	params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	CurrentPowerUp = GetWorld()->SpawnActor<AHMPowerUpActor>(PowerUpClass, GetTransform(), params);
@@ -51,10 +56,8 @@ void ASPickupActor::NotifyActorBeginOverlap(AActor * otherActor)
 	Super::NotifyActorBeginOverlap(otherActor);
 
 	if (Role == ROLE_Authority && CurrentPowerUp != nullptr) {
-
 		CurrentPowerUp->ActivatePowerUp(otherActor);
 		CurrentPowerUp = nullptr;
-
 		GetWorldTimerManager().SetTimer(TimerHandle_RespawnTimer, this, &ASPickupActor::Respawn, coolDownDuration);
 	}
 }
