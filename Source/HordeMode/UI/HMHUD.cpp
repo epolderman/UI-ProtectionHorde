@@ -24,7 +24,6 @@ AHMHUD::AHMHUD()
 	//}
 
 	MyUIWidget = SNew(SSTitleWidget);
-	// MyUIWidget = SNew(SStandardSlateWidget).OwnerHUD(this);
 
 	// Pass our viewport a weak ptr to our widget
 	// View port's weak ptr will not give Viewport ownership of Widget
