@@ -20,9 +20,7 @@ class HORDEMODE_API AHMHUD : public AHUD
 {
 	GENERATED_BODY()
 public:
-
 	AHMHUD();
-
 protected:
 	/*
 	A Shared Pointer owns the object it references, indefinitely preventing deletion 
@@ -31,6 +29,6 @@ protected:
 	it doesn't reference any object. 
 	Any non-null Shared Pointer can produce a Shared Reference to the object it references.
 	*/
-	TSharedPtr<SSTitleWidget> MyUIWidget;
+	TSharedPtr<SSTitleWidget> TitleWaveWidget;
 };
 

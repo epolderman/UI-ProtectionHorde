@@ -11,7 +11,6 @@
 AHMHUD::AHMHUD()
 {
 	UE_LOG(LogTemp, Warning, TEXT("AHMHUD()"));
-
 	/*
 		A Shared Reference acts like a Shared Pointer, in the sense that it owns the
 		object it references. They differ with regard to null objects; Shared References must
@@ -20,10 +19,11 @@ AHMHUD::AHMHUD()
 		guaranteed to reference a valid object. Use Shared References when you want a guarantee that the
 		referenced object is non-null, or if you want to indicate shared object ownership.
 	*/
-	MyUIWidget = SNew(SSTitleWidget).Visibility(EVisibility::Visible).OwnerHud(this);
+	TitleWaveWidget = SNew(SSTitleWidget).Visibility(EVisibility::Visible).OwnerHud(this);
+	TitleWaveWidget->SetTitleText("A HUD");
 	if (GEngine != nullptr) {
 		GEngine->GameViewport->AddViewportWidgetContent(
-			MyUIWidget.ToSharedRef()
+			TitleWaveWidget.ToSharedRef()
 		);
 	}
 }

@@ -13,6 +13,12 @@ class AHMHUD;
 
 /*
 		Generic Widget to show titles on our HUD w/ Animations
+
+		Slate Attribute = Needs to be TAttribute i.e. TAttribute<FText> TextContent
+		Attribute is a special type which allows you to bind functions and variable pointers
+
+		SLATE_ARGUMENT which is non-attribute argument and you can use normal types with it without 
+		TAttribute, but then of course you lose ability to bind functions
  */
 class HORDEMODE_API SSTitleWidget : public SCompoundWidget
 {
@@ -27,6 +33,8 @@ public:
 
 	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
+
+	void SetTitleText(FString NewTitle);
 protected:
 
 /*		
@@ -38,18 +46,27 @@ protected:
 		by a floating window. That window cannot own the tooltip
 		and must therefore use an SWeakWidget.
  */
-	TSharedPtr<SWeakWidget> TitleContainer;
+	// TSharedPtr<SWeakWidget> TitleContainer;
 
 	/** Owner world */
 	// TWeakObjectPtr<class UWorld> OwnerWorld;
 
-	/* Owner HUD */
+	/* 
+		Owner HUD
+		Weak Pointers are similar to Shared Pointers, but do not own the object they reference, and
+		therefore do not affect its lifecycle. This property can be very useful, as it 
+		breaks reference cycles, but it also means that a Weak Pointer can become null at any time, without warning. 
+		For this reason, a Weak Pointer can produce a
+		Shared Pointer to the object it references, ensuring programmers safe access to the object on a temporary basis.
+	*/
 	TWeakObjectPtr<class AHMHUD> OwnerHud;
 
-	FText TitleText = FText::FromString("THIS IS A HUD");
+	FText TitleText;
 
 	/** returns title string to display */
 	FText GetTitleText() const;
+
+	FSlateFontInfo GetTitleFont() const;
 
 private: 
 
