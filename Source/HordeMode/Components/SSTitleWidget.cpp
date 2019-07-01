@@ -8,6 +8,7 @@ void SSTitleWidget::Construct(const FArguments& InArgs)
 {
 
 	OwnerWorld = InArgs._OwnerWorld;
+
 	ChildSlot
 		.VAlign(VAlign_Fill)
 		.HAlign(HAlign_Fill)

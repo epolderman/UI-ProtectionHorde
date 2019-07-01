@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "HMHUD.h"
 #include "HMGameMode.h"
@@ -27,7 +26,7 @@ AHMHUD::AHMHUD()
 
 	// Pass our viewport a weak ptr to our widget
 	// View port's weak ptr will not give Viewport ownership of Widget
-	if (GEngine != NULL) {
+	if (GEngine != nullptr) {
 		GEngine->GameViewport->AddViewportWidgetContent(
 			SNew(SWeakWidget)
 			.PossiblyNullContent(MyUIWidget.ToSharedRef())
