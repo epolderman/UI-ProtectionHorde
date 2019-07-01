@@ -5,12 +5,16 @@
 #include <Engine/World.h>
 #include "HordeMode/Public/HMGameState.h"
 #include "HMPlayerState.h"
+#include "UI/HMHUD.h"
 
 
 // Tick Runs 60 times per sec / 1 for each frame
 
 AHMGameMode::AHMGameMode()
 {
+	HUDClass = AHMHUD::StaticClass();
+
+
 	TimeBetweenWaves = 2.0f;
 	GameStateClass = AHMGameState::StaticClass();
 	PlayerStateClass = AHMPlayerState::StaticClass();
