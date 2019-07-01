@@ -2,12 +2,13 @@
 
 #include "SSTitleWidget.h"
 #include "SlateOptMacros.h"
+#include "UI/HMHUD.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SSTitleWidget::Construct(const FArguments& InArgs)
 {
 
-	OwnerWorld = InArgs._OwnerWorld;
+	OwnerHud = InArgs._OwnerHud;
 
 	ChildSlot
 		.VAlign(VAlign_Fill)

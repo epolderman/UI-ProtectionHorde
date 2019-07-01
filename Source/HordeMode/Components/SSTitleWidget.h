@@ -9,8 +9,10 @@
 #include "SlateBasics.h"
 #include "SlateExtras.h"
 
+class AHMHUD;
+
 /*
-Generic Widget to show titles on our HUD
+		Generic Widget to show titles on our HUD w/ Animations
  */
 class HORDEMODE_API SSTitleWidget : public SCompoundWidget
 {
@@ -18,7 +20,8 @@ public:
 	SLATE_BEGIN_ARGS(SSTitleWidget)
 	{}
 
-	SLATE_ARGUMENT(TWeakObjectPtr<class UWorld>, OwnerWorld)
+	// SLATE_ARGUMENT(TWeakObjectPtr<class UWorld>, OwnerWorld)
+	SLATE_ARGUMENT(TWeakObjectPtr<class AHMHUD>, OwnerHud)
 
 	SLATE_END_ARGS()
 
@@ -38,9 +41,12 @@ protected:
 	TSharedPtr<SWeakWidget> TitleContainer;
 
 	/** Owner world */
-	TWeakObjectPtr<class UWorld> OwnerWorld;
+	// TWeakObjectPtr<class UWorld> OwnerWorld;
 
-	FText TitleText = FText::FromString("Some Title");
+	/* Owner HUD */
+	TWeakObjectPtr<class AHMHUD> OwnerHud;
+
+	FText TitleText = FText::FromString("THIS IS A HUD");
 
 	/** returns title string to display */
 	FText GetTitleText() const;
