@@ -1,8 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "SSTitleWidget.h"
 #include "SlateOptMacros.h"
 #include "UI/HMHUD.h"
+#include <DeclarativeSyntaxSupport.h>
+#include <Engine/Engine.h>
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SSTitleWidget::Construct(const FArguments& InArgs)
@@ -32,6 +32,33 @@ void SSTitleWidget::SetTitleText(FString NewTitle)
 	TitleText = FText::FromString(NewTitle);
 }
 
+void SSTitleWidget::ShowTitle(FString Title, const AHMHUD * Owner)
+{
+	OwnerHud = Owner;
+	TitleText = FText::FromString(Title);
+
+	if (GEngine && GEngine->GameViewport)
+	{
+		//SAssignNew(OwnerHud->TitleWaveWidget, SSTitleWidget)
+		//	.Visibility(EVisibility::Visible)
+		//	.OwnerHud(OwnerHud);
+
+		GEngine->GameViewport->AddViewportWidgetContent(
+			SAssignNew(TitleContainer, SWeakWidget)
+			.PossiblyNullContent(SharedThis(this))
+		);
+	}
+
+	//if (OwnerHud != nullptr) {
+	//	SAssignNew(OwnerHud->TitleWaveWidget, SSTitleWidget)
+	//		.Visibility(EVisibility::Visible)
+	//		.OwnerHud(OwnerHud);
+	//}
+	//else {
+	//	UE_LOG(LogTemp, Warning, TEXT("HUD WAS NULL DAWG"));
+	//}
+}
+
 FText SSTitleWidget::GetTitleText() const
 {
 	return TitleText;
@@ -43,8 +70,8 @@ FSlateFontInfo SSTitleWidget::GetTitleFont() const
 	const int32 StartFontSize = 50;
 
 	// Animation Code: TODO: 
-	//const int32 AnimatedFontSize = 70;
-	// const float AnimTime = 1.0f;
+	const int32 AnimatedFontSize = 70;
+	const float AnimTime = 1.0f;
 	// float AnimPercentage = FMath::Min(1.0f, GetTimeAlive() / AnimTime);
 	// End Animation Code
 

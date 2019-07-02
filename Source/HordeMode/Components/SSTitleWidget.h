@@ -35,19 +35,9 @@ public:
 	void Construct(const FArguments& InArgs);
 
 	void SetTitleText(FString NewTitle);
+
+	void ShowTitle(FString Title,const AHMHUD * Owner);
 protected:
-
-/*		
-		pointer to active widget container 
-		Implements a widget that holds a weak pointer to one child widget.
- 
-		Weak widgets encapsulate a piece of content without owning it.
-		e.g. A tooltip is owned by the hovered widget but displayed
-		by a floating window. That window cannot own the tooltip
-		and must therefore use an SWeakWidget.
- */
-	// TSharedPtr<SWeakWidget> TitleContainer;
-
 	/** Owner world */
 	// TWeakObjectPtr<class UWorld> OwnerWorld;
 
@@ -61,11 +51,23 @@ protected:
 	*/
 	TWeakObjectPtr<class AHMHUD> OwnerHud;
 
+	/*
+		Pointer to active widget container
+		Implements a widget that holds a weak pointer to one child widget.
+		Weak widgets encapsulate a piece of content without owning it.
+		e.g. A tooltip is owned by the hovered widget but displayed
+		by a floating window. That window cannot own the tooltip
+		and must therefore use an SWeakWidget.
+	*/
+	TSharedPtr<SWeakWidget> TitleContainer;
+
+	/* Display Information */
 	FText TitleText;
 
-	/** returns title string to display */
+	/* Returns title string to display */
 	FText GetTitleText() const;
 
+	/* Returns a modified font style for animations */
 	FSlateFontInfo GetTitleFont() const;
 
 private: 
