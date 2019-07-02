@@ -30,9 +30,10 @@ AHMHUD::AHMHUD()
 
 void AHMHUD::BeginPlay()
 {
-	UE_LOG(LogTemp, Warning, TEXT("AHMHUD() BeginPlay"));
+	/* 
+		https://forums.unrealengine.com/development-discussion/c-gameplay-programming/10029-what-exactly-is-sassignnew-doing
+	*/
 
-	// https://forums.unrealengine.com/development-discussion/c-gameplay-programming/10029-what-exactly-is-sassignnew-doing
 	SAssignNew(this->TitleWaveWidget, SSTitleWidget)
 			.Visibility(EVisibility::Visible)
 			.OwnerHud(this);

@@ -4,6 +4,9 @@
 #include <DeclarativeSyntaxSupport.h>
 #include <Engine/Engine.h>
 
+
+// TODO: Animations on the title, bind to the gameMode wave
+
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SSTitleWidget::Construct(const FArguments& InArgs)
 {
@@ -56,8 +59,8 @@ FSlateFontInfo SSTitleWidget::GetTitleFont() const
 	const int32 StartFontSize = 50;
 
 	// Animation Code: TODO: 
-	const int32 AnimatedFontSize = 70;
-	const float AnimTime = 1.0f;
+	// const int32 AnimatedFontSize = 70;
+	// const float AnimTime = 1.0f;
 	// float AnimPercentage = FMath::Min(1.0f, GetTimeAlive() / AnimTime);
 	// End Animation Code
 
