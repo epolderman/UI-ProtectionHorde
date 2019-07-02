@@ -32,31 +32,17 @@ void SSTitleWidget::SetTitleText(FString NewTitle)
 	TitleText = FText::FromString(NewTitle);
 }
 
-void SSTitleWidget::ShowTitle(FString Title, const AHMHUD * Owner)
+void SSTitleWidget::ShowTitle(FString Title)
 {
-	OwnerHud = Owner;
 	TitleText = FText::FromString(Title);
 
 	if (GEngine && GEngine->GameViewport)
 	{
-		//SAssignNew(OwnerHud->TitleWaveWidget, SSTitleWidget)
-		//	.Visibility(EVisibility::Visible)
-		//	.OwnerHud(OwnerHud);
-
 		GEngine->GameViewport->AddViewportWidgetContent(
 			SAssignNew(TitleContainer, SWeakWidget)
 			.PossiblyNullContent(SharedThis(this))
 		);
 	}
-
-	//if (OwnerHud != nullptr) {
-	//	SAssignNew(OwnerHud->TitleWaveWidget, SSTitleWidget)
-	//		.Visibility(EVisibility::Visible)
-	//		.OwnerHud(OwnerHud);
-	//}
-	//else {
-	//	UE_LOG(LogTemp, Warning, TEXT("HUD WAS NULL DAWG"));
-	//}
 }
 
 FText SSTitleWidget::GetTitleText() const

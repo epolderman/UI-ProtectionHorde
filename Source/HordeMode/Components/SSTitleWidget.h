@@ -36,7 +36,7 @@ public:
 
 	void SetTitleText(FString NewTitle);
 
-	void ShowTitle(FString Title,const AHMHUD * Owner);
+	void ShowTitle(FString Title);
 protected:
 	/** Owner world */
 	// TWeakObjectPtr<class UWorld> OwnerWorld;
