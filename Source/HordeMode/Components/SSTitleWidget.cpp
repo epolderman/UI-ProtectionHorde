@@ -3,6 +3,7 @@
 #include "UI/HMHUD.h"
 #include <DeclarativeSyntaxSupport.h>
 #include <Engine/Engine.h>
+#include <UnrealMathUtility.h>
 
 
 // TODO: Animations on the title, bind to the gameMode wave
@@ -12,6 +13,10 @@ void SSTitleWidget::Construct(const FArguments& InArgs)
 {
 
 	OwnerHud = InArgs._OwnerHud;
+	OwnerWorld = InArgs._OwnerWorld;
+	TitleRequestedTime = 0.0f;
+	FadeAnimationDuration = 5.0f;
+	DurationOfTitle = 1.0f;
 
 	ChildSlot
 		.VAlign(VAlign_Fill)
@@ -37,15 +42,28 @@ void SSTitleWidget::SetTitleText(FString NewTitle)
 
 void SSTitleWidget::ShowTitle(FString Title)
 {
-	TitleText = FText::FromString(Title);
+	SetTitleText(Title);
+	
+	if (GEngine != nullptr && OwnerWorld != nullptr) {
 
-	if (GEngine && GEngine->GameViewport)
-	{
+		UE_LOG(LogTemp, Warning, TEXT("Adding To ViewPort()"));
+
+		TitleRequestedTime = OwnerWorld->GetTimeSeconds();
+
 		GEngine->GameViewport->AddViewportWidgetContent(
 			SAssignNew(TitleContainer, SWeakWidget)
 			.PossiblyNullContent(SharedThis(this))
 		);
 	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Can't add to viewport"));
+	}
+}
+
+void SSTitleWidget::HideTitle()
+{
+	if (GEngine && GEngine->GameViewport)
+	GEngine->GameViewport->RemoveViewportWidgetContent(TitleContainer.ToSharedRef());
 }
 
 FText SSTitleWidget::GetTitleText() const
@@ -56,14 +74,35 @@ FText SSTitleWidget::GetTitleText() const
 FSlateFontInfo SSTitleWidget::GetTitleFont() const
 {
 	FSlateFontInfo ResultFont;
-	const int32 StartFontSize = 50;
+	const int32 StartFontSize = 8;
 
 	// Animation Code: TODO: 
-	// const int32 AnimatedFontSize = 70;
-	// const float AnimTime = 1.0f;
-	// float AnimPercentage = FMath::Min(1.0f, GetTimeAlive() / AnimTime);
+	const int32 AnimatedFontSize = 70;
+	const float AnimTime = 1.0f;
+	float AnimPercentage = FMath::Min(1.0f, GetTimeAlive() / AnimTime);
 	// End Animation Code
 
-	ResultFont = FSlateFontInfo(FPaths::ProjectContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), FMath::TruncToInt(StartFontSize));
+	ResultFont = FSlateFontInfo(FPaths::ProjectContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), FMath::TruncToInt(StartFontSize + AnimatedFontSize * AnimPercentage));
 	return ResultFont;
+}
+
+void SSTitleWidget::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
+{
+	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
+
+	const float TotalLifespan = (FadeAnimationDuration + DurationOfTitle);
+	if (TitleRequestedTime > 0.0f && GetTimeAlive() >= TotalLifespan)
+	{
+		HideTitle();
+	}
+
+}
+
+float SSTitleWidget::GetTimeAlive() const {
+
+	if (OwnerWorld == nullptr) {
+		return 0.0f;
+	}
+
+	return OwnerWorld->GetTimeSeconds() - TitleRequestedTime;
 }

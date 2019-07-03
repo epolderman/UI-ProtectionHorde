@@ -26,20 +26,21 @@ public:
 	SLATE_BEGIN_ARGS(SSTitleWidget)
 	{}
 
-	// SLATE_ARGUMENT(TWeakObjectPtr<class UWorld>, OwnerWorld)
+	SLATE_ARGUMENT(TWeakObjectPtr<class UWorld>, OwnerWorld)
 	SLATE_ARGUMENT(TWeakObjectPtr<class AHMHUD>, OwnerHud)
 
 	SLATE_END_ARGS()
 
-	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
 
 	void SetTitleText(FString NewTitle);
 
 	void ShowTitle(FString Title);
+
+	void HideTitle();
 protected:
-	/** Owner world */
-	// TWeakObjectPtr<class UWorld> OwnerWorld;
+	/** Will I Need this? Can't the HUD Just handle this */
+	TWeakObjectPtr<class UWorld> OwnerWorld;
 
 	/* 
 		Owner HUD
@@ -53,7 +54,7 @@ protected:
 
 	/*
 		Pointer to active widget container
-		Implements a widget that holds a weak pointer to one child widget.
+		SWeakWidget = Implements a widget that holds a weak pointer to one child widget.
 		Weak widgets encapsulate a piece of content without owning it.
 		e.g. A tooltip is owned by the hovered widget but displayed
 		by a floating window. That window cannot own the tooltip
@@ -70,8 +71,16 @@ protected:
 	/* Returns a modified font style for animations */
 	FSlateFontInfo GetTitleFont() const;
 
+	float TitleRequestedTime;
+
+	float DurationOfTitle;
+
+	float FadeAnimationDuration;
+
+	float GetTimeAlive() const;
+
 private: 
 
 	/** SWidget overrides */
-	// virtual void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;
+	virtual void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;
 };
