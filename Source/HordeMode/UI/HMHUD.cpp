@@ -28,18 +28,26 @@ AHMHUD::AHMHUD()
 	}*/
 }
 
-void AHMHUD::BeginPlay()
-{
-	/* 
-		https://forums.unrealengine.com/development-discussion/c-gameplay-programming/10029-what-exactly-is-sassignnew-doing
+void AHMHUD::PostInitializeComponents() {
+
+	UE_LOG(LogTemp, Warning, TEXT("PostInitComponents"));
+	Super::PostInitializeComponents();
+
+	/*
+	https://forums.unrealengine.com/development-discussion/c-gameplay-programming/10029-what-exactly-is-sassignnew-doing
 	*/
 
-	// TODO: Investigate world being null in hud? Is this needed on the server? Do we need another check? Investigate
+// TODO: Investigate world being null in hud? Is this needed on the server? Do we need another check? Investigate
 	UWorld* const MyWorld = GEngine != nullptr ? GEngine->GetWorld() : nullptr;
 	if (MyWorld == nullptr) {
 		UE_LOG(LogTemp, Warning, TEXT("World is null()"));
 	}
 	SAssignNew(this->TitleWaveWidget, SSTitleWidget).Visibility(EVisibility::Visible).OwnerHud(this).OwnerWorld(MyWorld);
 	this->TitleWaveWidget->ShowTitle("A HUD");
+}
+
+void AHMHUD::BeginPlay()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Begin Play()"));
 
 }
