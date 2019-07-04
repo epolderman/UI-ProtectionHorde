@@ -12,12 +12,13 @@
 
 AHMGameMode::AHMGameMode()
 {
+	GameStateClass = AHMGameState::StaticClass();
+	PlayerStateClass = AHMPlayerState::StaticClass();
 	HUDClass = AHMHUD::StaticClass();
 
 
 	TimeBetweenWaves = 2.0f;
-	GameStateClass = AHMGameState::StaticClass();
-	PlayerStateClass = AHMPlayerState::StaticClass();
+	
 	PrimaryActorTick.bCanEverTick = true;
 	// once a second
 	PrimaryActorTick.TickInterval = 1.0f;;
