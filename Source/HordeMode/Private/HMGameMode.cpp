@@ -6,6 +6,8 @@
 #include "HordeMode/Public/HMGameState.h"
 #include "HMPlayerState.h"
 #include "UI/HMHUD.h"
+#include <DeclarativeSyntaxSupport.h>
+#include "Components/SSTitleWidget.h"
 
 
 // Tick Runs 60 times per sec / 1 for each frame
@@ -15,10 +17,7 @@ AHMGameMode::AHMGameMode()
 	GameStateClass = AHMGameState::StaticClass();
 	PlayerStateClass = AHMPlayerState::StaticClass();
 	HUDClass = AHMHUD::StaticClass();
-
-
 	TimeBetweenWaves = 2.0f;
-	
 	PrimaryActorTick.bCanEverTick = true;
 	// once a second
 	PrimaryActorTick.TickInterval = 1.0f;;
@@ -90,6 +89,7 @@ void AHMGameMode::EndWave()
 void AHMGameMode::InitNextWave()
 {
 	SetWaveState(EWaveState::WaitingToStart);
+
 	
 	RestartDeadPlayers();
 

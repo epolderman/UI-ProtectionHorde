@@ -27,7 +27,7 @@ public:
 	{}
 
 	SLATE_ARGUMENT(TWeakObjectPtr<class UWorld>, OwnerWorld)
-	SLATE_ARGUMENT(TWeakObjectPtr<class AHMHUD>, OwnerHud)
+	// SLATE_ARGUMENT(TWeakObjectPtr<class AHMHUD>, OwnerHud)
 
 	SLATE_END_ARGS()
 

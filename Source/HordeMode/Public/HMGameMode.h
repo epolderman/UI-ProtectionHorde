@@ -34,7 +34,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnActorKilledSig OnActorKilled;
 
-	TSharedPtr<SSTitleWidget> Title;
+	TSharedPtr<SSTitleWidget> TitleWaveWidget;
 
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category="GameMode")
@@ -73,5 +73,7 @@ protected:
 	float TimeBetweenWaves;
 
 	void RestartDeadPlayers();
+
+
 };
 

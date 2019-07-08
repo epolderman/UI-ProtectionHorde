@@ -18,14 +18,6 @@
 AHMHUD::AHMHUD()
 {
 	UE_LOG(LogTemp, Warning, TEXT("AHMHUD()"));
-
-	/*TitleWaveWidget = SNew(SSTitleWidget).Visibility(EVisibility::Visible).OwnerHud(this);
-	TitleWaveWidget->SetTitleText("A HUD");
-	if (GEngine != nullptr) {
-		GEngine->GameViewport->AddViewportWidgetContent(
-			TitleWaveWidget.ToSharedRef()
-		);
-	}*/
 }
 
 void AHMHUD::PostInitializeComponents() {
@@ -36,24 +28,17 @@ void AHMHUD::PostInitializeComponents() {
 	/*
 	https://forums.unrealengine.com/development-discussion/c-gameplay-programming/10029-what-exactly-is-sassignnew-doing
 	*/
-
-	
 }
 
 void AHMHUD::BeginPlay()
 {
-	Super::BeginPlay()
-		;
+	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("HUD Begin Play()"));
-	if (GEngine == nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("GENGINE IS NULL"));
-	}
 
-	// TODO: Investigate world being null in hud? Is this needed on the server? Do we need another check? Investigate
-	UWorld* const MyWorld = GEngine != nullptr ? GEngine->GetWorld() : nullptr;
+	UWorld* const MyWorld = GetWorld();
 	if (MyWorld == nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("World is null()"));
+		UE_LOG(LogTemp, Warning, TEXT("HUD: World is null()"));
 	}
-	SAssignNew(this->TitleWaveWidget, SSTitleWidget).Visibility(EVisibility::Visible).OwnerHud(this).OwnerWorld(MyWorld);
+	SAssignNew(this->TitleWaveWidget, SSTitleWidget).Visibility(EVisibility::Visible).OwnerWorld(MyWorld);
 	this->TitleWaveWidget->ShowTitle("A HUD");
 }

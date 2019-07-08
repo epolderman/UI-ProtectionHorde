@@ -12,7 +12,7 @@ BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SSTitleWidget::Construct(const FArguments& InArgs)
 {
 
-	OwnerHud = InArgs._OwnerHud;
+	// OwnerHud = InArgs._OwnerHud;
 	OwnerWorld = InArgs._OwnerWorld;
 	TitleRequestedTime = 0.0f;
 	FadeAnimationDuration = 5.0f;
@@ -43,6 +43,8 @@ void SSTitleWidget::SetTitleText(FString NewTitle)
 void SSTitleWidget::ShowTitle(FString Title)
 {
 	SetTitleText(Title);
+
+	UE_LOG(LogTemp, Warning, TEXT("ShowTitle"));
 	
 	if (GEngine != nullptr && OwnerWorld != nullptr) {
 
@@ -62,8 +64,12 @@ void SSTitleWidget::ShowTitle(FString Title)
 
 void SSTitleWidget::HideTitle()
 {
-	if (GEngine && GEngine->GameViewport)
-	GEngine->GameViewport->RemoveViewportWidgetContent(TitleContainer.ToSharedRef());
+	if (GEngine != nullptr && GEngine->GameViewport != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("HideTitle"));
+		GEngine->GameViewport->RemoveViewportWidgetContent(TitleContainer.ToSharedRef());
+		// GEngine->GameViewport->RemoveAllViewportWidgets();
+	}
 }
 
 FText SSTitleWidget::GetTitleText() const
@@ -93,6 +99,8 @@ void SSTitleWidget::Tick(const FGeometry& AllottedGeometry, const double InCurre
 	const float TotalLifespan = (FadeAnimationDuration + DurationOfTitle);
 	if (TitleRequestedTime > 0.0f && GetTimeAlive() >= TotalLifespan)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Removing Title"));
+	
 		HideTitle();
 	}
 

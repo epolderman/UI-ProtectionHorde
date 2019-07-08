@@ -84,20 +84,6 @@ void AHMPowerUpActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutL
 }
 
 
-/*	UCharacterMovementComponent * CharMoveComp = Cast<UCharacterMovementComponent>(otherActor->GetComponentByClass(UCharacterMovementComponent::StaticClass()));
-if (CharMoveComp) {
-	if (Role == ROLE_Authority) {
-		UE_LOG(LogTemp, Warning, TEXT("Client: Active Power Up()"));
-		const float walkSpeed = CharMoveComp->MaxWalkSpeed;
-		UE_LOG(LogTemp, Warning, TEXT("MaxWalkSpeed B: %f"), CharMoveComp->MaxWalkSpeed);
-		CharMoveComp->MaxWalkSpeed = walkSpeed * 2.0f;
-
-		UE_LOG(LogTemp, Warning, TEXT("MaxWalkSpeed A: %f"), CharMoveComp->MaxWalkSpeed);
-	}
-
-}*/
-
-
 
 
 

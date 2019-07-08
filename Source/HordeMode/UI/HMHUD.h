@@ -9,7 +9,9 @@
 		One HUD Per Player Controller. 
 		Responsibility: Show player health, ammo, wave states. 
 		Explore Animations in slate. 
+		
 
+		Apparently this is derived from AActor.
 	*/
 
 
