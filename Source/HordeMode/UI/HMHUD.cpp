@@ -39,6 +39,6 @@ void AHMHUD::BeginPlay()
 	if (MyWorld == nullptr) {
 		UE_LOG(LogTemp, Warning, TEXT("HUD: World is null()"));
 	}
-	SAssignNew(this->TitleWaveWidget, SSTitleWidget).Visibility(EVisibility::Visible).OwnerWorld(MyWorld);
+	SAssignNew(this->TitleWaveWidget, SSTitleWidget).OwnerWorld(MyWorld);
 	this->TitleWaveWidget->ShowTitle("A HUD");
 }

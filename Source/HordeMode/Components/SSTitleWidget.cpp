@@ -71,6 +71,7 @@ void SSTitleWidget::HideTitle()
 	if (GEngine != nullptr && GEngine->GameViewport != nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("HideTitle"));
+		// Why doesnt this remove from the viewport? SWeakWidget is title widget, 
 		GEngine->GameViewport->RemoveViewportWidgetContent(TitleContainer.ToSharedRef());
 		bisRemoved = true;
 		// GEngine->GameViewport->RemoveAllViewportWidgets();
