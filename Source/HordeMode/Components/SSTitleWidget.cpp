@@ -31,6 +31,8 @@ void SSTitleWidget::Construct(const FArguments& InArgs)
 							.Text(this, &SSTitleWidget::GetTitleText)
 		]
 		];
+
+	bisRemoved = false;
 }
 
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
@@ -56,6 +58,8 @@ void SSTitleWidget::ShowTitle(FString Title)
 			SAssignNew(TitleContainer, SWeakWidget)
 			.PossiblyNullContent(SharedThis(this))
 		);
+
+		bisRemoved = false;
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("Can't add to viewport"));
@@ -68,6 +72,7 @@ void SSTitleWidget::HideTitle()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("HideTitle"));
 		GEngine->GameViewport->RemoveViewportWidgetContent(TitleContainer.ToSharedRef());
+		bisRemoved = true;
 		// GEngine->GameViewport->RemoveAllViewportWidgets();
 	}
 }
@@ -97,7 +102,7 @@ void SSTitleWidget::Tick(const FGeometry& AllottedGeometry, const double InCurre
 	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
 
 	const float TotalLifespan = (FadeAnimationDuration + DurationOfTitle);
-	if (TitleRequestedTime > 0.0f && GetTimeAlive() >= TotalLifespan)
+	if (TitleRequestedTime > 0.0f && GetTimeAlive() >= TotalLifespan && !bisRemoved)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Removing Title"));
 	

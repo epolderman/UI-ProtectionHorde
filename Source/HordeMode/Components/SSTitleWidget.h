@@ -81,6 +81,7 @@ protected:
 
 private: 
 
+	bool bisRemoved;
 	/** SWidget overrides */
 	virtual void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;
 };
