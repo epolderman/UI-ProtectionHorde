@@ -29,6 +29,8 @@ public:
 
 	virtual void StartPlay() override;
 
+	virtual void BeginPlay() override;
+
 	virtual void Tick(float DeltaSeconds) override;
 
 	UPROPERTY(BlueprintAssignable, Category = "Events")

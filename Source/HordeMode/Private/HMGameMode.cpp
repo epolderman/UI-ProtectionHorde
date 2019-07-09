@@ -40,17 +40,23 @@ void AHMGameMode::RestartDeadPlayers()
 
 		APlayerController * CurrentPlayer = It->Get();
 		if (CurrentPlayer != nullptr && CurrentPlayer->GetPawn() == nullptr) {
-			// respawn
 			RestartPlayer(CurrentPlayer);
 		}
+	
 	}
 }
 
 void AHMGameMode::StartPlay()
 {
 	Super::StartPlay();
-
 	InitNextWave();
+	UE_LOG(LogTemp, Warning, TEXT("GAMEMODE StartPlay"));
+}
+
+void AHMGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+	UE_LOG(LogTemp, Warning, TEXT("GAMEMODE BEGINPLAY"));
 }
 
 void AHMGameMode::Tick(float DeltaSeconds)

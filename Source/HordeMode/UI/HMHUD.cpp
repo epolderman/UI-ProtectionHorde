@@ -14,6 +14,18 @@
 	referenced object is non-null, or if you want to indicate shared object ownership.
 */
 
+/*
+
+	Each client (including server) gets a unique Player Controller, which is specified in the game mode,
+	so creating local gui elements and other objects are probably best created in the player controller as
+	there is no way to distinct if a character is controlled by one client or another. My understanding is that
+	each instance of the game has one player controller but infinite possible characters so you can be assured
+	when you are creating objects in the player controller that they will be local to that instance of the game.
+
+	issue is wwhat owns this? server? clients? how to display only on the client?
+
+*/
+
 
 AHMHUD::AHMHUD()
 {
@@ -39,6 +51,7 @@ void AHMHUD::BeginPlay()
 	if (MyWorld == nullptr) {
 		UE_LOG(LogTemp, Warning, TEXT("HUD: World is null()"));
 	}
+	
 	SAssignNew(this->TitleWaveWidget, SSTitleWidget).OwnerWorld(MyWorld);
 	this->TitleWaveWidget->ShowTitle("A HUD");
 }

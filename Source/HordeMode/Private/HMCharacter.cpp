@@ -26,6 +26,8 @@
 // DebugGameEditor will allows us to play the game but add breakpoints to see where we are breaking.
 // At the top of Visual Studio to the left of Win64
 
+
+
 AHMCharacter::AHMCharacter()
 {
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
