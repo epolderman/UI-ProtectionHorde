@@ -42,16 +42,27 @@ void AHMHUD::PostInitializeComponents() {
 	*/
 }
 
-void AHMHUD::BeginPlay()
+void AHMHUD::ShowTitle(FString Title)
 {
-	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("HUD Begin Play()"));
 
 	UWorld* const MyWorld = GetWorld();
 	if (MyWorld == nullptr) {
 		UE_LOG(LogTemp, Warning, TEXT("HUD: World is null()"));
 	}
-	
-	SAssignNew(this->TitleWaveWidget, SSTitleWidget).OwnerWorld(MyWorld);
-	this->TitleWaveWidget->ShowTitle("A HUD");
+
+	// basically, title is not added to clients, only server authority hud? how should this communication be established?
+	if (Role != ROLE_Authority) {
+		SAssignNew(this->TitleWaveWidget, SSTitleWidget).OwnerWorld(MyWorld).OwnerHud(this);
+		this->TitleWaveWidget->ShowTitle(Title);
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("HUD: This the the authority"));
+	}
+}
+
+void AHMHUD::BeginPlay()
+{
+	Super::BeginPlay();
+	UE_LOG(LogTemp, Warning, TEXT("HUD Begin Play()"));
+
 }

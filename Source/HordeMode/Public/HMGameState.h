@@ -27,10 +27,10 @@ public:
 
 protected:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_WaveState, Category = "GameState")
-		EWaveState CurrentGameState;
+	EWaveState CurrentGameState;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "GameState")
-		void WaveStateChanged(EWaveState NewState, EWaveState OldState);
+	void WaveStateChanged(EWaveState NewState, EWaveState OldState);
 
 	UFUNCTION()
 	void OnRep_WaveState(EWaveState OldState);

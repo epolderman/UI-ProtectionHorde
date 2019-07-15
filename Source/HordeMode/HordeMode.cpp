@@ -2,5 +2,6 @@
 
 #include "HordeMode.h"
 #include "Modules/ModuleManager.h"
+#include <LogMacros.h>
 
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, HordeMode, "HordeMode" );

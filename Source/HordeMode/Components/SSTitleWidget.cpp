@@ -4,6 +4,9 @@
 #include <DeclarativeSyntaxSupport.h>
 #include <Engine/Engine.h>
 #include <UnrealMathUtility.h>
+#include "HordeMode.h"
+#include <Engine/GameViewportClient.h>
+
 
 
 // TODO: Animations on the title, bind to the gameMode wave
@@ -14,9 +17,10 @@ void SSTitleWidget::Construct(const FArguments& InArgs)
 
 	// OwnerHud = InArgs._OwnerHud;
 	OwnerWorld = InArgs._OwnerWorld;
+	OwnerHud = InArgs._OwnerHud;
 	TitleRequestedTime = 0.0f;
 	FadeAnimationDuration = 5.0f;
-	DurationOfTitle = 1.0f;
+	DurationOfTitle = 5.0f;
 
 	ChildSlot
 		.VAlign(VAlign_Fill)
@@ -45,34 +49,31 @@ void SSTitleWidget::SetTitleText(FString NewTitle)
 void SSTitleWidget::ShowTitle(FString Title)
 {
 	SetTitleText(Title);
-
 	UE_LOG(LogTemp, Warning, TEXT("ShowTitle"));
-	
 	if (GEngine != nullptr && OwnerWorld != nullptr) {
-
 		UE_LOG(LogTemp, Warning, TEXT("Adding To ViewPort()"));
-
 		TitleRequestedTime = OwnerWorld->GetTimeSeconds();
-
 		GEngine->GameViewport->AddViewportWidgetContent(
 			SAssignNew(TitleContainer, SWeakWidget)
 			.PossiblyNullContent(SharedThis(this))
 		);
-
 		bisRemoved = false;
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("Can't add to viewport"));
 	}
 }
 
 void SSTitleWidget::HideTitle()
 {
+
+	UE_LOG(LogTemp, Warning, TEXT("Trying..to..HideTitle"));
+
+
 	if (GEngine != nullptr && GEngine->GameViewport != nullptr){
-	
-		UE_LOG(LogTemp, Warning, TEXT("HideTitle"));
-		GEngine->GameViewport->RemoveViewportWidgetContent(TitleContainer.ToSharedRef());
-		bisRemoved = true;
+		
+		
+			GEngine->GameViewport->RemoveViewportWidgetContent(TitleContainer.ToSharedRef());
+			bisRemoved = true;
+			UE_LOG(LogTemp, Warning, TEXT("HideTitle"));
+		
 	}
 }
 

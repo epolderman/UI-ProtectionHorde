@@ -53,6 +53,7 @@ void AHMCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	UE_LOG(LogTemp, Warning, TEXT("AHMCharacter Begin Play()"));
+	
 
 	defaultFOV = CameraComponent->FieldOfView;
 	HealthComponent->OnHealthChanged.AddDynamic(this, &AHMCharacter::OnHealthChanged);

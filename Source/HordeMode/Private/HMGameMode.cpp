@@ -16,7 +16,15 @@ AHMGameMode::AHMGameMode()
 {
 	GameStateClass = AHMGameState::StaticClass();
 	PlayerStateClass = AHMPlayerState::StaticClass();
-	HUDClass = AHMHUD::StaticClass();
+	// HUDClass = AHMHUD::StaticClass();
+	// only adds to the server, removes from server, so where should the hud be created? wtf?
+	//if (Role != ROLE_Authority) {
+	//	UE_LOG(LogTemp, Warning, TEXT("GameMode: Add Hud to Client"));
+	//	HUDClass = AHMHUD::StaticClass();
+	//}
+
+
+	// HUDClass = AHMHUD::StaticClass();
 	TimeBetweenWaves = 2.0f;
 	PrimaryActorTick.bCanEverTick = true;
 	// once a second
