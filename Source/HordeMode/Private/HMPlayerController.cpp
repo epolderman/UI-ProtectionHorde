@@ -15,19 +15,19 @@ AHMPlayerController::AHMPlayerController()
 
 void AHMPlayerController::BeginPlay()
 {
-	UWorld* const MyWorld = GetWorld();
-	if (MyWorld == nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("PC: World is null()"));
-	}
+	//UWorld* const MyWorld = GetWorld();
+	//if (MyWorld == nullptr) {
+	//	UE_LOG(LogTemp, Warning, TEXT("PC: World is null()"));
+	//}
 
-	AHMHUD * HUD = Cast<AHMHUD>(GetHUD());
+	//AHMHUD * HUD = Cast<AHMHUD>(GetHUD());
 
-	if (HUD != nullptr && MyWorld != nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("PC: GOOD 2 GO"));
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("PC: NOT good 2 GO"));
-	}
+	//if (HUD != nullptr && MyWorld != nullptr) {
+	//	UE_LOG(LogTemp, Warning, TEXT("PC: GOOD 2 GO"));
+	//}
+	//else {
+	//	UE_LOG(LogTemp, Warning, TEXT("PC: NOT good 2 GO"));
+	//}
 
 	//// basically, title is not added to clients, only server authority hud? how should this communication be established?
 	//if (Role != ROLE_Authority) {

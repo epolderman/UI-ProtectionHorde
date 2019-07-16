@@ -52,17 +52,19 @@ void AHMHUD::ShowTitle(FString Title)
 
 	// basically, title is not added to clients, only server authority hud? how should this communication be established?
 	if (Role != ROLE_Authority) {
-		SAssignNew(this->TitleWaveWidget, SSTitleWidget).OwnerWorld(MyWorld).OwnerHud(this);
-		this->TitleWaveWidget->ShowTitle(Title);
+		UE_LOG(LogTemp, Warning, TEXT("HUD: Won't Hud"));
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("HUD: This the the authority"));
 	}
+
+	SAssignNew(this->TitleWaveWidget, SSTitleWidget).OwnerWorld(MyWorld).OwnerHud(this);
+	this->TitleWaveWidget->ShowTitle(Title);
 }
 
 void AHMHUD::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("HUD Begin Play()"));
-
+	UE_LOG(LogTemp, Warning, TEXT("HUD: Begin Play()"));
+	ShowTitle("HUD");
 }
