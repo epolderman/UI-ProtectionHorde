@@ -19,6 +19,9 @@ class SSTitleWidget;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnActorKilledSig, AActor*, killer,  AActor*, victim, AController*, controlledBy);
 
+// declare a delegate to send the user an update on waves
+
+
 UCLASS()
 class HORDEMODE_API AHMGameMode : public AGameModeBase
 {
