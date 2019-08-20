@@ -51,7 +51,10 @@ void AHMHUD::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("HUD: World is null()"));
 	}
 
-	// basically, title is not added to clients, only server authority hud? how should this communication be established?
+	// basically, title is not added to clients, only server authority hud? 
+	// how should this communication be established?
+	// Should this be the main menu HUD architecture? 
+	// Should a networking hud be attached when you join the game?
 	if (Role != ROLE_Authority) {
 		UE_LOG(LogTemp, Warning, TEXT("HUD: Won't Hud"));
 	}
