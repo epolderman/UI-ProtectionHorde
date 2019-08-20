@@ -42,9 +42,10 @@ void AHMHUD::PostInitializeComponents() {
 	*/
 }
 
-void AHMHUD::ShowTitle(FString Title)
+void AHMHUD::BeginPlay()
 {
-
+	Super::BeginPlay();
+	UE_LOG(LogTemp, Warning, TEXT("HUD: Begin Play()--------------------------->"));
 	UWorld* const MyWorld = GetWorld();
 	if (MyWorld == nullptr) {
 		UE_LOG(LogTemp, Warning, TEXT("HUD: World is null()"));
@@ -59,12 +60,5 @@ void AHMHUD::ShowTitle(FString Title)
 	}
 
 	SAssignNew(this->TitleWaveWidget, SSTitleWidget).OwnerWorld(MyWorld).OwnerHud(this);
-	this->TitleWaveWidget->ShowTitle(Title);
-}
-
-void AHMHUD::BeginPlay()
-{
-	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("HUD: Begin Play()"));
-	ShowTitle("HUD");
+	this->TitleWaveWidget->ShowTitle("HUD");
 }

@@ -32,9 +32,6 @@ public:
 	Any non-null Shared Pointer can produce a Shared Reference to the object it references.
 	*/
 	TSharedPtr<SSTitleWidget> TitleWaveWidget;
-
-	UFUNCTION(BlueprintCallable, Category = "Title Shit")
-	void ShowTitle(FString Title);
 protected:
 
 	virtual void BeginPlay() override;
