@@ -5,7 +5,11 @@
 #include "HMGameState.generated.h"
 
 /*
-	Handles Client Game State
+	Handles Client Game State and replication. 
+	Game Mode doesnt exist on the clients. 
+	Game State can hold the state for the clients. 
+
+	Todo:: somehow grab the controller -> cast to our hud then show title
  */
 
 UENUM(BlueprintType)
@@ -17,14 +21,14 @@ enum class EWaveState: uint8 {
 	GameOver,
 };
 
+// on rep gives use the ability of the old state, for example: old weapon, we can call unequip, new weapon, equip;
+
 UCLASS()
 class HORDEMODE_API AHMGameState : public AGameStateBase
 {
 	GENERATED_BODY()
 public:
-
 	void SetWaveState(EWaveState NewWaveState);
-
 protected:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_WaveState, Category = "GameState")
 	EWaveState CurrentGameState;

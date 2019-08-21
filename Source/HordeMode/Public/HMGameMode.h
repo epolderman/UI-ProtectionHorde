@@ -8,6 +8,7 @@
 
 
 /*
+	ONLY EXISTS ON SERVER. 
 	Generates all class files for our project, GameState, GameSession, Controller, etc..
 	Should exist only on the server when networked. GameState [not this] class handles replicated information.
 	Gives us MatchState, Delay, etc.. See GameModeBase.h
@@ -18,9 +19,6 @@ enum class EWaveState : uint8;
 class SSTitleWidget;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnActorKilledSig, AActor*, killer,  AActor*, victim, AController*, controlledBy);
-
-// declare a delegate to send the user an update on waves
-
 
 UCLASS()
 class HORDEMODE_API AHMGameMode : public AGameModeBase
@@ -78,7 +76,5 @@ protected:
 	float TimeBetweenWaves;
 
 	void RestartDeadPlayers();
-
-
 };
 

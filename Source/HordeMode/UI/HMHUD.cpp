@@ -46,6 +46,10 @@ void AHMHUD::BeginPlay()
 {
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("HUD: Begin Play()--------------------------->"));
+	
+}
+
+void AHMHUD::ShowWaveTitle() {
 	UWorld* const MyWorld = GetWorld();
 	if (MyWorld == nullptr) {
 		UE_LOG(LogTemp, Warning, TEXT("HUD: World is null()"));
