@@ -9,7 +9,7 @@
 
 
 
-// TODO: Animations on the title, bind to the gameMode wave
+// TODO: Animations on the title, bind to the gameMode wave, handle network replication
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SSTitleWidget::Construct(const FArguments& InArgs)
@@ -49,9 +49,7 @@ void SSTitleWidget::SetTitleText(FString NewTitle)
 void SSTitleWidget::ShowTitle(FString Title)
 {
 	SetTitleText(Title);
-	UE_LOG(LogTemp, Warning, TEXT("ShowTitle"));
 	if (GEngine != nullptr && OwnerWorld != nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("Adding To ViewPort()"));
 		TitleRequestedTime = OwnerWorld->GetTimeSeconds();
 		GEngine->GameViewport->AddViewportWidgetContent(
 			SAssignNew(TitleContainer, SWeakWidget)
@@ -63,17 +61,10 @@ void SSTitleWidget::ShowTitle(FString Title)
 
 void SSTitleWidget::HideTitle()
 {
-
-	UE_LOG(LogTemp, Warning, TEXT("Trying..to..HideTitle"));
-
-
 	if (GEngine != nullptr && GEngine->GameViewport != nullptr){
-		
-		
 			GEngine->GameViewport->RemoveViewportWidgetContent(TitleContainer.ToSharedRef());
 			bisRemoved = true;
-			UE_LOG(LogTemp, Warning, TEXT("HideTitle"));
-		
+			UE_LOG(LogTemp, Warning, TEXT("Title is Removed"));
 	}
 }
 
@@ -87,7 +78,7 @@ FSlateFontInfo SSTitleWidget::GetTitleFont() const
 	FSlateFontInfo ResultFont;
 	const int32 StartFontSize = 8;
 
-	// Animation Code: TODO: 
+	// Animation Code:
 	const int32 AnimatedFontSize = 70;
 	const float AnimTime = 1.0f;
 	float AnimPercentage = FMath::Min(1.0f, GetTimeAlive() / AnimTime);
@@ -105,7 +96,6 @@ void SSTitleWidget::Tick(const FGeometry& AllottedGeometry, const double InCurre
 	if (TitleRequestedTime > 0.0f && GetTimeAlive() >= TotalLifespan && !bisRemoved)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Removing Title"));
-	
 		HideTitle();
 	}
 

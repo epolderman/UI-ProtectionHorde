@@ -8,8 +8,6 @@
 	Handles Client Game State and replication. 
 	Game Mode doesnt exist on the clients. 
 	Game State can hold the state for the clients. 
-
-	Todo:: somehow grab the controller -> cast to our hud then show title
  */
 
 UENUM(BlueprintType)

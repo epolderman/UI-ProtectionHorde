@@ -33,10 +33,7 @@ AHMHUD::AHMHUD()
 }
 
 void AHMHUD::PostInitializeComponents() {
-
-	UE_LOG(LogTemp, Warning, TEXT("PostInitComponents"));
 	Super::PostInitializeComponents();
-
 	/*
 	https://forums.unrealengine.com/development-discussion/c-gameplay-programming/10029-what-exactly-is-sassignnew-doing
 	*/
@@ -45,27 +42,27 @@ void AHMHUD::PostInitializeComponents() {
 void AHMHUD::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("HUD: Begin Play()--------------------------->"));
-	
 }
 
 void AHMHUD::ShowWaveTitle() {
 	UWorld* const MyWorld = GetWorld();
 	if (MyWorld == nullptr) {
 		UE_LOG(LogTemp, Warning, TEXT("HUD: World is null()"));
+		return;
 	}
 
-	// basically, title is not added to clients, only server authority hud? 
-	// how should this communication be established?
-	// Should this be the main menu HUD architecture? 
-	// Should a networking hud be attached when you join the game?
+	/*
+	In the network replicated gamestate, in blueprint, we can call showtitle
+	Issue is, it doesnt remove on one of the clients? wtf? The UI widget it local to the machine, why 
+	is it not being removed?
+	*/
 	if (Role != ROLE_Authority) {
-		UE_LOG(LogTemp, Warning, TEXT("HUD: Won't Hud"));
+		UE_LOG(LogTemp, Warning, TEXT("HUD: Client HUD"));
 	}
 	else {
-		UE_LOG(LogTemp, Warning, TEXT("HUD: This the the authority"));
+		UE_LOG(LogTemp, Warning, TEXT("HUD: Server"));
 	}
 
 	SAssignNew(this->TitleWaveWidget, SSTitleWidget).OwnerWorld(MyWorld).OwnerHud(this);
-	this->TitleWaveWidget->ShowTitle("HUD");
+	this->TitleWaveWidget->ShowTitle("Wave Start");
 }
