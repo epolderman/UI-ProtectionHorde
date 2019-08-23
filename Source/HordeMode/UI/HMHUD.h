@@ -35,9 +35,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Actions")
 	void ShowWaveTitle();
+
+	void HideWaveTitle();
 protected:
+	bool bIsTitleVisible;
 
 	virtual void BeginPlay() override;
+
 	virtual void PostInitializeComponents() override;
 };
 

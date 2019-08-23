@@ -21,6 +21,7 @@ void SSTitleWidget::Construct(const FArguments& InArgs)
 	TitleRequestedTime = 0.0f;
 	FadeAnimationDuration = 5.0f;
 	DurationOfTitle = 5.0f;
+	bisVisible = false;
 
 	ChildSlot
 		.VAlign(VAlign_Fill)
@@ -36,7 +37,7 @@ void SSTitleWidget::Construct(const FArguments& InArgs)
 		]
 		];
 
-	bisRemoved = false;
+	
 }
 
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
@@ -48,23 +49,47 @@ void SSTitleWidget::SetTitleText(FString NewTitle)
 
 void SSTitleWidget::ShowTitle(FString Title)
 {
+	if (bisVisible) {
+		return;
+	}
+
 	SetTitleText(Title);
 	if (GEngine != nullptr && OwnerWorld != nullptr) {
 		TitleRequestedTime = OwnerWorld->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("Title Req Time: %f"), TitleRequestedTime);
 		GEngine->GameViewport->AddViewportWidgetContent(
 			SAssignNew(TitleContainer, SWeakWidget)
 			.PossiblyNullContent(SharedThis(this))
 		);
-		bisRemoved = false;
+		bisVisible = true;
 	}
 }
 
 void SSTitleWidget::HideTitle()
 {
-	if (GEngine != nullptr && GEngine->GameViewport != nullptr){
-			GEngine->GameViewport->RemoveViewportWidgetContent(TitleContainer.ToSharedRef());
-			bisRemoved = true;
-			UE_LOG(LogTemp, Warning, TEXT("Title is Removed"));
+	if (!bisVisible) {
+		return;
+	}
+
+	if (GEngine != nullptr && GEngine->GameViewport != nullptr)
+	{
+		if (TitleContainer.IsValid())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("TitleContainer is Valid"));
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("TitleCOntainer is not Valid"));
+		}
+
+		// there is a bug in here because the actual widget is not being removed on one client
+		// the hud slam of the owning pointer is set to null on hidwavetitle
+		GEngine->GameViewport->RemoveViewportWidgetContent(TitleContainer.ToSharedRef());
+		bisVisible = false;
+		OwnerHud->HideWaveTitle();
+		UE_LOG(LogTemp, Warning, TEXT("Title is Removed"));
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Can't Remove Title"));
 	}
 }
 
@@ -93,9 +118,8 @@ void SSTitleWidget::Tick(const FGeometry& AllottedGeometry, const double InCurre
 	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
 
 	const float TotalLifespan = (FadeAnimationDuration + DurationOfTitle);
-	if (TitleRequestedTime > 0.0f && GetTimeAlive() >= TotalLifespan && !bisRemoved)
+	if (TitleRequestedTime > 0.0f && GetTimeAlive() >= TotalLifespan && bisVisible)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Removing Title"));
 		HideTitle();
 	}
 

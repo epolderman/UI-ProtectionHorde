@@ -12,9 +12,6 @@
 	a Shared Reference can always be converted to a Shared Pointer, and that Shared Pointer is
 	guaranteed to reference a valid object. Use Shared References when you want a guarantee that the
 	referenced object is non-null, or if you want to indicate shared object ownership.
-*/
-
-/*
 
 	Each client (including server) gets a unique Player Controller, which is specified in the game mode,
 	so creating local gui elements and other objects are probably best created in the player controller as
@@ -23,7 +20,6 @@
 	when you are creating objects in the player controller that they will be local to that instance of the game.
 
 	issue is wwhat owns this? server? clients? how to display only on the client?
-
 */
 
 
@@ -46,23 +42,16 @@ void AHMHUD::BeginPlay()
 
 void AHMHUD::ShowWaveTitle() {
 	UWorld* const MyWorld = GetWorld();
-	if (MyWorld == nullptr) {
+	if (MyWorld == nullptr || bIsTitleVisible) {
 		UE_LOG(LogTemp, Warning, TEXT("HUD: World is null()"));
 		return;
 	}
 
-	/*
-	In the network replicated gamestate, in blueprint, we can call showtitle
-	Issue is, it doesnt remove on one of the clients? wtf? The UI widget it local to the machine, why 
-	is it not being removed?
-	*/
-	if (Role != ROLE_Authority) {
-		UE_LOG(LogTemp, Warning, TEXT("HUD: Client HUD"));
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("HUD: Server"));
-	}
-
 	SAssignNew(this->TitleWaveWidget, SSTitleWidget).OwnerWorld(MyWorld).OwnerHud(this);
 	this->TitleWaveWidget->ShowTitle("Wave Start");
+	bIsTitleVisible = true;
+}
+void AHMHUD::HideWaveTitle() {
+	TitleWaveWidget = nullptr;
+	bIsTitleVisible = false;
 }
