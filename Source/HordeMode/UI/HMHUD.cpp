@@ -43,9 +43,15 @@ void AHMHUD::BeginPlay()
 void AHMHUD::ShowWaveTitle() {
 	UWorld* const MyWorld = GetWorld();
 	if (MyWorld == nullptr || bIsTitleVisible) {
-		UE_LOG(LogTemp, Warning, TEXT("HUD: World is null()"));
 		return;
 	}
+
+	/*
+	So SAssignNew is just more convenient way of assigning widgets to variables and it makes sure 
+	that you don't disturb you declarative syntax code and split it into multiple blocks. 
+	Of course there are scenarios when you would prefer using SNew instead SAssignNew 
+	but thats totally up to you.
+	*/
 
 	SAssignNew(this->TitleWaveWidget, SSTitleWidget).OwnerWorld(MyWorld).OwnerHud(this);
 	this->TitleWaveWidget->ShowTitle("Wave Start");
