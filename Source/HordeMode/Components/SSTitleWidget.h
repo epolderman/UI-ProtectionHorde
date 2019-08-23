@@ -19,7 +19,21 @@ class AHMHUD;
 
 		SLATE_ARGUMENT which is non-attribute argument and you can use normal types with it without 
 		TAttribute, but then of course you lose ability to bind functions
- */
+
+		Owner HUD
+		Weak Pointers are similar to Shared Pointers, but do not own the object they reference, and
+		therefore do not affect its lifecycle. This property can be very useful, as it
+		breaks reference cycles, but it also means that a Weak Pointer can become null at any time, without warning.
+		For this reason, a Weak Pointer can produce a
+		Shared Pointer to the object it references, ensuring programmers safe access to the object on a temporary basis.
+
+		Pointer to active widget container
+		SWeakWidget = Implements a widget that holds a weak pointer to one child widget.
+		Weak widgets encapsulate a piece of content without owning it.
+		e.g. A tooltip is owned by the hovered widget but displayed
+		by a floating window. That window cannot own the tooltip
+		and must therefore use an SWeakWidget.
+*/
 class HORDEMODE_API SSTitleWidget : public SCompoundWidget
 {
 public:
@@ -39,27 +53,10 @@ public:
 
 	void HideTitle();
 protected:
-	/** Will I Need this? Can't the HUD Just handle this */
 	TWeakObjectPtr<class UWorld> OwnerWorld;
 
-	/* 
-		Owner HUD
-		Weak Pointers are similar to Shared Pointers, but do not own the object they reference, and
-		therefore do not affect its lifecycle. This property can be very useful, as it 
-		breaks reference cycles, but it also means that a Weak Pointer can become null at any time, without warning. 
-		For this reason, a Weak Pointer can produce a
-		Shared Pointer to the object it references, ensuring programmers safe access to the object on a temporary basis.
-	*/
 	TWeakObjectPtr<class AHMHUD> OwnerHud;
 
-	/*
-		Pointer to active widget container
-		SWeakWidget = Implements a widget that holds a weak pointer to one child widget.
-		Weak widgets encapsulate a piece of content without owning it.
-		e.g. A tooltip is owned by the hovered widget but displayed
-		by a floating window. That window cannot own the tooltip
-		and must therefore use an SWeakWidget.
-	*/
 	TSharedPtr<SWeakWidget> TitleContainer;
 
 	/* Display Information */
@@ -80,8 +77,6 @@ protected:
 	float GetTimeAlive() const;
 
 private: 
-
-	bool bisVisible;
 
 	virtual void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;
 };
