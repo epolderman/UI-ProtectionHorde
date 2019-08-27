@@ -8,7 +8,6 @@
 #include <Engine/GameViewportClient.h>
 
 
-BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SSTitleWidget::Construct(const FArguments& InArgs)
 {
 	OwnerWorld = InArgs._OwnerWorld;
@@ -34,8 +33,6 @@ void SSTitleWidget::Construct(const FArguments& InArgs)
 	
 }
 
-END_SLATE_FUNCTION_BUILD_OPTIMIZATION
-
 void SSTitleWidget::SetTitleText(FString NewTitle)
 {
 	TitleText = FText::FromString(NewTitle);
@@ -55,13 +52,12 @@ void SSTitleWidget::ShowTitle(FString Title)
 
 void SSTitleWidget::HideTitle()
 {
-	if (GEngine != nullptr && GEngine->GameViewport != nullptr)
+	// there is a bug in here because the actual widget is not being removed on one client
+	// the hud slam of the owning pointer is set to null on hidwavetitle
+	if (GEngine  && GEngine->GameViewport)
 	{
-		// there is a bug in here because the actual widget is not being removed on one client
-		// the hud slam of the owning pointer is set to null on hidwavetitle
 		GEngine->GameViewport->RemoveViewportWidgetContent(TitleContainer.ToSharedRef());
 		OwnerHud->HideWaveTitle();
-		UE_LOG(LogTemp, Warning, TEXT("Title is Removed"));
 	}
 }
 
@@ -75,11 +71,9 @@ FSlateFontInfo SSTitleWidget::GetTitleFont() const
 	FSlateFontInfo ResultFont;
 	const int32 StartFontSize = 8;
 
-	// Animation Code:
 	const int32 AnimatedFontSize = 70;
 	const float AnimTime = 1.0f;
 	float AnimPercentage = FMath::Min(1.0f, GetTimeAlive() / AnimTime);
-	// End Animation Code
 
 	ResultFont = FSlateFontInfo(FPaths::ProjectContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), FMath::TruncToInt(StartFontSize + AnimatedFontSize * AnimPercentage));
 	return ResultFont;

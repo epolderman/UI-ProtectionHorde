@@ -39,10 +39,8 @@ class HORDEMODE_API SSTitleWidget : public SCompoundWidget
 public:
 	SLATE_BEGIN_ARGS(SSTitleWidget)
 	{}
-
 	SLATE_ARGUMENT(TWeakObjectPtr<class UWorld>, OwnerWorld)
 	SLATE_ARGUMENT(TWeakObjectPtr<class AHMHUD>, OwnerHud)
-
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs);
