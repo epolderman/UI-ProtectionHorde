@@ -43,13 +43,10 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category="GameMode")
 	void SpawnNewBot();
 
-	// start spawning
 	void StartWave();
 
-	// stop spawning
 	void EndWave();
 
-	// set time for next start wave
 	void InitNextWave();
 
 	void SpawnBotTimerElapsed();

@@ -25,11 +25,11 @@ public:
 	AHMHUD();
 
 	/*
-	A Shared Pointer owns the object it references, indefinitely preventing deletion
-	of that object, and ultimately handling its deletion when no Shared Pointer or
-	Shared Reference (see below) references it. A Shared Pointer can be empty, meaning
-	it doesn't reference any object.
-	Any non-null Shared Pointer can produce a Shared Reference to the object it references.
+		A Shared Pointer owns the object it references, indefinitely preventing deletion
+		of that object, and ultimately handling its deletion when no Shared Pointer or
+		Shared Reference (see below) references it. A Shared Pointer can be empty, meaning
+		it doesn't reference any object.
+		Any non-null Shared Pointer can produce a Shared Reference to the object it references.
 	*/
 	TSharedPtr<SSTitleWidget> TitleWaveWidget;
 

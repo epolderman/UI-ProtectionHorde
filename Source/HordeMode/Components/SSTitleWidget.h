@@ -59,13 +59,10 @@ protected:
 
 	TSharedPtr<SWeakWidget> TitleContainer;
 
-	/* Display Information */
 	FText TitleText;
 
-	/* Returns title string to display */
 	FText GetTitleText() const;
 
-	/* Returns a modified font style for animations */
 	FSlateFontInfo GetTitleFont() const;
 
 	float TitleRequestedTime;
@@ -75,8 +72,6 @@ protected:
 	float FadeAnimationDuration;
 
 	float GetTimeAlive() const;
-
 private: 
-
 	virtual void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;
 };

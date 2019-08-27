@@ -105,3 +105,18 @@ float SSTitleWidget::GetTimeAlive() const {
 
 	return OwnerWorld->GetTimeSeconds() - TitleRequestedTime;
 }
+
+/*
+if (OwnerWorld != nullptr)
+{
+	const APlayerController* MyOwner = GEngine->GetFirstLocalPlayerController(OwnerWorld.Get());
+	AStrategyHUD* const MyHUD = (MyOwner) ? Cast<AStrategyHUD>(MyOwner->GetHUD()) : nullptr;
+	if (MyHUD)
+	{
+		if (MyHUD->IsPauseMenuUp() == true)
+		{
+			ResultColor.A = 0.0f;
+		}
+	}
+}
+*/

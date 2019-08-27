@@ -37,12 +37,10 @@ void AHMGameMode::SetWaveState(EWaveState NewState)
 void AHMGameMode::RestartDeadPlayers()
 {
 	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It) {
-
 		APlayerController * CurrentPlayer = It->Get();
 		if (CurrentPlayer != nullptr && CurrentPlayer->GetPawn() == nullptr) {
 			RestartPlayer(CurrentPlayer);
 		}
-	
 	}
 }
 
@@ -85,7 +83,6 @@ void AHMGameMode::StartWave()
 void AHMGameMode::EndWave()
 {
 	GetWorldTimerManager().ClearTimer(TimerHandle_BotSpawner);
-
 	if(!isGameOver)
 	SetWaveState(EWaveState::WaveInProgress);
 }
@@ -93,10 +90,7 @@ void AHMGameMode::EndWave()
 void AHMGameMode::InitNextWave()
 {
 	SetWaveState(EWaveState::WaitingToStart);
-
-	
 	RestartDeadPlayers();
-
 	GetWorldTimerManager().SetTimer(TimerHandle_NextWaveStart, this, &AHMGameMode::StartWave, TimeBetweenWaves, false);
 }
 
@@ -149,7 +143,6 @@ void AHMGameMode::CheckWaveState()
 bool AHMGameMode::IsAnyPlayerAlive() const
 {	
 	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It) {
-
 		APlayerController * CurrentPlayer = It->Get();
 		if (CurrentPlayer != nullptr && CurrentPlayer->GetPawn()) {
 			APawn * Pawn = CurrentPlayer->GetPawn();
@@ -159,16 +152,13 @@ bool AHMGameMode::IsAnyPlayerAlive() const
 			}
 		}
 	}
-
 	return false;
 }
 
 void AHMGameMode::GameOver()
 {
 	isGameOver = true;
-
 	SetWaveState(EWaveState::GameOver);
-
 	EndWave();
 }
 
