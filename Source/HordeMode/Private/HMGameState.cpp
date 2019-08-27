@@ -6,14 +6,10 @@
 void AHMGameState::SetWaveState(EWaveState NewWaveState)
 {
 	if (Role == ROLE_Authority) {
-
 		EWaveState OldState = CurrentGameState;
-
 		CurrentGameState = NewWaveState;
-
 		OnRep_WaveState(OldState);
 	}
-	
 }
 
 void AHMGameState::OnRep_WaveState(EWaveState OldState)

@@ -36,5 +36,4 @@ protected:
 
 	UFUNCTION()
 	void OnRep_WaveState(EWaveState OldState);
-	
 };
