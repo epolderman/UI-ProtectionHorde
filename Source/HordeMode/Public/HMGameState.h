@@ -26,6 +26,7 @@ class HORDEMODE_API AHMGameState : public AGameStateBase
 {
 	GENERATED_BODY()
 public:
+	AHMGameState();
 	void SetWaveState(EWaveState NewWaveState);
 protected:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_WaveState, Category = "GameState")
