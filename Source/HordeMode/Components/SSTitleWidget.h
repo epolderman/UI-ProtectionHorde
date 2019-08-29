@@ -45,9 +45,9 @@ public:
 
 	void Construct(const FArguments& InArgs);
 
-	void SetTitleText(FString NewTitle);
+	void SetTitleText(FText Title);
 
-	void ShowTitle(FString Title);
+	void ShowTitle(FText Title);
 
 	void HideTitle();
 protected:

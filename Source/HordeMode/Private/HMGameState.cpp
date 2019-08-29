@@ -9,12 +9,19 @@ void AHMGameState::SetWaveState(EWaveState NewWaveState)
 		EWaveState OldState = CurrentGameState;
 		CurrentGameState = NewWaveState;
 		OnRep_WaveState(OldState);
+		
 	}
+
+	WaveNumber = 0;
 }
 
 void AHMGameState::OnRep_WaveState(EWaveState OldState)
 {
-	WaveStateChanged(CurrentGameState, OldState);
+	if (CurrentGameState == EWaveState::WaveStart) {
+		UE_LOG(LogTemp, Warning, TEXT("GameState: WaveNumber"));
+		WaveNumber++;
+	}
+	WaveStateChanged(CurrentGameState, OldState, WaveNumber);
 }	
 
 void AHMGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const {

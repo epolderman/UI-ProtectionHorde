@@ -20,6 +20,12 @@
 	when you are creating objects in the player controller that they will be local to that instance of the game.
 
 	issue is wwhat owns this? server? clients? how to display only on the client?
+
+	So SAssignNew is just more convenient way of assigning widgets to variables and it makes sure
+	that you don't disturb you declarative syntax code and split it into multiple blocks.
+	Of course there are scenarios when you would prefer using SNew instead SAssignNew
+	but thats totally up to you.
+
 */
 
 
@@ -39,19 +45,14 @@ void AHMHUD::BeginPlay()
 	Super::BeginPlay();
 }
 
-/*
-	So SAssignNew is just more convenient way of assigning widgets to variables and it makes sure
-	that you don't disturb you declarative syntax code and split it into multiple blocks.
-	Of course there are scenarios when you would prefer using SNew instead SAssignNew
-	but thats totally up to you.
-*/
-void AHMHUD::ShowWaveTitle() {
+void AHMHUD::ShowWaveTitle(int WaveNumber) {
 	UWorld* const MyWorld = GetWorld();
 	if (MyWorld == nullptr || bIsTitleVisible) {
 		return;
 	}
 	SAssignNew(this->TitleWaveWidget, SSTitleWidget).OwnerWorld(MyWorld).OwnerHud(this);
-	this->TitleWaveWidget->ShowTitle("Wave Start");
+	FText Wave = FText::Format(NSLOCTEXT("GameFlow", "WaveNr", "Wave {0}"), FText::AsNumber(WaveNumber));
+	this->TitleWaveWidget->ShowTitle(Wave);
 	bIsTitleVisible = true;
 }
 void AHMHUD::HideWaveTitle() {

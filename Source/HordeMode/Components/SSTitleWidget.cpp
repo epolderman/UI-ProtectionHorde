@@ -13,8 +13,8 @@ void SSTitleWidget::Construct(const FArguments& InArgs)
 	OwnerWorld = InArgs._OwnerWorld;
 	OwnerHud = InArgs._OwnerHud;
 	TitleRequestedTime = 0.0f;
-	FadeAnimationDuration = 5.0f;
-	DurationOfTitle = 5.0f;
+	FadeAnimationDuration = 2.0f;
+	DurationOfTitle = 2.0f;
 
 	ChildSlot
 		.VAlign(VAlign_Fill)
@@ -33,12 +33,12 @@ void SSTitleWidget::Construct(const FArguments& InArgs)
 	
 }
 
-void SSTitleWidget::SetTitleText(FString NewTitle)
+void SSTitleWidget::SetTitleText(FText Title)
 {
-	TitleText = FText::FromString(NewTitle);
+	TitleText = Title;
 }
 
-void SSTitleWidget::ShowTitle(FString Title)
+void SSTitleWidget::ShowTitle(FText Title)
 {
 	SetTitleText(Title);
 	if (GEngine != nullptr && OwnerWorld != nullptr) {

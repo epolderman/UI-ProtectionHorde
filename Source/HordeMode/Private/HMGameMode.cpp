@@ -78,6 +78,7 @@ void AHMGameMode::StartWave()
 	GetWorldTimerManager().SetTimer(TimerHandle_BotSpawner, this, &AHMGameMode::SpawnBotTimerElapsed, 1.0f, true, 0.0f);
 
 	SetWaveState(EWaveState::WaveStart);
+	UE_LOG(LogTemp, Warning, TEXT("GameMode: WaveStart"));
 }
 
 void AHMGameMode::EndWave()
@@ -101,6 +102,7 @@ void AHMGameMode::SpawnBotTimerElapsed()
 	NumberOfBotsToSpawnInCurrentWave--;
 
 	if (NumberOfBotsToSpawnInCurrentWave <= 0) {
+		UE_LOG(LogTemp, Warning, TEXT("GameMode: Ending Wave"));
 		EndWave();
 	}
 }

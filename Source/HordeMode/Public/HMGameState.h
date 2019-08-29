@@ -32,8 +32,10 @@ protected:
 	EWaveState CurrentGameState;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "GameState")
-	void WaveStateChanged(EWaveState NewState, EWaveState OldState);
+	void WaveStateChanged(EWaveState NewState, EWaveState OldState, int WaveNumber);
 
 	UFUNCTION()
 	void OnRep_WaveState(EWaveState OldState);
+
+	int WaveNumber;
 };

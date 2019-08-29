@@ -12,6 +12,12 @@
 		
 
 		Apparently this is derived from AActor.
+
+		A Shared Pointer owns the object it references, indefinitely preventing deletion
+		of that object, and ultimately handling its deletion when no Shared Pointer or
+		Shared Reference (see below) references it. A Shared Pointer can be empty, meaning
+		it doesn't reference any object.
+		Any non-null Shared Pointer can produce a Shared Reference to the object it references.
 	*/
 
 
@@ -24,17 +30,10 @@ class HORDEMODE_API AHMHUD : public AHUD
 public:
 	AHMHUD();
 
-	/*
-		A Shared Pointer owns the object it references, indefinitely preventing deletion
-		of that object, and ultimately handling its deletion when no Shared Pointer or
-		Shared Reference (see below) references it. A Shared Pointer can be empty, meaning
-		it doesn't reference any object.
-		Any non-null Shared Pointer can produce a Shared Reference to the object it references.
-	*/
 	TSharedPtr<SSTitleWidget> TitleWaveWidget;
 
 	UFUNCTION(BlueprintCallable, Category = "Actions")
-	void ShowWaveTitle();
+	void ShowWaveTitle(int WaveNumber);
 
 	void HideWaveTitle();
 protected:
