@@ -102,7 +102,7 @@ void AHMGameMode::SpawnBotTimerElapsed()
 	NumberOfBotsToSpawnInCurrentWave--;
 
 	if (NumberOfBotsToSpawnInCurrentWave <= 0) {
-		UE_LOG(LogTemp, Warning, TEXT("GameMode: Ending Wave"));
+		UE_LOG(LogTemp, Warning, TEXT("GameMode: Ending Wave-------------->"));
 		EndWave();
 	}
 }

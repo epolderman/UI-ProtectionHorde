@@ -7,7 +7,9 @@
 /*
 	Handles Client Game State and replication. 
 	Game Mode doesnt exist on the clients. 
-	Game State can hold the state for the clients. 
+	Game State can hold the state for the clients
+
+	Set Up Replicated Information In this class
  */
 
 UENUM(BlueprintType)
@@ -26,8 +28,11 @@ class HORDEMODE_API AHMGameState : public AGameStateBase
 {
 	GENERATED_BODY()
 public:
+
 	AHMGameState();
+
 	void SetWaveState(EWaveState NewWaveState);
+
 protected:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_WaveState, Category = "GameState")
 	EWaveState CurrentGameState;

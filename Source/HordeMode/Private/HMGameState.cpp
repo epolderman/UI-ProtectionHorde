@@ -15,7 +15,6 @@ void AHMGameState::SetWaveState(EWaveState NewWaveState)
 		EWaveState OldState = CurrentGameState;
 		CurrentGameState = NewWaveState;
 		OnRep_WaveState(OldState);
-		
 	}
 
 }
