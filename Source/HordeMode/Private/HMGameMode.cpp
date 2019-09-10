@@ -58,12 +58,16 @@ void AHMGameMode::BeginPlay()
 void AHMGameMode::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	
 
 	if (isGameOver)
 	return;
 
+	// @todo bug in here game over is being triggered
 	if (!IsAnyPlayerAlive()) {
-		GameOver();
+		/// GameOver();
+		UE_LOG(LogTemp, Warning, TEXT("Mode::Calling Game Over"));
+
 	}
 
 	CheckWaveState();
@@ -78,7 +82,6 @@ void AHMGameMode::StartWave()
 	GetWorldTimerManager().SetTimer(TimerHandle_BotSpawner, this, &AHMGameMode::SpawnBotTimerElapsed, 1.0f, true, 0.0f);
 
 	SetWaveState(EWaveState::WaveStart);
-	UE_LOG(LogTemp, Warning, TEXT("GameMode: WaveStart"));
 }
 
 void AHMGameMode::EndWave()
@@ -100,21 +103,17 @@ void AHMGameMode::SpawnBotTimerElapsed()
 	SpawnNewBot();
 
 	NumberOfBotsToSpawnInCurrentWave--;
-	UE_LOG(LogTemp, Warning, TEXT("Number of bots left %i"), NumberOfBotsToSpawnInCurrentWave);
 
 	if (NumberOfBotsToSpawnInCurrentWave <= 0) {
-		UE_LOG(LogTemp, Warning, TEXT("GameMode: Ending Wave-------------->"));
 		EndWave();
 	}
 }
 
 void AHMGameMode::CheckWaveState()
 {
-	UE_LOG(LogTemp, Warning, TEXT("CheckWaveState()"));
 
 	bool isPreparingForWave = GetWorldTimerManager().IsTimerActive(TimerHandle_NextWaveStart);
 	if (NumberOfBotsToSpawnInCurrentWave > 0 || isPreparingForWave) {
-		UE_LOG(LogTemp, Warning, TEXT("Fail 1"));
 		return;
 	}
 
@@ -141,15 +140,12 @@ void AHMGameMode::CheckWaveState()
 
 		SetWaveState(EWaveState::WaveComplete);;
 		InitNextWave();
-		UE_LOG(LogTemp, Warning, TEXT("Init Next Wave"));
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("Init Next Wave FAILING..."));
 	}
 	
 
 }
 
+// @todo bug is in here: Calling Game Over periodically
 bool AHMGameMode::IsAnyPlayerAlive() const
 {	
 	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It) {
@@ -158,10 +154,12 @@ bool AHMGameMode::IsAnyPlayerAlive() const
 			APawn * Pawn = CurrentPlayer->GetPawn();
 			USHealthComponent * HealthComp = Cast<USHealthComponent>(Pawn->GetComponentByClass(USHealthComponent::StaticClass()));
 			if (ensure(HealthComp) && HealthComp->GetHealth() > 0.0f) {
+				UE_LOG(LogTemp, Warning, TEXT("PLAYERS ARE STILL ALIVE"));
 				return true;
 			}
 		}
 	}
+	UE_LOG(LogTemp, Warning, TEXT("NO PLAYER IS ALIVE"));
 	return false;
 }
 
