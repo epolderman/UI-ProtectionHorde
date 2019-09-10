@@ -100,6 +100,7 @@ void AHMGameMode::SpawnBotTimerElapsed()
 	SpawnNewBot();
 
 	NumberOfBotsToSpawnInCurrentWave--;
+	UE_LOG(LogTemp, Warning, TEXT("Number of bots left %i"), NumberOfBotsToSpawnInCurrentWave);
 
 	if (NumberOfBotsToSpawnInCurrentWave <= 0) {
 		UE_LOG(LogTemp, Warning, TEXT("GameMode: Ending Wave-------------->"));
@@ -109,8 +110,11 @@ void AHMGameMode::SpawnBotTimerElapsed()
 
 void AHMGameMode::CheckWaveState()
 {
+	UE_LOG(LogTemp, Warning, TEXT("CheckWaveState()"));
+
 	bool isPreparingForWave = GetWorldTimerManager().IsTimerActive(TimerHandle_NextWaveStart);
 	if (NumberOfBotsToSpawnInCurrentWave > 0 || isPreparingForWave) {
+		UE_LOG(LogTemp, Warning, TEXT("Fail 1"));
 		return;
 	}
 
@@ -137,6 +141,10 @@ void AHMGameMode::CheckWaveState()
 
 		SetWaveState(EWaveState::WaveComplete);;
 		InitNextWave();
+		UE_LOG(LogTemp, Warning, TEXT("Init Next Wave"));
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Init Next Wave FAILING..."));
 	}
 	
 
