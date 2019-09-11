@@ -22,7 +22,7 @@ void SSTitleWidget::Construct(const FArguments& InArgs)
 		[
 			SNew(SOverlay)
 			+ SOverlay::Slot()
-		.VAlign(VAlign_Center)
+		.VAlign(VAlign_Top)
 		.HAlign(HAlign_Center)
 		[
 			SNew(STextBlock).Font(this, &SSTitleWidget::GetTitleFont)
@@ -69,10 +69,10 @@ FText SSTitleWidget::GetTitleText() const
 FSlateFontInfo SSTitleWidget::GetTitleFont() const
 {
 	FSlateFontInfo ResultFont;
-	const int32 StartFontSize = 8;
+	const int32 StartFontSize = 12;
 
 	const int32 AnimatedFontSize = 70;
-	const float AnimTime = 1.0f;
+	const float AnimTime = 0.75f;
 	float AnimPercentage = FMath::Min(1.0f, GetTimeAlive() / AnimTime);
 
 	ResultFont = FSlateFontInfo(FPaths::ProjectContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), FMath::TruncToInt(StartFontSize + AnimatedFontSize * AnimPercentage));

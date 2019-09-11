@@ -64,8 +64,6 @@ void AHMGameMode::Tick(float DeltaSeconds)
 
 	if (hasGameStarted && !IsAnyPlayerAlive()) {
 		GameOver();
-		UE_LOG(LogTemp, Warning, TEXT("Mode::Calling Game Over"));
-
 	}
 
 	CheckWaveState();
