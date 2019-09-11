@@ -61,6 +61,8 @@ protected:
 
 	bool isGameOver;
 
+	bool hasGameStarted;
+
 	FTimerHandle TimerHandle_NextWaveStart;
 
 	FTimerHandle TimerHandle_BotSpawner;

@@ -16,12 +16,14 @@ AHMGameMode::AHMGameMode()
 {
 	GameStateClass = AHMGameState::StaticClass();
 	PlayerStateClass = AHMPlayerState::StaticClass();
+		
 
 	TimeBetweenWaves = 5.0f;
 	PrimaryActorTick.bCanEverTick = true;
 	// once a second
 	PrimaryActorTick.TickInterval = 1.0f;;
 	isGameOver = false;
+	hasGameStarted = false;
 }
 
 void AHMGameMode::SetWaveState(EWaveState NewState)
@@ -64,8 +66,8 @@ void AHMGameMode::Tick(float DeltaSeconds)
 	return;
 
 	// @todo bug in here game over is being triggered
-	if (!IsAnyPlayerAlive()) {
-		/// GameOver();
+	if (hasGameStarted && !IsAnyPlayerAlive()) {
+		GameOver();
 		UE_LOG(LogTemp, Warning, TEXT("Mode::Calling Game Over"));
 
 	}
@@ -82,6 +84,10 @@ void AHMGameMode::StartWave()
 	GetWorldTimerManager().SetTimer(TimerHandle_BotSpawner, this, &AHMGameMode::SpawnBotTimerElapsed, 1.0f, true, 0.0f);
 
 	SetWaveState(EWaveState::WaveStart);
+
+	if (!hasGameStarted) {
+		hasGameStarted = true;
+	}
 }
 
 void AHMGameMode::EndWave()
@@ -136,7 +142,7 @@ void AHMGameMode::CheckWaveState()
 		}
 	}
 
-	if (!bisAnyBotAlive && IsAnyPlayerAlive()) {
+	if (!bisAnyBotAlive && IsAnyPlayerAlive() && hasGameStarted) {
 
 		SetWaveState(EWaveState::WaveComplete);;
 		InitNextWave();
@@ -148,6 +154,7 @@ void AHMGameMode::CheckWaveState()
 // @todo bug is in here: Calling Game Over periodically
 bool AHMGameMode::IsAnyPlayerAlive() const
 {	
+
 	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It) {
 		APlayerController * CurrentPlayer = It->Get();
 		if (CurrentPlayer != nullptr && CurrentPlayer->GetPawn()) {
