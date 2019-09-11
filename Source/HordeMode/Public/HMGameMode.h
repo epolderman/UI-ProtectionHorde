@@ -16,7 +16,6 @@
 
 enum class EWaveState : uint8;
 
-class SSTitleWidget;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnActorKilledSig, AActor*, killer,  AActor*, victim, AController*, controlledBy);
 
@@ -36,8 +35,6 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnActorKilledSig OnActorKilled;
-
-	TSharedPtr<SSTitleWidget> TitleWaveWidget;
 
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category="GameMode")

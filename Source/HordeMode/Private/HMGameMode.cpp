@@ -16,8 +16,6 @@ AHMGameMode::AHMGameMode()
 {
 	GameStateClass = AHMGameState::StaticClass();
 	PlayerStateClass = AHMPlayerState::StaticClass();
-		
-
 	TimeBetweenWaves = 5.0f;
 	PrimaryActorTick.bCanEverTick = true;
 	// once a second
@@ -61,11 +59,9 @@ void AHMGameMode::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	
-
 	if (isGameOver)
 	return;
 
-	// @todo bug in here game over is being triggered
 	if (hasGameStarted && !IsAnyPlayerAlive()) {
 		GameOver();
 		UE_LOG(LogTemp, Warning, TEXT("Mode::Calling Game Over"));
@@ -151,7 +147,6 @@ void AHMGameMode::CheckWaveState()
 
 }
 
-// @todo bug is in here: Calling Game Over periodically
 bool AHMGameMode::IsAnyPlayerAlive() const
 {	
 
@@ -161,12 +156,10 @@ bool AHMGameMode::IsAnyPlayerAlive() const
 			APawn * Pawn = CurrentPlayer->GetPawn();
 			USHealthComponent * HealthComp = Cast<USHealthComponent>(Pawn->GetComponentByClass(USHealthComponent::StaticClass()));
 			if (ensure(HealthComp) && HealthComp->GetHealth() > 0.0f) {
-				UE_LOG(LogTemp, Warning, TEXT("PLAYERS ARE STILL ALIVE"));
 				return true;
 			}
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("NO PLAYER IS ALIVE"));
 	return false;
 }
 
