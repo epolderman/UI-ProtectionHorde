@@ -23,7 +23,6 @@ void AHMGameState::OnRep_WaveState(EWaveState OldState)
 {
 	if (CurrentGameState == EWaveState::WaveStart) {
 		++WaveNumber;
-		UE_LOG(LogTemp, Warning, TEXT("GameState: WaveNumber %i"), WaveNumber);
 		WaveStateChanged(CurrentGameState, OldState, WaveNumber);
 	}
 	

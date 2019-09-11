@@ -36,6 +36,10 @@ public:
 	void ShowWaveTitle(int WaveNumber);
 
 	void HideWaveTitle();
+
+	UFUNCTION(BlueprintCallable, Category = "Actions")
+	void UpdateScore(float Score);
+
 protected:
 	bool bIsTitleVisible;
 

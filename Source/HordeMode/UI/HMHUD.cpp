@@ -28,14 +28,16 @@
 
 */
 
-
-AHMHUD::AHMHUD()
-{
-	UE_LOG(LogTemp, Warning, TEXT("AHMHUD()"));
-}
 /*
 	https://forums.unrealengine.com/development-discussion/c-gameplay-programming/10029-what-exactly-is-sassignnew-doing
 */
+
+
+AHMHUD::AHMHUD()
+{
+	// UE_LOG(LogTemp, Warning, TEXT("AHMHUD()"));
+}
+
 void AHMHUD::PostInitializeComponents() {
 	Super::PostInitializeComponents();
 }
@@ -59,3 +61,9 @@ void AHMHUD::HideWaveTitle() {
 	TitleWaveWidget = nullptr;
 	bIsTitleVisible = false;
 }
+
+void AHMHUD::UpdateScore(float Score) {
+	// update score on ai killed
+}
+
+
