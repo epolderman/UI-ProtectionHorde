@@ -64,6 +64,10 @@ void AHMHUD::HideWaveTitle() {
 
 void AHMHUD::UpdateScore(float Score) {
 	// update score on ai killed
+	//const APawn * Pawn = Cast<APawn>(GetOwner());
+	//if (Pawn) {
+	//	const APlayerController * playerController = Pawn->GetNetOwningPla
+	//}
 }
 
 
