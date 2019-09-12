@@ -52,3 +52,7 @@ void AHMPlayerState::AddScore(float deltaScore)
 	//	UE_LOG(LogTemp, Warning, TEXT("HUD:World is null"));
 	//}
 }
+
+float AHMPlayerState::GetScore() {
+	return Score;
+}

@@ -4,6 +4,7 @@
 #include <Engine/Engine.h>
 #include <DeclarativeSyntaxSupport.h>
 #include "Components/SSTitleWidget.h"
+#include "HMPlayerState.h"
 
 /*
 	A Shared Reference acts like a Shared Pointer, in the sense that it owns the
@@ -62,12 +63,29 @@ void AHMHUD::HideWaveTitle() {
 	bIsTitleVisible = false;
 }
 
-void AHMHUD::UpdateScore(float Score) {
-	// update score on ai killed
-	//const APawn * Pawn = Cast<APawn>(GetOwner());
-	//if (Pawn) {
-	//	const APlayerController * playerController = Pawn->GetNetOwningPla
-	//}
+void AHMHUD::UpdateScore() {
+	// @todo fails top level cast
+	APawn * myOwner = Cast<APawn>(GetOwner());
+	if (myOwner) {
+		APlayerController * controller = Cast<APlayerController>(myOwner->GetController());
+		if (controller) {
+			AHMPlayerState * ps = Cast<AHMPlayerState>(controller);
+			if (ps) {
+				UE_LOG(LogTemp, Warning, TEXT("HUD: Updating Score %f"), ps->GetScore());
+			}
+			else {
+				UE_LOG(LogTemp, Warning, TEXT("HUD: Fail PS Cast"));
+			}
+		}
+		else {
+
+			UE_LOG(LogTemp, Warning, TEXT("HUD: Fail controller cast"));
+
+		}
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("HUD: Faild pawn cast"));
+	}
 }
 
 

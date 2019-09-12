@@ -53,4 +53,6 @@ class HORDEMODE_API AHMPlayerState : public APlayerState
 public:
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	void AddScore(float deltaScore);
+
+	float GetScore();
 };
