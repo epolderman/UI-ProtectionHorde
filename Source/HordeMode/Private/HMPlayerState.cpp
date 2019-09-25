@@ -17,42 +17,26 @@
 	designed to store  data across sessions. It is a form of container, not a form of controller.
 
 	Same thing with GameMode and GameState
+
+	hierarchy in ue4 for player state
+
+	UObjectBase
+	UObjectBaseUtility
+	UObject
+	AActor
+	AInfo
+	APlayerState
 */
 
-// @todo: look into the relationship heirarcy in ue4 for player state
+
 void AHMPlayerState::AddScore(float deltaScore)
 {
 	Score += deltaScore;
-	
-	////const AActor * Owner = Cast<AHMCharacter>(GetOwner());
-	////if (Owner) {
-	////	 APlayerController * MyOwner = Owner
-	////	 AHMHUD * const MyHUD = (MyOwner) ? Cast<AHMHUD>(MyOwner->GetHUD()) : nullptr;
-	////	 if (MyHUD)
-	////	 {
-	////		 UE_LOG(LogTemp, Warning, TEXT("HUD: Updating Score %f"), Score);
-	////		 MyHUD->UpdateScore(Score);
-	////	 }
-	////}
-	//
-	//UWorld* const MyWorld = GEngine->GetWorld();
-	//if (MyWorld != nullptr) {
-	//	const APlayerController* MyOwner = GEngine->GetFirstLocalPlayerController(MyWorld);
-	//	AHMHUD * const MyHUD = (MyOwner) ? Cast<AHMHUD>(MyOwner->GetHUD()) : nullptr;
-	//	if (MyHUD)
-	//	{
-	//		UE_LOG(LogTemp, Warning, TEXT("HUD: Updating Score %f"), Score);
-	//		MyHUD->UpdateScore(Score);
-	//	}
-	//	else {
-	//		UE_LOG(LogTemp, Warning, TEXT("HUD: HUD is null"));
-	//	}
-	//}
-	//else {
-	//	UE_LOG(LogTemp, Warning, TEXT("HUD:World is null"));
-	//}
+	UE_LOG(LogTemp, Warning, TEXT("PlayerState: Updating Score %f"), Score);
+	// @todo notify hud / player to display score
+	// does this need to be replicated so other players can see this information?
 }
 
-float AHMPlayerState::GetScore() {
+float AHMPlayerState::GetScore() const {
 	return Score;
 }

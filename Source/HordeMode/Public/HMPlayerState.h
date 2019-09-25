@@ -54,5 +54,5 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	void AddScore(float deltaScore);
 
-	float GetScore();
+	float GetScore() const;
 };

@@ -64,28 +64,18 @@ void AHMHUD::HideWaveTitle() {
 }
 
 void AHMHUD::UpdateScore() {
-	// @todo fails top level cast
-	APawn * myOwner = Cast<APawn>(GetOwner());
-	if (myOwner) {
-		APlayerController * controller = Cast<APlayerController>(myOwner->GetController());
-		if (controller) {
-			AHMPlayerState * ps = Cast<AHMPlayerState>(controller);
-			if (ps) {
-				UE_LOG(LogTemp, Warning, TEXT("HUD: Updating Score %f"), ps->GetScore());
-			}
-			else {
-				UE_LOG(LogTemp, Warning, TEXT("HUD: Fail PS Cast"));
-			}
-		}
-		else {
 
-			UE_LOG(LogTemp, Warning, TEXT("HUD: Fail controller cast"));
 
+	APlayerController * c = this->GetOwningPlayerController();
+
+	if (c) {
+		AHMPlayerState * ps = Cast<AHMPlayerState>(c->PlayerState);
+		if (ps) {
+			UE_LOG(LogTemp, Warning, TEXT("HUD: Updating Score %f"), ps->GetScore());
 		}
+	
 	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("HUD: Faild pawn cast"));
-	}
+
 }
 
 
