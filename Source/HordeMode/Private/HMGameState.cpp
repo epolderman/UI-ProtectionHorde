@@ -19,6 +19,7 @@ void AHMGameState::SetWaveState(EWaveState NewWaveState)
 
 }
 
+
 void AHMGameState::OnRep_WaveState(EWaveState OldState)
 {
 	if (CurrentGameState == EWaveState::WaveStart) {
@@ -26,7 +27,8 @@ void AHMGameState::OnRep_WaveState(EWaveState OldState)
 		WaveStateChanged(CurrentGameState, OldState, WaveNumber);
 	}
 	
-}	
+}
+
 
 void AHMGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const {
 

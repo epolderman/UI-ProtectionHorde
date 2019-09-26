@@ -19,6 +19,8 @@ enum class EWaveState : uint8;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnActorKilledSig, AActor*, killer,  AActor*, victim, AController*, controlledBy);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnScoreUpdate, float, score);
+
 UCLASS()
 class HORDEMODE_API AHMGameMode : public AGameModeBase
 {
@@ -35,6 +37,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnActorKilledSig OnActorKilled;
+
+	UPROPERTY(BlueprintCallable, Category = "Events")
+	FOnScoreUpdate OnScoreUpdateEvent;
 
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category="GameMode")
