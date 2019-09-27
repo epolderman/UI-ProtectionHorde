@@ -34,6 +34,7 @@ void AHMPlayerState::AddScore(float deltaScore)
 	// this needs to be broad casted to all players
 	// hud needs to update score
 	Score += deltaScore;
+	// OnScoreUpdate.Broadcast(Score);
 	UE_LOG(LogTemp, Warning, TEXT("PlayerState: Updating Score %f"), Score);
 }
 

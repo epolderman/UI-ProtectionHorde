@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
+#include "HMGameMode.h"
 #include "HMPlayerState.generated.h"
 
 /**
@@ -44,6 +45,9 @@ needs to be known by everyone (best scores, current killing streak, player name.
 
 
  */
+
+
+
 UCLASS()
 class HORDEMODE_API AHMPlayerState : public APlayerState
 {
@@ -53,6 +57,9 @@ class HORDEMODE_API AHMPlayerState : public APlayerState
 public:
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	void AddScore(float deltaScore);
+
+	//UPROPERTY(BlueprintAssignable, Category = "Events")
+	//FOnScoreUpdate OnScoreUpdate;
 
 	float GetScore() const;
 };

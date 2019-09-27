@@ -32,6 +32,8 @@ public:
 
 	TSharedPtr<SSTitleWidget> TitleWaveWidget;
 
+	TSharedPtr<SSTitleWidget> ScoreWidget;
+
 	UFUNCTION(BlueprintCallable, Category = "Actions")
 	void ShowWaveTitle(int WaveNumber);
 
@@ -39,6 +41,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Actions")
 	void UpdateScore();
+
+	UFUNCTION(BlueprintCallable, Category = "Actions")
+	void ShowScore();
 
 protected:
 	bool bIsTitleVisible;

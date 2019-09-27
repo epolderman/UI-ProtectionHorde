@@ -78,4 +78,9 @@ void AHMHUD::UpdateScore() {
 
 }
 
+void AHMHUD::ShowScore()
+{
+	//  handle showing score in hud
+}
+
 

@@ -38,9 +38,6 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnActorKilledSig OnActorKilled;
 
-	UPROPERTY(BlueprintCallable, Category = "Events")
-	FOnScoreUpdate OnScoreUpdateEvent;
-
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category="GameMode")
 	void SpawnNewBot();
