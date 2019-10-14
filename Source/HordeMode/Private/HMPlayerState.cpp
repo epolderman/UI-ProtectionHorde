@@ -38,7 +38,7 @@ void AHMPlayerState::AddScore(float deltaScore)
 
 	AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());
 	if (CurrentGameMode) {
-		UE_LOG(LogTemp, Warning, TEXT("PlayerState: We have GameMode"));
+		UE_LOG(LogTemp, Warning, TEXT("PlayerState: We have GameMode %f"), Score);
 		AHMGameState * GS = CurrentGameMode->GetGameState<AHMGameState>();
 		if (GS) {
 			UE_LOG(LogTemp, Warning, TEXT("PlayerState: We have GameState"));

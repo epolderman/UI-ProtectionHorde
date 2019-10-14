@@ -39,7 +39,6 @@
 AHMHUD::AHMHUD()
 {
 	UE_LOG(LogTemp, Warning, TEXT("AHMHUD()"));
-	// this->ShowScore();
 }
 
 void AHMHUD::PostInitializeComponents() {
@@ -49,7 +48,7 @@ void AHMHUD::PostInitializeComponents() {
 void AHMHUD::BeginPlay()
 {
 	Super::BeginPlay();
-	this->ShowScore();
+	ShowScore();
 }
 
 void AHMHUD::ShowWaveTitle(int WaveNumber) {
@@ -81,6 +80,8 @@ void AHMHUD::UpdateScore() {
 			ScoreWidget->SetScoreText(ScoreUpdate);
 		}
 	}
+	// FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(Score));
+	// ScoreWidget->SetScoreText(ScoreUpdate);
 }
 
 void AHMHUD::ShowScore()

@@ -7,6 +7,7 @@
 
 AHMGameState::AHMGameState() {
 	WaveNumber = 0;
+	PlayerScore = 0.0f;
 }
 void AHMGameState::SetWaveState(EWaveState NewWaveState)
 {
@@ -25,7 +26,21 @@ void AHMGameState::SetWaveState(EWaveState NewWaveState)
 
 void AHMGameState::SetScoreState(float Score)
 {
-	OnRep_PlayerScore(Score);
+	
+
+	
+
+		// EWaveState OldState = CurrentGameState;
+		// float OldScore = PlayerScore;
+
+		// triggers client change when var change
+		// CurrentGameState = NewWaveState;
+		PlayerScore = Score;
+
+		// manually call for the server
+		// OnRep_WaveState(OldState);
+		OnRep_PlayerScore(Score);
+	
 }
 
 
@@ -43,9 +58,7 @@ void AHMGameState::OnRep_WaveState(EWaveState OldState)
 
 void AHMGameState::OnRep_PlayerScore(float Score)
 {
-	float OldScore = PlayerScore;
-	PlayerScore = Score;
-	ScoreStateChanged(OldScore, PlayerScore);
+	ScoreStateChanged(Score, PlayerScore);
 }
 
 
