@@ -45,3 +45,12 @@ protected:
 
 	int WaveNumber;
 };
+
+/*
+		ReplicatedUsing = OnRep_WaveState = Setting WaveState var will trigger on the clients
+		but not on server. Same mechanic does not work on server, we need to check if
+		authority -> then manually call onRep change. 
+
+		// on rep vs multicast
+		https://forums.unrealengine.com/development-discussion/c-gameplay-programming/25318-onrep-vs-multicast
+*/

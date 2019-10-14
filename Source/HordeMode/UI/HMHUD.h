@@ -22,6 +22,7 @@
 
 
 class SSTitleWidget;
+class SScoreWidget;
 
 UCLASS()
 class HORDEMODE_API AHMHUD : public AHUD
@@ -32,7 +33,7 @@ public:
 
 	TSharedPtr<SSTitleWidget> TitleWaveWidget;
 
-	TSharedPtr<SSTitleWidget> ScoreWidget;
+	TSharedPtr<SScoreWidget> ScoreWidget;
 
 	UFUNCTION(BlueprintCallable, Category = "Actions")
 	void ShowWaveTitle(int WaveNumber);
@@ -47,6 +48,8 @@ public:
 
 protected:
 	bool bIsTitleVisible;
+
+	bool bisScoreVisible;
 
 	virtual void BeginPlay() override;
 

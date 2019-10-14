@@ -90,7 +90,7 @@ void USHealthComponent::HandleDamage(AActor * DamagedActor, float Damage, const 
 
 	if (bIsDead) {
 		
-		// only valid on server
+		// only valid on server / only succeeds on serve call GetAuthGameMode
 		AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());
 		if (CurrentGameMode) {
 			CurrentGameMode->OnActorKilled.Broadcast(DamageCauser, GetOwner(), InstigatedBy);
