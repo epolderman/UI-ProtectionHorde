@@ -4,6 +4,8 @@
 #include <Engine/Engine.h>
 #include "UI/HMHUD.h"
 #include "HMCharacter.h"
+#include "HMGameState.h"
+#include "HMGameMode.h"
 
 
 /*
@@ -31,10 +33,19 @@
 
 void AHMPlayerState::AddScore(float deltaScore)
 {
+
 	Score += deltaScore;
 
-	// OnScoreUpdate.Broadcast(Score);
-	// FUniqueNetIdRepl UniqueId;
+	AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());
+	if (CurrentGameMode) {
+		UE_LOG(LogTemp, Warning, TEXT("PlayerState: We have GameMode"));
+		AHMGameState * GS = CurrentGameMode->GetGameState<AHMGameState>();
+		if (GS) {
+			UE_LOG(LogTemp, Warning, TEXT("PlayerState: We have GameState"));
+			GS->SetScoreState(Score);
+		}
+
+	}
 
 	FString uID = UniqueId->ToString();
 	UE_LOG(LogTemp, Warning, TEXT("PlayerState: Updating Score %f"), Score);

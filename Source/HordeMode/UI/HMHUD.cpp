@@ -68,6 +68,8 @@ void AHMHUD::HideWaveTitle() {
 }
 
 void AHMHUD::UpdateScore() {
+	UE_LOG(LogTemp, Warning, TEXT("HUD: Updating Score()"));
+
 	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
 	if (OwningPlayerController) {
 		AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);

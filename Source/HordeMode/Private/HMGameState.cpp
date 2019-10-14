@@ -3,10 +3,10 @@
 #include "HMGameState.h"
 #include <UnrealNetwork.h>
 
+/* this is the file you should set up events and talk to game mode through this */
+
 AHMGameState::AHMGameState() {
-
 	WaveNumber = 0;
-
 }
 void AHMGameState::SetWaveState(EWaveState NewWaveState)
 {
@@ -23,6 +23,11 @@ void AHMGameState::SetWaveState(EWaveState NewWaveState)
 
 }
 
+void AHMGameState::SetScoreState(float Score)
+{
+	OnRep_PlayerScore(Score);
+}
+
 
 void AHMGameState::OnRep_WaveState(EWaveState OldState)
 {
@@ -36,6 +41,13 @@ void AHMGameState::OnRep_WaveState(EWaveState OldState)
 	
 }
 
+void AHMGameState::OnRep_PlayerScore(float Score)
+{
+	float OldScore = PlayerScore;
+	PlayerScore = Score;
+	ScoreStateChanged(OldScore, PlayerScore);
+}
+
 
 void AHMGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const {
 
@@ -43,7 +55,5 @@ void AHMGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLife
 
 	DOREPLIFETIME(AHMGameState, CurrentGameState);
 
-
-	// @todo redesign wave number architecture
-	// DOREPLIFETIME(AHMGameState, WaveNumber);
+	DOREPLIFETIME(AHMGameState, PlayerScore);
 }

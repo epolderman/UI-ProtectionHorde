@@ -53,13 +53,12 @@ class HORDEMODE_API AHMPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 	
-	
 public:
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	void AddScore(float deltaScore);
 
-	//UPROPERTY(BlueprintAssignable, Category = "Events")
-	//FOnScoreUpdate OnScoreUpdate;
+	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerState")
+	void ScoreStateChanged(float PrevScore, float NewScore);
 
 	float GetScore() const;
 };

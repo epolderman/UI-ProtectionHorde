@@ -1,5 +1,3 @@
-#pragma once
-
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
 #include "HMGameState.generated.h"
@@ -33,6 +31,8 @@ public:
 
 	void SetWaveState(EWaveState NewWaveState);
 
+	void SetScoreState(float Score);
+
 protected:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_WaveState, Category = "GameState")
 	EWaveState CurrentGameState;
@@ -40,10 +40,19 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "GameState")
 	void WaveStateChanged(EWaveState NewState, EWaveState OldState, int WaveNumber);
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "GameState")
+	void ScoreStateChanged(float PrevScore, float NewScore);
+
 	UFUNCTION()
 	void OnRep_WaveState(EWaveState OldState);
 
 	int WaveNumber;
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_PlayerScore, Category = "GameState")
+	float PlayerScore;
+
+	UFUNCTION()
+	void OnRep_PlayerScore(float OldScore);
 };
 
 /*
