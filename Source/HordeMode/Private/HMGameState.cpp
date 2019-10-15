@@ -2,6 +2,7 @@
 
 #include "HMGameState.h"
 #include <UnrealNetwork.h>
+#include "HMPlayerState.h"
 
 
 AHMGameState::AHMGameState() {
@@ -19,6 +20,20 @@ void AHMGameState::SetWaveState(EWaveState NewWaveState)
 
 		// manually call for the server
 		OnRep_WaveState(OldState);
+
+		// Display Scores at every round
+		for (int i = 0; i < PlayerArray.Num(); i++) {
+			AHMPlayerState * p = Cast<AHMPlayerState>(PlayerArray[i]);
+			if (p) {
+				FString uID = p->UniqueId->ToString();
+				float Score = p->GetScore();
+				UE_LOG(LogTemp, Warning, TEXT("GameState: Server Score: %f %s"), Score, *uID);
+				// UE_LOG(LogTemp, Warning, TEXT("GameState: Server UID: %s"), *uID);
+			}
+			else {
+				UE_LOG(LogTemp, Warning, TEXT("GameState: Cast to PlayerState failed"));
+			}
+		}
 	}
 
 }

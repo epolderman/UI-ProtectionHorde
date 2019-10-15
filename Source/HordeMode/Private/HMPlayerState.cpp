@@ -27,11 +27,8 @@
 
 void AHMPlayerState::AddScore(float deltaScore)
 {
-		// direct change to server
-		Score += deltaScore;
-		FString uID = UniqueId->ToString();
-		UE_LOG(LogTemp, Warning, TEXT("PlayerState: Server Updating Score %f"), Score);
-		UE_LOG(LogTemp, Warning, TEXT("PlayerState: Server Updating Score for %s"), *uID);
+	// Score is Replicated : Direct change to server
+	Score += deltaScore;
 }
 
 
@@ -42,11 +39,7 @@ float AHMPlayerState::GetScore() const {
 /* Callback to tell the client it has been replicated to clients */
 void AHMPlayerState::OnRep_Score()
 {
-	AHMHUD * hud = Cast<AHMHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
-	if (hud) {
-		hud->UpdateScore();
-	}
-	FString uID = UniqueId->ToString();
-	UE_LOG(LogTemp, Warning, TEXT("PlayerState: OnRep_Updating Score %f"), Score);
-	UE_LOG(LogTemp, Warning, TEXT("PlayerState: OnRep_Updating Score for %s"), *uID);
+	AHMHUD * PlayerHud = Cast<AHMHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
+	if (PlayerHud)
+		PlayerHud->UpdateScore();
 }

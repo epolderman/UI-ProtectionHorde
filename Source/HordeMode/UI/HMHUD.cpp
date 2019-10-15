@@ -52,36 +52,30 @@ void AHMHUD::BeginPlay()
 }
 
 void AHMHUD::ShowWaveTitle(int WaveNumber) {
+
 	UWorld* const MyWorld = GetWorld();
+
 	if (MyWorld == nullptr || bIsTitleVisible) {
 		return;
 	}
+
 	SAssignNew(this->TitleWaveWidget, SSTitleWidget).OwnerWorld(MyWorld).OwnerHud(this);
 	FText Wave = FText::Format(NSLOCTEXT("GameFlow", "WaveNr", "Wave {0}"), FText::AsNumber(WaveNumber));
 	this->TitleWaveWidget->ShowTitle(Wave);
 	bIsTitleVisible = true;
-}
-void AHMHUD::HideWaveTitle() {
-	TitleWaveWidget = nullptr;
-	bIsTitleVisible = false;
+
 }
 
-void AHMHUD::UpdateScore() {
-	
-	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
-	if (OwningPlayerController) {
-		AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);
-		float scoreToDisplay = PlayerState != nullptr ? PlayerState->GetScore() : NULL;
-		if (scoreToDisplay == NULL) {
-			return;
-		}
-		FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(scoreToDisplay));
-		ScoreWidget->SetScoreText(ScoreUpdate);
-	}
+void AHMHUD::HideWaveTitle() {
+
+	TitleWaveWidget = nullptr;
+	bIsTitleVisible = false;
+
 }
 
 void AHMHUD::ShowScore()
 {
+
 	UWorld* const MyWorld = GetWorld();
 	if (MyWorld == nullptr || bisScoreVisible) {
 		return;
@@ -98,6 +92,24 @@ void AHMHUD::ShowScore()
 		GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(ScoreWidget.ToSharedRef()));
 		ScoreWidget->SetVisibility(EVisibility::Visible);
 		bisScoreVisible = true;
+	}
+}
+
+
+void AHMHUD::UpdateScore() {
+
+	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
+
+	if (OwningPlayerController) {
+
+		AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);
+		float scoreToDisplay = PlayerState != nullptr ? PlayerState->GetScore() : NULL;
+		if (scoreToDisplay == NULL) {
+			return;
+		}
+
+		FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(scoreToDisplay));
+		ScoreWidget->SetScoreText(ScoreUpdate);
 	}
 }
 

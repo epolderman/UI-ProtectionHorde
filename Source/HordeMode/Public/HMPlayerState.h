@@ -41,23 +41,18 @@ but Ammo might on your Weapon Class if you can switch Weapons).
 
 PlayerState - Holds every variable non related to the PlayerCharacter that 
 needs to be known by everyone (best scores, current killing streak, player name...).
-
-
-
  */
-
-
 
 UCLASS()
 class HORDEMODE_API AHMPlayerState : public APlayerState
 {
 	GENERATED_BODY()
-	
+
+	virtual void OnRep_Score() override;
+
 public:
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	void AddScore(float deltaScore);
 
 	float GetScore() const;
-
-	virtual void OnRep_Score() override;
 };

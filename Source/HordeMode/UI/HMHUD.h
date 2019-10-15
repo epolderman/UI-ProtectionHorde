@@ -31,22 +31,22 @@ class HORDEMODE_API AHMHUD : public AHUD
 public:
 	AHMHUD();
 
-	TSharedPtr<SSTitleWidget> TitleWaveWidget;
-
-	TSharedPtr<SScoreWidget> ScoreWidget;
-
-	UFUNCTION(BlueprintCallable, Category = "Actions")
+	UFUNCTION(BlueprintCallable, Category = "UIActions")
 	void ShowWaveTitle(int WaveNumber);
 
 	void HideWaveTitle();
 
-	UFUNCTION(BlueprintCallable, Category = "Actions")
+	UFUNCTION(BlueprintCallable, Category = "UIActions")
 	void UpdateScore();
 
-	UFUNCTION(BlueprintCallable, Category = "Actions")
+	UFUNCTION(BlueprintCallable, Category = "UIActions")
 	void ShowScore();
 
 protected:
+	TSharedPtr<SSTitleWidget> TitleWaveWidget;
+
+	TSharedPtr<SScoreWidget> ScoreWidget;
+
 	bool bIsTitleVisible;
 
 	bool bisScoreVisible;
