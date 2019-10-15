@@ -97,9 +97,8 @@ void AHMHUD::ShowScore()
 		ScoreWidget = SNew(SScoreWidget).OwnerHud(this).TextToSet(ScoreUpdate);
 		GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(ScoreWidget.ToSharedRef()));
 		ScoreWidget->SetVisibility(EVisibility::Visible);
+		bisScoreVisible = true;
 	}
-
-	bisScoreVisible = true;
 }
 
 
