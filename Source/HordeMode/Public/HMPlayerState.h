@@ -57,9 +57,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	void AddScore(float deltaScore);
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerState")
-	void ScoreStateChanged(float PrevScore, float NewScore);
-
 	float GetScore() const;
 
 	virtual void OnRep_Score() override;
