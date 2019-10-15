@@ -27,7 +27,7 @@ void SScoreWidget::Construct(const FArguments& InArgs)
 				[
 				SNew(STextBlock)
 				.ShadowColorAndOpacity(FLinearColor::Black)
-				.ColorAndOpacity(FLinearColor::Red)
+				.ColorAndOpacity(FLinearColor::Green)
 				.ShadowOffset(FIntPoint(-1, 1))
 				.Font(ResultFont)
 				.Text(this, &SScoreWidget::GetScoreText)
