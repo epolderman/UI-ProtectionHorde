@@ -3,9 +3,9 @@
 #include "HMGameState.h"
 #include <UnrealNetwork.h>
 
-/* this is the file you should set up events and talk to game mode through this */
 
 AHMGameState::AHMGameState() {
+
 	WaveNumber = 0;
 }
 void AHMGameState::SetWaveState(EWaveState NewWaveState)
