@@ -6,6 +6,7 @@
 #include "HMCharacter.h"
 #include "HMGameState.h"
 #include "HMGameMode.h"
+#include <Kismet/GameplayStatics.h>
 
 
 /*
@@ -33,26 +34,26 @@
 
 void AHMPlayerState::AddScore(float deltaScore)
 {
-
-	Score += deltaScore;
-
-	AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());
-	if (CurrentGameMode) {
-		UE_LOG(LogTemp, Warning, TEXT("PlayerState: We have GameMode %f"), Score);
-		AHMGameState * GS = CurrentGameMode->GetGameState<AHMGameState>();
-		if (GS) {
-			UE_LOG(LogTemp, Warning, TEXT("PlayerState: We have GameState"));
-			GS->SetScoreState(Score);
-		}
-
-	}
-
-	FString uID = UniqueId->ToString();
-	UE_LOG(LogTemp, Warning, TEXT("PlayerState: Updating Score %f"), Score);
-	UE_LOG(LogTemp, Warning, TEXT("PlayerState: Updating Score for %s"), *uID);
+		// direct change to server
+		Score += deltaScore;
+		FString uID = UniqueId->ToString();
+		UE_LOG(LogTemp, Warning, TEXT("PlayerState: Server Updating Score %f"), Score);
+		UE_LOG(LogTemp, Warning, TEXT("PlayerState: Server Updating Score for %s"), *uID);
 }
 
 
 float AHMPlayerState::GetScore() const {
 	return Score;
+}
+
+/* Callback to tell the client it has been replicated to clients */
+void AHMPlayerState::OnRep_Score()
+{
+	AHMHUD * hud = Cast<AHMHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
+	if (hud) {
+		hud->UpdateScore();
+	}
+	FString uID = UniqueId->ToString();
+	UE_LOG(LogTemp, Warning, TEXT("PlayerState: OnRep_Updating Score %f"), Score);
+	UE_LOG(LogTemp, Warning, TEXT("PlayerState: OnRep_Updating Score for %s"), *uID);
 }

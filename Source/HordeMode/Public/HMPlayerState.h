@@ -61,4 +61,6 @@ public:
 	void ScoreStateChanged(float PrevScore, float NewScore);
 
 	float GetScore() const;
+
+	virtual void OnRep_Score() override;
 };
