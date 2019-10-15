@@ -16,9 +16,7 @@
 
 enum class EWaveState : uint8;
 
-// @todo: add player controller so we can update score hud widget
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnActorKilledSig, AActor*, killer,  AActor*, victim, AController*, controlledBy);
-
 
 UCLASS()
 class HORDEMODE_API AHMGameMode : public AGameModeBase

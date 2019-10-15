@@ -21,17 +21,13 @@ void AHMGameState::SetWaveState(EWaveState NewWaveState)
 		// manually call for the server
 		OnRep_WaveState(OldState);
 
-		// Display Scores at every round
+		// Display Scores at every round @todo Put into a widget
 		for (int i = 0; i < PlayerArray.Num(); i++) {
-			AHMPlayerState * p = Cast<AHMPlayerState>(PlayerArray[i]);
-			if (p) {
-				FString uID = p->UniqueId->ToString();
-				float Score = p->GetScore();
+			AHMPlayerState * Player = Cast<AHMPlayerState>(PlayerArray[i]);
+			if (Player) {
+				FString uID = Player->UniqueId->ToString();
+				float Score = Player->GetScore();
 				UE_LOG(LogTemp, Warning, TEXT("GameState: Server Score: %f %s"), Score, *uID);
-				// UE_LOG(LogTemp, Warning, TEXT("GameState: Server UID: %s"), *uID);
-			}
-			else {
-				UE_LOG(LogTemp, Warning, TEXT("GameState: Cast to PlayerState failed"));
 			}
 		}
 	}
