@@ -67,63 +67,39 @@ void AHMHUD::HideWaveTitle() {
 }
 
 void AHMHUD::UpdateScore() {
-	UE_LOG(LogTemp, Warning, TEXT("HUD: Updating Score()"));
-
+	
 	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
 	if (OwningPlayerController) {
 		AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);
-		if (PlayerState) {
-			UE_LOG(LogTemp, Warning, TEXT("HUD: Updating Score %f"), PlayerState->GetScore());
-
-			float scoreToDisplay = PlayerState->GetScore();
-			FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(scoreToDisplay));
-			ScoreWidget->SetScoreText(ScoreUpdate);
+		float scoreToDisplay = PlayerState != nullptr ? PlayerState->GetScore() : NULL;
+		if (scoreToDisplay == NULL) {
+			return;
 		}
+		FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(scoreToDisplay));
+		ScoreWidget->SetScoreText(ScoreUpdate);
 	}
-	// FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(Score));
-	// ScoreWidget->SetScoreText(ScoreUpdate);
 }
 
 void AHMHUD::ShowScore()
 {
-	UE_LOG(LogTemp, Warning, TEXT("HUD: ShowScore()"));
 	UWorld* const MyWorld = GetWorld();
 	if (MyWorld == nullptr || bisScoreVisible) {
-		UE_LOG(LogTemp, Warning, TEXT("HUD: returning.."));
 		return;
 	}
 
 	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
 
 	if (OwningPlayerController) {
-
-		UE_LOG(LogTemp, Warning, TEXT("HUD: in ShowScore()"));
 		AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);
-		float scoreToDisplay = 0;
+		float scoreToDisplay = PlayerState != nullptr ? PlayerState->GetScore() : 0;
 
-		if (PlayerState) {
-			UE_LOG(LogTemp, Warning, TEXT("HUD: Playerstate was not null "));
-
-			scoreToDisplay = PlayerState->GetScore();
-			FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(scoreToDisplay));
-			ScoreWidget = SNew(SScoreWidget).OwnerHud(this).TextToSet(ScoreUpdate);
-			GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(ScoreWidget.ToSharedRef()));
-			ScoreWidget->SetVisibility(EVisibility::Visible);
-		}
-		else {
-			UE_LOG(LogTemp, Warning, TEXT("HUD: Playerstate was null "));
-
-
-			FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(scoreToDisplay));
-			ScoreWidget = SNew(SScoreWidget).OwnerHud(this).TextToSet(ScoreUpdate);
-			GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(ScoreWidget.ToSharedRef()));
-			ScoreWidget->SetVisibility(EVisibility::Visible);
-		}
-
+		FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(scoreToDisplay));
+		ScoreWidget = SNew(SScoreWidget).OwnerHud(this).TextToSet(ScoreUpdate);
+		GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(ScoreWidget.ToSharedRef()));
+		ScoreWidget->SetVisibility(EVisibility::Visible);
 	}
 
 	bisScoreVisible = true;
-	
 }
 
 

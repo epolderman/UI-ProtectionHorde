@@ -14,13 +14,6 @@
 	Persistent information for the player. Player controller only exists
 	on your machine and server. 
 
-	"PlayerState is extension of PlayerController" is also wrong. PlayerState is its own 
-	class hierarchy and the first parent class the two share is AActor. PlayerState is, as 
-	Duncan Dam pointed out, 
-	designed to store  data across sessions. It is a form of container, not a form of controller.
-
-	Same thing with GameMode and GameState
-
 	hierarchy in ue4 for player state
 
 	UObjectBase
