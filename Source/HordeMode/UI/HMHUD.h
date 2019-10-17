@@ -40,7 +40,7 @@ public:
 	void UpdateScore();
 
 	UFUNCTION(BlueprintCallable, Category = "UIActions")
-	void ShowScore();
+	void InitializeScoreWidget();
 
 protected:
 	TSharedPtr<SSTitleWidget> TitleWaveWidget;

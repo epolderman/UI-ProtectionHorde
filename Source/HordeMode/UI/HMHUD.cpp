@@ -48,7 +48,7 @@ void AHMHUD::PostInitializeComponents() {
 void AHMHUD::BeginPlay()
 {
 	Super::BeginPlay();
-	ShowScore();
+	InitializeScoreWidget();
 }
 
 void AHMHUD::ShowWaveTitle(int WaveNumber) {
@@ -73,7 +73,7 @@ void AHMHUD::HideWaveTitle() {
 
 }
 
-void AHMHUD::ShowScore()
+void AHMHUD::InitializeScoreWidget()
 {
 
 	UWorld* const MyWorld = GetWorld();
