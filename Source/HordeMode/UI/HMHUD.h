@@ -23,6 +23,7 @@
 
 class SSTitleWidget;
 class SScoreWidget;
+class SSTotalScoresWidget;
 
 UCLASS()
 class HORDEMODE_API AHMHUD : public AHUD
@@ -42,10 +43,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UIActions")
 	void InitializeScoreWidget();
 
+	UFUNCTION(BlueprintCallable, Category = "UIActions")
+	void InitializeTotalScoresWidget();
+
 protected:
 	TSharedPtr<SSTitleWidget> TitleWaveWidget;
 
 	TSharedPtr<SScoreWidget> ScoreWidget;
+
+	TSharedPtr<SSTotalScoresWidget> TotalScoresWidget;
 
 	bool bIsTitleVisible;
 

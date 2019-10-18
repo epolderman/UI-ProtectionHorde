@@ -7,6 +7,7 @@
 #include "HMPlayerState.h"
 #include "Widgets/SWeakWidget.h" 
 #include "Components/SScoreWidget.h"
+#include "UI/Components/SSTotalScoresWidget.h"
 
 /*
 	A Shared Reference acts like a Shared Pointer, in the sense that it owns the
@@ -49,15 +50,15 @@ void AHMHUD::BeginPlay()
 {
 	Super::BeginPlay();
 	InitializeScoreWidget();
+	InitializeTotalScoresWidget();
 }
 
 void AHMHUD::ShowWaveTitle(int WaveNumber) {
 
 	UWorld* const MyWorld = GetWorld();
 
-	if (MyWorld == nullptr || bIsTitleVisible) {
-		return;
-	}
+	if (MyWorld == nullptr || bIsTitleVisible) 
+	return;
 
 	SAssignNew(this->TitleWaveWidget, SSTitleWidget).OwnerWorld(MyWorld).OwnerHud(this);
 	FText Wave = FText::Format(NSLOCTEXT("GameFlow", "WaveNr", "Wave {0}"), FText::AsNumber(WaveNumber));
@@ -85,9 +86,9 @@ void AHMHUD::InitializeScoreWidget()
 	return;
 
 	AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);
-	float scoreToDisplay = PlayerState != nullptr ? PlayerState->GetScore() : 0;
+	float PlayerScore = PlayerState != nullptr ? PlayerState->GetScore() : 0;
 
-	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(scoreToDisplay));
+	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(PlayerScore));
 	ScoreWidget = SNew(SScoreWidget).OwnerHud(this).TextToSet(ScoreUpdate);
 	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(ScoreWidget.ToSharedRef()));
 	ScoreWidget->SetVisibility(EVisibility::Visible);
@@ -96,18 +97,28 @@ void AHMHUD::InitializeScoreWidget()
 }
 
 
+void AHMHUD::InitializeTotalScoresWidget()
+{
+	TotalScoresWidget = SNew(SSTotalScoresWidget).OwnerHud(this);
+	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(TotalScoresWidget.ToSharedRef()));
+	TotalScoresWidget->SetVisibility(EVisibility::Visible);
+}
+
 void AHMHUD::UpdateScore() {
+
+	if (!bisScoreVisible)
+	return;
 
 	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
 	if (OwningPlayerController == nullptr)
 	return;
 
 	AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);
-	float scoreToDisplay = PlayerState != nullptr ? PlayerState->GetScore() : NULL;
-	if (scoreToDisplay == NULL)
+	float UpdatedScore = PlayerState != nullptr ? PlayerState->GetScore() : NULL;
+	if (UpdatedScore == NULL)
 	return;
 
-	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(scoreToDisplay));
+	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(UpdatedScore));
 	ScoreWidget->SetScoreText(ScoreUpdate);
 }
 
