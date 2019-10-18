@@ -77,40 +77,38 @@ void AHMHUD::InitializeScoreWidget()
 {
 
 	UWorld* const MyWorld = GetWorld();
-	if (MyWorld == nullptr || bisScoreVisible) {
-		return;
-	}
+	if (MyWorld == nullptr || bisScoreVisible) 
+	return;
 
 	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
+	if (OwningPlayerController == nullptr)
+	return;
 
-	if (OwningPlayerController) {
-		AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);
-		float scoreToDisplay = PlayerState != nullptr ? PlayerState->GetScore() : 0;
+	AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);
+	float scoreToDisplay = PlayerState != nullptr ? PlayerState->GetScore() : 0;
 
-		FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(scoreToDisplay));
-		ScoreWidget = SNew(SScoreWidget).OwnerHud(this).TextToSet(ScoreUpdate);
-		GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(ScoreWidget.ToSharedRef()));
-		ScoreWidget->SetVisibility(EVisibility::Visible);
-		bisScoreVisible = true;
-	}
+	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(scoreToDisplay));
+	ScoreWidget = SNew(SScoreWidget).OwnerHud(this).TextToSet(ScoreUpdate);
+	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(ScoreWidget.ToSharedRef()));
+	ScoreWidget->SetVisibility(EVisibility::Visible);
+	bisScoreVisible = true;
+
 }
 
 
 void AHMHUD::UpdateScore() {
 
 	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
+	if (OwningPlayerController == nullptr)
+	return;
 
-	if (OwningPlayerController) {
+	AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);
+	float scoreToDisplay = PlayerState != nullptr ? PlayerState->GetScore() : NULL;
+	if (scoreToDisplay == NULL)
+	return;
 
-		AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);
-		float scoreToDisplay = PlayerState != nullptr ? PlayerState->GetScore() : NULL;
-		if (scoreToDisplay == NULL) {
-			return;
-		}
-
-		FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(scoreToDisplay));
-		ScoreWidget->SetScoreText(ScoreUpdate);
-	}
+	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(scoreToDisplay));
+	ScoreWidget->SetScoreText(ScoreUpdate);
 }
 
 
