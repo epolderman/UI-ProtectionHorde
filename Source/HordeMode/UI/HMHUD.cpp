@@ -89,9 +89,9 @@ void AHMHUD::InitializeScoreWidget()
 	float PlayerScore = PlayerState != nullptr ? PlayerState->GetScore() : 0;
 
 	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(PlayerScore));
-	ScoreWidget = SNew(SScoreWidget).OwnerHud(this).TextToSet(ScoreUpdate);
-	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(ScoreWidget.ToSharedRef()));
-	ScoreWidget->SetVisibility(EVisibility::Visible);
+	PlayerScoreWidget = SNew(SScoreWidget).OwnerHud(this).TextToSet(ScoreUpdate);
+	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(PlayerScoreWidget.ToSharedRef()));
+	PlayerScoreWidget->SetVisibility(EVisibility::Visible);
 	bisScoreVisible = true;
 
 }
@@ -119,7 +119,7 @@ void AHMHUD::UpdateScore() {
 	return;
 
 	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(UpdatedScore));
-	ScoreWidget->SetScoreText(ScoreUpdate);
+	PlayerScoreWidget->SetScoreText(ScoreUpdate);
 }
 
 

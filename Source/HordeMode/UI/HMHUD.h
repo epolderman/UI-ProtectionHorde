@@ -49,7 +49,7 @@ public:
 protected:
 	TSharedPtr<SSTitleWidget> TitleWaveWidget;
 
-	TSharedPtr<SScoreWidget> ScoreWidget;
+	TSharedPtr<SScoreWidget> PlayerScoreWidget;
 
 	TSharedPtr<SSTotalScoresWidget> TotalScoresWidget;
 

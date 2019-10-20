@@ -30,7 +30,7 @@ void SScoreWidget::Construct(const FArguments& InArgs)
 				.ColorAndOpacity(FLinearColor::Green)
 				.ShadowOffset(FIntPoint(-1, 1))
 				.Font(ResultFont)
-				.Text(this, &SScoreWidget::GetScoreText)
+				.Text(this, &SScoreWidget::GetScoreText) /* Polling for score updates */
 				]
 		];
 	
