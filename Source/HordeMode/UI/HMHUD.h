@@ -38,7 +38,10 @@ public:
 	void HideWaveTitle();
 
 	UFUNCTION(BlueprintCallable, Category = "UIActions")
-	void UpdateScore();
+	void UpdatePlayerScore();
+
+	UFUNCTION(BlueprintCallable, Category = "UIActions")
+	void UpdateTotalScores();
 
 	UFUNCTION(BlueprintCallable, Category = "UIActions")
 	void InitializeScoreWidget();
@@ -56,6 +59,8 @@ protected:
 	bool bIsTitleVisible;
 
 	bool bisScoreVisible;
+
+	bool bisTotalScoreVisible;
 
 	virtual void BeginPlay() override;
 

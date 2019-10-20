@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "HMPlayerState.h"
 #include <Engine/Engine.h>
@@ -41,5 +40,8 @@ void AHMPlayerState::OnRep_Score()
 {
 	AHMHUD * PlayerHud = Cast<AHMHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
 	if (PlayerHud)
-		PlayerHud->UpdateScore();
+	{
+		PlayerHud->UpdatePlayerScore();
+		PlayerHud->UpdateTotalScores();
+	}
 }

@@ -8,6 +8,7 @@
 #include "Widgets/SWeakWidget.h" 
 #include "Components/SScoreWidget.h"
 #include "UI/Components/SSTotalScoresWidget.h"
+#include "HMGameState.h"
 
 /*
 	A Shared Reference acts like a Shared Pointer, in the sense that it owns the
@@ -81,6 +82,7 @@ void AHMHUD::InitializeScoreWidget()
 	if (MyWorld == nullptr || bisScoreVisible) 
 	return;
 
+	// @todo: handle failure on initialization, and recovering
 	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
 	if (OwningPlayerController == nullptr)
 	return;
@@ -96,15 +98,28 @@ void AHMHUD::InitializeScoreWidget()
 
 }
 
-
+// @todo: handle entire hud initialization failure for all components, not just one
 void AHMHUD::InitializeTotalScoresWidget()
 {
-	TotalScoresWidget = SNew(SSTotalScoresWidget).OwnerHud(this);
+	if (bisTotalScoreVisible)
+	return;
+
+	UWorld * const MyWorld = GetWorld();
+	AHMGameState * GameState = MyWorld != nullptr ? Cast<AHMGameState>(MyWorld->GetGameState()) : nullptr;
+	if (GameState == nullptr)
+	return;
+
+	if (GameState && GameState->PlayerArray.Num() == 0) {
+		UE_LOG(LogTemp, Warning, TEXT("HUD: Data is empty:"));
+	}
+
+	TotalScoresWidget = SNew(SSTotalScoresWidget).OwnerHud(this).ScoreArray(GameState->PlayerArray);
 	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(TotalScoresWidget.ToSharedRef()));
 	TotalScoresWidget->SetVisibility(EVisibility::Visible);
+	bisTotalScoreVisible = true;
 }
 
-void AHMHUD::UpdateScore() {
+void AHMHUD::UpdatePlayerScore() {
 
 	if (!bisScoreVisible)
 	return;
@@ -122,4 +137,20 @@ void AHMHUD::UpdateScore() {
 	PlayerScoreWidget->SetScoreText(ScoreUpdate);
 }
 
+void AHMHUD::UpdateTotalScores()
+{
+	if(!bisTotalScoreVisible)
+	return;
+
+	UWorld * const MyWorld = GetWorld();
+	AHMGameState * GameState = MyWorld != nullptr ? Cast<AHMGameState>(MyWorld->GetGameState()) : nullptr;
+	if (GameState == nullptr)
+		return;
+
+	if (GameState && GameState->PlayerArray.Num() == 0) {
+		UE_LOG(LogTemp, Warning, TEXT("HUD: Data is empty:"));
+	}
+
+	TotalScoresWidget->SetPlayerScores(GameState->PlayerArray);
+}
 
