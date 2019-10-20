@@ -26,6 +26,7 @@ void SSTotalScoresWidget::Construct(const FArguments& InArgs)
 				.ColorAndOpacity(FLinearColor::Red)
 				.ShadowOffset(FIntPoint(-1, 1))
 				.Font(ResultFont)
+				.WrapTextAt(10)
 				.Text(this, &SSTotalScoresWidget::GetFirstPlayerName)
 		]
 		+ SUniformGridPanel::Slot(0, 1).HAlign(HAlign_Right)[
@@ -34,6 +35,7 @@ void SSTotalScoresWidget::Construct(const FArguments& InArgs)
 				.ColorAndOpacity(FLinearColor::Red)
 				.ShadowOffset(FIntPoint(-1, 1))
 				.Font(ResultFont)
+				.WrapTextAt(10)
 				.Text(this, &SSTotalScoresWidget::GetSecondPlayerName)
 		]
 		+ SUniformGridPanel::Slot(1, 0).HAlign(HAlign_Right)[
