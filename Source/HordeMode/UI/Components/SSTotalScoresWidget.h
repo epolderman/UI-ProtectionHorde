@@ -33,6 +33,7 @@ private:
 
 	TArray<APlayerState *> ScoreArray;
 
+	/* Place these into a struct -> link to*/
 	float PlayerOneScore;
 
 	FString PlayerOneName;
