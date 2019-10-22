@@ -5,12 +5,11 @@
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
 #include "Widgets/DeclarativeSyntaxSupport.h"
+#include "UI/Components/FPlayerData.h"
 
 /*
-
 	Holds Total Scores during the match.
-
- */
+*/
 
 class APlayerState;
 
@@ -33,14 +32,9 @@ private:
 
 	TArray<APlayerState *> ScoreArray;
 
-	/* Place these into a struct -> link to*/
-	float PlayerOneScore;
+	FPlayerData PlayerOne;
 
-	FString PlayerOneName;
-
-	float PlayerTwoScore;
-
-	FString PlayerTwoName;
+	FPlayerData PlayerTwo;
 
 	FText GetFirstPlayerScore() const;
 

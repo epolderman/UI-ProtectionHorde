@@ -59,19 +59,17 @@ void SSTotalScoresWidget::Construct(const FArguments& InArgs)
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
+/* Optimize these function */
 void SSTotalScoresWidget::SetPlayerScores(TArray<APlayerState*> PlayerScores)
 {
 	ScoreArray = PlayerScores;
 	AHMPlayerState * PlayerOnePS = Cast<AHMPlayerState>(ScoreArray[0]);
 	AHMPlayerState * PlayerTwoPS = Cast<AHMPlayerState>(ScoreArray[1]);
-	if (PlayerOnePS) {
-		PlayerOneScore = PlayerOnePS->GetScore();
-		PlayerOneName = PlayerOnePS->UniqueId->ToString();
-	}
-	if (PlayerTwoPS) {
-		PlayerTwoScore = PlayerTwoPS->GetScore();
-		PlayerTwoName = PlayerTwoPS->UniqueId->ToString();
-	}
+	if (PlayerOnePS)
+	PlayerOne = FPlayerData(PlayerOnePS->GetScore(), PlayerOnePS->UniqueId->ToString());
+
+	if (PlayerTwoPS) 
+	PlayerTwo = FPlayerData(PlayerTwoPS->GetScore(), PlayerTwoPS->UniqueId->ToString());
 }
 
 
@@ -80,10 +78,10 @@ FText SSTotalScoresWidget::GetFirstPlayerScore() const
 {
 	float UpdatedScore = 0.0f;
 	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(UpdatedScore));
-	if (PlayerOneScore == 0.0f) {
+	if (PlayerOne.Score == 0.0f) {
 		return ScoreUpdate;
 	}
-	ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(PlayerOneScore));
+	ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(PlayerOne.Score));
 	return ScoreUpdate;
 }
 
@@ -91,10 +89,10 @@ FText SSTotalScoresWidget::GetFirstPlayerName() const
 {
 	FString Name = FString("Empty Name");
 	FText NameUpdate = FText::FromString(Name);
-	if (PlayerOneName.IsEmpty()) {
+	if (PlayerOne.Name.IsEmpty()) {
 		return NameUpdate;
 	}
-	NameUpdate = FText::FromString(PlayerOneName);
+	NameUpdate = FText::FromString(PlayerOne.Name);
 	return NameUpdate;
 }
 
@@ -102,10 +100,10 @@ FText SSTotalScoresWidget::GetSecondPlayerScore() const
 {
 	float UpdatedScore = 0.0f;
 	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(UpdatedScore));
-	if (PlayerTwoScore == 0.0f) {
+	if (PlayerTwo.Score == 0.0f) {
 		return ScoreUpdate;
 	}
-	ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(PlayerTwoScore));
+	ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(PlayerTwo.Score));
 	return ScoreUpdate;
 }
 
@@ -113,10 +111,10 @@ FText SSTotalScoresWidget::GetSecondPlayerName() const
 {
 	FString Name = FString("Empty Name");
 	FText NameUpdate = FText::FromString(Name);
-	if (PlayerTwoName.IsEmpty()) {
+	if (PlayerTwo.Name.IsEmpty()) {
 		return NameUpdate;
 	}
-	NameUpdate = FText::FromString(PlayerTwoName);
+	NameUpdate = FText::FromString(PlayerTwo.Name);
 	return NameUpdate;
 }
 
