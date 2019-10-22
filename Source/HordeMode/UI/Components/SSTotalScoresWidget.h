@@ -34,9 +34,11 @@ private:
 	TArray<APlayerState *> ScoreArray;
 
 	float PlayerOneScore;
+
 	FString PlayerOneName;
 
 	float PlayerTwoScore;
+
 	FString PlayerTwoName;
 
 	FText GetFirstPlayerScore() const;
@@ -48,20 +50,4 @@ private:
 	FText GetSecondPlayerName() const;
 };
 
-//USTRUCT()
-//struct FPlayerData {
-//
-//	GENERATED_BODY()
-//
-//	UPROPERTY()
-//	float Score;
-//
-//	UPROPERTY()
-//	FString Name;
-//
-//	FPlayerData(float s, FString n){
-//		Score = s;
-//		Name = n;
-//	}
-//
-//};
+
