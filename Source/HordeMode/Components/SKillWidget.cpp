@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "SScoreWidget.h"
+#include "SKillWidget.h"
 #include "SlateOptMacros.h"
 #include <STextBlock.h>
 #include <SOverlay.h>
@@ -11,7 +11,7 @@ BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
 #define LOCTEXT_NAMESPACE "SScoreWidget"
 
-void SScoreWidget::Construct(const FArguments& InArgs)
+void SKillWidget::Construct(const FArguments& InArgs)
 {
 	OwnerHUD = InArgs._OwnerHud;
 	ScoreText = InArgs._TextToSet;
@@ -30,18 +30,18 @@ void SScoreWidget::Construct(const FArguments& InArgs)
 				.ColorAndOpacity(FLinearColor::Green)
 				.ShadowOffset(FIntPoint(-1, 1))
 				.Font(ResultFont)
-				.Text(this, &SScoreWidget::GetScoreText) /* Polling for score updates */
+				.Text(this, &SKillWidget::GetScoreText) /* Polling for score updates */
 				]
 		];
 	
 }
 
-void SScoreWidget::SetScoreText(FText Score)
+void SKillWidget::SetScoreText(FText Score)
 {
 	ScoreText = Score;
 }
 
-FText SScoreWidget::GetScoreText() const
+FText SKillWidget::GetScoreText() const
 {
 	return ScoreText;
 }

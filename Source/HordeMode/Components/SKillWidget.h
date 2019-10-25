@@ -27,12 +27,10 @@ class AHMHUD;
 	a float value from the player controller player state.
 */
 
-
-//@todo Change Name and use to kills widget
-class HORDEMODE_API SScoreWidget : public SCompoundWidget
+class HORDEMODE_API SKillWidget : public SCompoundWidget
 {
 public:
-	SLATE_BEGIN_ARGS(SScoreWidget): _TextToSet(FText::FromString(""))
+	SLATE_BEGIN_ARGS(SKillWidget): _TextToSet(FText::FromString(""))
 	{}
 	SLATE_ARGUMENT(TWeakObjectPtr<class AHMHUD>, OwnerHud);
 	SLATE_ARGUMENT(FText, TextToSet)

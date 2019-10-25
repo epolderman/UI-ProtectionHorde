@@ -21,7 +21,7 @@
 
 
 class SSTitleWidget;
-class SScoreWidget;
+class SKillWidget;
 class SSTotalScoresWidget;
 
 UCLASS()
@@ -51,7 +51,7 @@ public:
 protected:
 	TSharedPtr<SSTitleWidget> TitleWaveWidget;
 
-	TSharedPtr<SScoreWidget> TotalKillsWidget;
+	TSharedPtr<SKillWidget> TotalKillsWidget;
 
 	TSharedPtr<SSTotalScoresWidget> TotalScoresWidget;
 

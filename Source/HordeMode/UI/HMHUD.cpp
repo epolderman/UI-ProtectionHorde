@@ -6,7 +6,7 @@
 #include "Components/SSTitleWidget.h"
 #include "HMPlayerState.h"
 #include "Widgets/SWeakWidget.h" 
-#include "Components/SScoreWidget.h"
+#include "Components/SKillWidget.h"
 #include "UI/Components/SSTotalScoresWidget.h"
 #include "HMGameState.h"
 
@@ -67,7 +67,7 @@ void AHMHUD::InitializeTotalKillsWidget()
 	int32 PlayerKills = PlayerState != nullptr ? PlayerState->GetKills() : 0;
 
 	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "KillNr", "Kills {0}"), FText::AsNumber(PlayerKills));
-	TotalKillsWidget = SNew(SScoreWidget).OwnerHud(this).TextToSet(ScoreUpdate);
+	TotalKillsWidget = SNew(SKillWidget).OwnerHud(this).TextToSet(ScoreUpdate);
 	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(TotalKillsWidget.ToSharedRef()));
 	bisKillWidgetInitialized = true;
 
