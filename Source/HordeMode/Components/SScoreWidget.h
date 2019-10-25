@@ -27,6 +27,8 @@ class AHMHUD;
 	a float value from the player controller player state.
 */
 
+
+//@todo Change Name and use to kills widget
 class HORDEMODE_API SScoreWidget : public SCompoundWidget
 {
 public:
