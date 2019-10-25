@@ -16,16 +16,19 @@ class APlayerState;
 class HORDEMODE_API SSTotalScoresWidget : public SCompoundWidget
 {
 public:
-	SLATE_BEGIN_ARGS(SSTotalScoresWidget)
+	SLATE_BEGIN_ARGS(SSTotalScoresWidget): _ScoreArray()
+
 	{}
+
 	SLATE_ARGUMENT(TWeakObjectPtr<class AHMHUD>, OwnerHud);
+
 	SLATE_ARGUMENT(TArray<APlayerState *>, ScoreArray);
+
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs);
 
 	void SetPlayerScores(TArray<APlayerState*> PlayerScores);
-
 private:
 
 	TWeakObjectPtr<class AHMHUD> OwnerHUD;

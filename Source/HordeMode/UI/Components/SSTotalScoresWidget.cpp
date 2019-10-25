@@ -78,6 +78,7 @@ FText SSTotalScoresWidget::GetFirstPlayerScore() const
 {
 	float UpdatedScore = 0.0f;
 	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(UpdatedScore));
+
 	if (PlayerOne.Score == 0.0f) {
 		return ScoreUpdate;
 	}
@@ -89,6 +90,7 @@ FText SSTotalScoresWidget::GetFirstPlayerName() const
 {
 	FString Name = FString("Empty Name");
 	FText NameUpdate = FText::FromString(Name);
+
 	if (PlayerOne.Name.IsEmpty()) {
 		return NameUpdate;
 	}
@@ -100,9 +102,10 @@ FText SSTotalScoresWidget::GetSecondPlayerScore() const
 {
 	float UpdatedScore = 0.0f;
 	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(UpdatedScore));
-	if (PlayerTwo.Score == 0.0f) {
-		return ScoreUpdate;
-	}
+
+	if (PlayerTwo.Score == 0.0f)
+	return ScoreUpdate;
+
 	ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(PlayerTwo.Score));
 	return ScoreUpdate;
 }
@@ -111,9 +114,10 @@ FText SSTotalScoresWidget::GetSecondPlayerName() const
 {
 	FString Name = FString("Empty Name");
 	FText NameUpdate = FText::FromString(Name);
-	if (PlayerTwo.Name.IsEmpty()) {
-		return NameUpdate;
-	}
+
+	if (PlayerTwo.Name.IsEmpty())
+	return NameUpdate;
+
 	NameUpdate = FText::FromString(PlayerTwo.Name);
 	return NameUpdate;
 }

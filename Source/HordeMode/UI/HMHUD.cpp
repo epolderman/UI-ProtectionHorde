@@ -106,17 +106,12 @@ void AHMHUD::InitializeTotalScoresWidget()
 
 	UWorld * const MyWorld = GetWorld();
 	AHMGameState * GameState = MyWorld != nullptr ? Cast<AHMGameState>(MyWorld->GetGameState()) : nullptr;
-	if (GameState == nullptr)
-	return;
-
-	if (GameState && GameState->PlayerArray.Num() == 0) {
-		UE_LOG(LogTemp, Warning, TEXT("HUD: Data is empty:"));
-	}
-
 	TotalScoresWidget = SNew(SSTotalScoresWidget).OwnerHud(this).ScoreArray(GameState->PlayerArray);
 	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(TotalScoresWidget.ToSharedRef()));
-	TotalScoresWidget->SetVisibility(EVisibility::Visible);
 	bisTotalScoreVisible = true;
+
+	if(GameState->PlayerArray.Num() != 0)
+	TotalScoresWidget->SetVisibility(EVisibility::Visible);
 }
 
 void AHMHUD::UpdatePlayerScore() {
@@ -147,10 +142,7 @@ void AHMHUD::UpdateTotalScores()
 	if (GameState == nullptr)
 		return;
 
-	if (GameState && GameState->PlayerArray.Num() == 0) {
-		UE_LOG(LogTemp, Warning, TEXT("HUD: Data is empty:"));
-	}
-
+	TotalScoresWidget->SetVisibility(EVisibility::Visible);
 	TotalScoresWidget->SetPlayerScores(GameState->PlayerArray);
 }
 
