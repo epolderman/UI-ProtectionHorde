@@ -40,7 +40,9 @@
 
 AHMHUD::AHMHUD()
 {
-	UE_LOG(LogTemp, Warning, TEXT("AHMHUD()"));
+	bIsTitleVisible = false;
+	bisScoreWidgetInitialized = false;
+	bisTotalScoreWidgetInitialized = false;
 }
 
 void AHMHUD::PostInitializeComponents() {
@@ -52,6 +54,39 @@ void AHMHUD::BeginPlay()
 	Super::BeginPlay();
 	InitializeScoreWidget();
 	InitializeTotalScoresWidget();
+}
+
+void AHMHUD::InitializeScoreWidget()
+{
+	if (bisScoreWidgetInitialized)
+		return;
+
+	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
+	AHMPlayerState * PlayerState = OwningPlayerController != nullptr ? Cast<AHMPlayerState>(OwningPlayerController->PlayerState) : nullptr;
+	float PlayerScore = PlayerState != nullptr ? PlayerState->GetScore() : 0.0f;
+
+	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(PlayerScore));
+	PlayerScoreWidget = SNew(SScoreWidget).OwnerHud(this).TextToSet(ScoreUpdate);
+	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(PlayerScoreWidget.ToSharedRef()));
+	bisScoreWidgetInitialized = true;
+
+	if (PlayerScore == 0.0f)
+		PlayerScoreWidget->SetVisibility(EVisibility::Hidden);
+}
+
+void AHMHUD::InitializeTotalScoresWidget()
+{
+	if (bisTotalScoreWidgetInitialized)
+		return;
+
+	UWorld * const MyWorld = GetWorld();
+	AHMGameState * GameState = MyWorld != nullptr ? Cast<AHMGameState>(MyWorld->GetGameState()) : nullptr;
+	TotalScoresWidget = SNew(SSTotalScoresWidget).OwnerHud(this).ScoreArray(GameState->PlayerArray);
+	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(TotalScoresWidget.ToSharedRef()));
+	bisTotalScoreWidgetInitialized = true;
+
+	if (GameState->PlayerArray.Num() != 0)
+		TotalScoresWidget->SetVisibility(EVisibility::Visible);
 }
 
 void AHMHUD::ShowWaveTitle(int WaveNumber) {
@@ -72,51 +107,12 @@ void AHMHUD::HideWaveTitle() {
 
 	TitleWaveWidget = nullptr;
 	bIsTitleVisible = false;
-
 }
 
-void AHMHUD::InitializeScoreWidget()
-{
-
-	UWorld* const MyWorld = GetWorld();
-	if (MyWorld == nullptr || bisScoreVisible) 
-	return;
-
-	// @todo: handle failure on initialization, and recovering
-	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
-	if (OwningPlayerController == nullptr)
-	return;
-
-	AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);
-	float PlayerScore = PlayerState != nullptr ? PlayerState->GetScore() : 0;
-
-	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(PlayerScore));
-	PlayerScoreWidget = SNew(SScoreWidget).OwnerHud(this).TextToSet(ScoreUpdate);
-	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(PlayerScoreWidget.ToSharedRef()));
-	PlayerScoreWidget->SetVisibility(EVisibility::Visible);
-	bisScoreVisible = true;
-
-}
-
-// @todo: handle entire hud initialization failure for all components, not just one
-void AHMHUD::InitializeTotalScoresWidget()
-{
-	if (bisTotalScoreVisible)
-	return;
-
-	UWorld * const MyWorld = GetWorld();
-	AHMGameState * GameState = MyWorld != nullptr ? Cast<AHMGameState>(MyWorld->GetGameState()) : nullptr;
-	TotalScoresWidget = SNew(SSTotalScoresWidget).OwnerHud(this).ScoreArray(GameState->PlayerArray);
-	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(TotalScoresWidget.ToSharedRef()));
-	bisTotalScoreVisible = true;
-
-	if(GameState->PlayerArray.Num() != 0)
-	TotalScoresWidget->SetVisibility(EVisibility::Visible);
-}
 
 void AHMHUD::UpdatePlayerScore() {
 
-	if (!bisScoreVisible)
+	if (!bisScoreWidgetInitialized)
 	return;
 
 	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
@@ -128,13 +124,14 @@ void AHMHUD::UpdatePlayerScore() {
 	if (UpdatedScore == NULL)
 	return;
 
+	PlayerScoreWidget->SetVisibility(EVisibility::Visible);
 	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(UpdatedScore));
 	PlayerScoreWidget->SetScoreText(ScoreUpdate);
 }
 
 void AHMHUD::UpdateTotalScores()
 {
-	if(!bisTotalScoreVisible)
+	if(!bisTotalScoreWidgetInitialized)
 	return;
 
 	UWorld * const MyWorld = GetWorld();

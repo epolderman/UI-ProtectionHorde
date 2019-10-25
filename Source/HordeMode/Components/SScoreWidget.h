@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
+#include "Widgets/DeclarativeSyntaxSupport.h"
 
 class AHMHUD;
 
@@ -29,7 +30,7 @@ class AHMHUD;
 class HORDEMODE_API SScoreWidget : public SCompoundWidget
 {
 public:
-	SLATE_BEGIN_ARGS(SScoreWidget)
+	SLATE_BEGIN_ARGS(SScoreWidget): _TextToSet(FText::FromString(""))
 	{}
 	SLATE_ARGUMENT(TWeakObjectPtr<class AHMHUD>, OwnerHud);
 	SLATE_ARGUMENT(FText, TextToSet)

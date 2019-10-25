@@ -5,7 +5,6 @@
 #include "HMHUD.generated.h"
 
 	/*
-
 		One HUD Per Player Controller. 
 		Responsibility: Show player health, ammo, wave states. 
 		Explore Animations in slate. 
@@ -58,9 +57,9 @@ protected:
 
 	bool bIsTitleVisible;
 
-	bool bisScoreVisible;
+	bool bisScoreWidgetInitialized;
 
-	bool bisTotalScoreVisible;
+	bool bisTotalScoreWidgetInitialized;
 
 	virtual void BeginPlay() override;
 
