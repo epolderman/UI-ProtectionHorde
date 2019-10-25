@@ -50,9 +50,19 @@ class HORDEMODE_API AHMPlayerState : public APlayerState
 
 	virtual void OnRep_Score() override;
 
+	UFUNCTION()
+	void OnRep_Kills();
+
+	UPROPERTY(ReplicatedUsing = OnRep_Kills, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = "Kills")
+	int32 Kills;
 public:
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	void AddScore(float deltaScore);
 
 	float GetScore() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Kills")
+	void AddKill(int32 kill);
+
+	int32 GetKills() const;
 };

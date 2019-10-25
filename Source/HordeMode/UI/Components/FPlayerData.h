@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "FPlayerData.generated.h"
 
+/* Total Scores Data */
+
 USTRUCT()
 struct HORDEMODE_API FPlayerData
 {

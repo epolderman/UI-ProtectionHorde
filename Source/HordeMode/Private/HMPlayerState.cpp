@@ -6,6 +6,7 @@
 #include "HMGameState.h"
 #include "HMGameMode.h"
 #include <Kismet/GameplayStatics.h>
+#include <UnrealNetwork.h>
 
 
 /*
@@ -31,8 +32,27 @@ void AHMPlayerState::AddScore(float deltaScore)
 }
 
 
-float AHMPlayerState::GetScore() const {
+float AHMPlayerState::GetScore() const
+{
 	return Score;
+}
+
+void AHMPlayerState::AddKill(int32 kill)
+{
+	Kills += kill;
+}
+
+int32 AHMPlayerState::GetKills() const
+{
+	return Kills;
+}
+
+void AHMPlayerState::OnRep_Kills()
+{
+	// notify HUD
+	AHMHUD * PlayerHud = Cast<AHMHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
+	if (PlayerHud)
+	PlayerHud->UpdateTotalKills();
 }
 
 /* Callback to tell the client it has been replicated to clients */
@@ -40,8 +60,13 @@ void AHMPlayerState::OnRep_Score()
 {
 	AHMHUD * PlayerHud = Cast<AHMHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
 	if (PlayerHud)
-	{
-		PlayerHud->UpdatePlayerScore();
-		PlayerHud->UpdateTotalScores();
-	}
+	PlayerHud->UpdateTotalScores();
 }
+
+void AHMPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const {
+
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AHMPlayerState, Kills);
+}
+

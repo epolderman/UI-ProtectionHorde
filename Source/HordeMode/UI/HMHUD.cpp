@@ -41,7 +41,7 @@
 AHMHUD::AHMHUD()
 {
 	bIsTitleVisible = false;
-	bisScoreWidgetInitialized = false;
+	bisKillWidgetInitialized = false;
 	bisTotalScoreWidgetInitialized = false;
 }
 
@@ -52,26 +52,27 @@ void AHMHUD::PostInitializeComponents() {
 void AHMHUD::BeginPlay()
 {
 	Super::BeginPlay();
-	InitializeScoreWidget();
+	InitializeTotalKillsWidget();
 	InitializeTotalScoresWidget();
 }
 
-void AHMHUD::InitializeScoreWidget()
+void AHMHUD::InitializeTotalKillsWidget()
 {
-	if (bisScoreWidgetInitialized)
+	if (bisKillWidgetInitialized)
 		return;
 
 	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
 	AHMPlayerState * PlayerState = OwningPlayerController != nullptr ? Cast<AHMPlayerState>(OwningPlayerController->PlayerState) : nullptr;
-	float PlayerScore = PlayerState != nullptr ? PlayerState->GetScore() : 0.0f;
+	// float PlayerScore = PlayerState != nullptr ? PlayerState->GetScore() : 0.0f;
+	int32 PlayerKills = PlayerState != nullptr ? PlayerState->GetKills() : 0;
 
-	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(PlayerScore));
-	PlayerScoreWidget = SNew(SScoreWidget).OwnerHud(this).TextToSet(ScoreUpdate);
-	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(PlayerScoreWidget.ToSharedRef()));
-	bisScoreWidgetInitialized = true;
+	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "KillNr", "Kills {0}"), FText::AsNumber(PlayerKills));
+	TotalKillsWidget = SNew(SScoreWidget).OwnerHud(this).TextToSet(ScoreUpdate);
+	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(TotalKillsWidget.ToSharedRef()));
+	bisKillWidgetInitialized = true;
 
-	if (PlayerScore == 0.0f)
-		PlayerScoreWidget->SetVisibility(EVisibility::Hidden);
+	if (PlayerKills == 0)
+		TotalKillsWidget->SetVisibility(EVisibility::Hidden);
 }
 
 void AHMHUD::InitializeTotalScoresWidget()
@@ -110,9 +111,9 @@ void AHMHUD::HideWaveTitle() {
 }
 
 
-void AHMHUD::UpdatePlayerScore() {
+void AHMHUD::UpdateTotalKills() {
 
-	if (!bisScoreWidgetInitialized)
+	if (!bisKillWidgetInitialized)
 	return;
 
 	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
@@ -120,13 +121,13 @@ void AHMHUD::UpdatePlayerScore() {
 	return;
 
 	AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);
-	float UpdatedScore = PlayerState != nullptr ? PlayerState->GetScore() : NULL;
-	if (UpdatedScore == NULL)
+	int32 UpdatedKills = PlayerState != nullptr ? PlayerState->GetKills() : NULL;
+	if (UpdatedKills == NULL)
 	return;
 
-	PlayerScoreWidget->SetVisibility(EVisibility::Visible);
-	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(UpdatedScore));
-	PlayerScoreWidget->SetScoreText(ScoreUpdate);
+	TotalKillsWidget->SetVisibility(EVisibility::Visible);
+	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "KillNr", "Kills {0}"), FText::AsNumber(UpdatedKills));
+	TotalKillsWidget->SetScoreText(ScoreUpdate);
 }
 
 void AHMHUD::UpdateTotalScores()

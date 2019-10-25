@@ -16,8 +16,6 @@ AHMPowerUpActor::AHMPowerUpActor()
 void AHMPowerUpActor::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UE_LOG(LogTemp, Warning, TEXT("AHMPowerAcotr BeginPlay()"));
 }
 
 void AHMPowerUpActor::OnTickPowerUp()

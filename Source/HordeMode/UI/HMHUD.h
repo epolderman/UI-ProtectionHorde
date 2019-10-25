@@ -37,13 +37,13 @@ public:
 	void HideWaveTitle();
 
 	UFUNCTION(BlueprintCallable, Category = "UIActions")
-	void UpdatePlayerScore();
+	void UpdateTotalKills();
 
 	UFUNCTION(BlueprintCallable, Category = "UIActions")
 	void UpdateTotalScores();
 
 	UFUNCTION(BlueprintCallable, Category = "UIActions")
-	void InitializeScoreWidget();
+	void InitializeTotalKillsWidget();
 
 	UFUNCTION(BlueprintCallable, Category = "UIActions")
 	void InitializeTotalScoresWidget();
@@ -51,13 +51,13 @@ public:
 protected:
 	TSharedPtr<SSTitleWidget> TitleWaveWidget;
 
-	TSharedPtr<SScoreWidget> PlayerScoreWidget;
+	TSharedPtr<SScoreWidget> TotalKillsWidget;
 
 	TSharedPtr<SSTotalScoresWidget> TotalScoresWidget;
 
 	bool bIsTitleVisible;
 
-	bool bisScoreWidgetInitialized;
+	bool bisKillWidgetInitialized;
 
 	bool bisTotalScoreWidgetInitialized;
 
