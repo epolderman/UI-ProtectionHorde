@@ -14,7 +14,7 @@
 	Persistent information for the player. Player controller only exists
 	on your machine and server. 
 
-	hierarchy in ue4 for player state
+	Hierarchy in ue4 for player state
 
 	UObjectBase
 	UObjectBaseUtility
@@ -25,21 +25,20 @@
 */
 
 
+// Score is Replicated : Direct change to server
 void AHMPlayerState::AddScore(float deltaScore)
 {
-	// Score is Replicated : Direct change to server
 	Score += deltaScore;
 }
-
 
 float AHMPlayerState::GetScore() const
 {
 	return Score;
 }
 
-void AHMPlayerState::AddKill(int32 kill)
+void AHMPlayerState::AddKill(int32 Kill)
 {
-	Kills += kill;
+	Kills += Kill;
 }
 
 int32 AHMPlayerState::GetKills() const
@@ -47,9 +46,9 @@ int32 AHMPlayerState::GetKills() const
 	return Kills;
 }
 
+// Notify HUD
 void AHMPlayerState::OnRep_Kills()
 {
-	// notify HUD
 	AHMHUD * PlayerHud = Cast<AHMHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
 	if (PlayerHud)
 	PlayerHud->UpdateTotalKills();

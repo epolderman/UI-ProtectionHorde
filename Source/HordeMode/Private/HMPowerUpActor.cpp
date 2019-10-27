@@ -39,16 +39,12 @@ void AHMPowerUpActor::OnTickPowerUp()
 // client calls
 void AHMPowerUpActor::OnRep_PowerupActive()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Client: PowerUpActive()"), bIsPowerUpActive);
 	// client: blue print will handle this
 	OnPowerupStateChanged(bIsPowerUpActive);
 
-	if (bIsPowerUpActive) {
-		UE_LOG(LogTemp, Warning, TEXT("Client: OnActivate"));
-		OnActivated(aActorPowerUp);
-	}
+	if (bIsPowerUpActive) 
+	OnActivated(aActorPowerUp);
 	else {
-		UE_LOG(LogTemp, Warning, TEXT("Client: OnExpired"));
 		OnExpired();
 		aActorPowerUp = nullptr;
 	}
