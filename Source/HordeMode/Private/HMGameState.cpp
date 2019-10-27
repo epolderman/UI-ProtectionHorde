@@ -11,14 +11,10 @@ AHMGameState::AHMGameState() {
 }
 void AHMGameState::SetWaveState(EWaveState NewWaveState)
 {
+	// Server Change -> Imperatively Call OnRep
 	if (Role == ROLE_Authority) {
-
 		EWaveState OldState = CurrentGameState;
-
-		// triggers client change when var change
 		CurrentGameState = NewWaveState;
-
-		// manually call for the server
 		OnRep_WaveState(OldState);
 	}
 
@@ -27,15 +23,10 @@ void AHMGameState::SetWaveState(EWaveState NewWaveState)
 void AHMGameState::OnRep_WaveState(EWaveState OldState)
 {
 	if (CurrentGameState == EWaveState::WaveStart) {
-
 		++WaveNumber;
-
 		WaveStateChanged(CurrentGameState, OldState, WaveNumber);
-
 	}
-	
 }
-
 
 void AHMGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const {
 

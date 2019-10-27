@@ -36,7 +36,6 @@ void AHMHUD::InitializeTotalKillsWidget()
 
 	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
 	AHMPlayerState * PlayerState = OwningPlayerController != nullptr ? Cast<AHMPlayerState>(OwningPlayerController->PlayerState) : nullptr;
-	// float PlayerScore = PlayerState != nullptr ? PlayerState->GetScore() : 0.0f;
 	int32 PlayerKills = PlayerState != nullptr ? PlayerState->GetKills() : 0;
 
 	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "KillNr", "Kills {0}"), FText::AsNumber(PlayerKills));

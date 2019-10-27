@@ -27,13 +27,8 @@ void ASPickupActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (Role == ROLE_Authority) {
-
-		Respawn();
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("Not Respawning..."));
-	}
+	if (Role == ROLE_Authority)
+	Respawn();
 }
 
 void ASPickupActor::Respawn()

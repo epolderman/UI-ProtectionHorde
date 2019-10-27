@@ -11,21 +11,27 @@
 #include "HordeMode/Components/SHealthComponent.h"
 #include "Net/UnrealNetwork.h"
 
-// Notes / Hot keys 
-// CTRL Shift F = Search Entire Solution & Replace UI
-// Shift + Alt + O = Search entire source
-// Alt + G => Takes you to the function definition in the Engine. 
-// Shift + F1 => While playing game, can regain focus back in editor. 
-// Root Component = Capsule
-// Blueprint values can override C++ values (Example: bUsePawnControlRotation)
-// Notes: Shift + Alt + R = quick rename
-// In the UE4 Editor -> End on the keypad will place object on the floor
+/*	
+	Notes / Hot keys 
+	CTRL Shift F = Search Entire Solution & Replace UI
+	Shift + Alt + O = Search entire source
+	Alt + G => Takes you to the function definition in the Engine. 
+	Shift + F1 => While playing game, can regain focus back in editor. 
+	Root Component = Capsule
+	Blueprint values can override C++ values (Example: bUsePawnControlRotation)
+	Notes: Shift + Alt + R = quick rename
+	In the UE4 Editor -> End on the keypad will place object on the floor
 
-// 121 - 122 const effectiveness in UE
+	121 - 122 const effectiveness in UE
 
-// DebugGameEditor will allows us to play the game but add breakpoints to see where we are breaking.
-// At the top of Visual Studio to the left of Win64
+	DebugGameEditor will allows us to play the game but add breakpoints to see where we are breaking.
+	At the top of Visual Studio to the left of Win64
 
+	Logging: 
+	UE_LOG(LogTemp, Warning, TEXT("OnRep Callback"));
+	UE_LOG(LogTemp, Warning, TEXT("OnRep Callback %f"), someFloatValue);
+
+*/
 
 
 AHMCharacter::AHMCharacter()
