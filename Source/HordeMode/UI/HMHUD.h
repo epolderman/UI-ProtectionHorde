@@ -6,12 +6,11 @@
 
 	/*
 		One HUD Per Player Controller. 
-		Responsibility: Show player health, ammo, wave states. 
+		Responsibility: Incorporate UI Widgets, Show player health, ammo, wave states. 
 		Explore Animations in slate. 
 		
 
 		Apparently this is derived from AActor.
-
 		A Shared Pointer owns the object it references, indefinitely preventing deletion
 		of that object, and ultimately handling its deletion when no Shared Pointer or
 		Shared Reference (see below) references it. A Shared Pointer can be empty, meaning
