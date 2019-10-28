@@ -6,11 +6,11 @@
 
 ### User Interface
 
-**-HUD: Incorporate Slate Widgets + UMG and build HUD around replication.**
-**-In Game Menu: Imperative animations, inventory, ammo**
-**-Main Menu: Built around Slate.**
+- HUD: Incorporate Slate Widgets + UMG and build HUD around replication.
+- In Game Menu: Imperative animations, inventory, ammo
+- Main Menu: Built around Slate.
 
 ### Gameplay
 
-**-Update EQS to attack users + asset**
-**-Build an asset, write the AI**
+- Update EQS to attack users + asset
+- Build an asset, write the AI
