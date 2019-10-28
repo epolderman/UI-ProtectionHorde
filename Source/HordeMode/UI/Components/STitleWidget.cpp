@@ -1,4 +1,4 @@
-#include "SSTitleWidget.h"
+#include "STitleWidget.h"
 #include "SlateOptMacros.h"
 #include "UI/HMHUD.h"
 #include <DeclarativeSyntaxSupport.h>
@@ -8,7 +8,7 @@
 #include <Engine/GameViewportClient.h>
 
 
-void SSTitleWidget::Construct(const FArguments& InArgs)
+void STitleWidget::Construct(const FArguments& InArgs)
 {
 	OwnerWorld = InArgs._OwnerWorld;
 	OwnerHud = InArgs._OwnerHud;
@@ -16,29 +16,30 @@ void SSTitleWidget::Construct(const FArguments& InArgs)
 	FadeAnimationDuration = 2.0f;
 	DurationOfTitle = 2.0f;
 
-	ChildSlot
+		ChildSlot
 		.VAlign(VAlign_Fill)
 		.HAlign(HAlign_Fill)
 		[
-			SNew(SOverlay)
-			+ SOverlay::Slot()
+		SNew(SOverlay)
+		+ SOverlay::Slot()
 		.VAlign(VAlign_Top)
 		.HAlign(HAlign_Center)
 		[
-			SNew(STextBlock).Font(this, &SSTitleWidget::GetTitleFont)
-							.Text(this, &SSTitleWidget::GetTitleText)
+		SNew(STextBlock)
+		.Font(this, &STitleWidget::GetTitleFont)
+		.Text(this, &STitleWidget::GetTitleText)
 		]
 		];
 
-	
+
 }
 
-void SSTitleWidget::SetTitleText(FText Title)
+void STitleWidget::SetTitleText(FText Title)
 {
 	TitleText = Title;
 }
 
-void SSTitleWidget::ShowTitle(FText Title)
+void STitleWidget::ShowTitle(FText Title)
 {
 	SetTitleText(Title);
 	if (GEngine != nullptr && OwnerWorld != nullptr) {
@@ -50,7 +51,7 @@ void SSTitleWidget::ShowTitle(FText Title)
 	}
 }
 
-void SSTitleWidget::HideTitle()
+void STitleWidget::HideTitle()
 {
 	// there is a bug in here because the actual widget is not being removed on one client
 	// the hud slam of the owning pointer is set to null on hidwavetitle
@@ -61,12 +62,12 @@ void SSTitleWidget::HideTitle()
 	}
 }
 
-FText SSTitleWidget::GetTitleText() const
+FText STitleWidget::GetTitleText() const
 {
 	return TitleText;
 }
 
-FSlateFontInfo SSTitleWidget::GetTitleFont() const
+FSlateFontInfo STitleWidget::GetTitleFont() const
 {
 	FSlateFontInfo ResultFont;
 	const int32 StartFontSize = 12;
@@ -79,7 +80,7 @@ FSlateFontInfo SSTitleWidget::GetTitleFont() const
 	return ResultFont;
 }
 
-void SSTitleWidget::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
+void STitleWidget::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
 {
 	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
 
@@ -91,7 +92,7 @@ void SSTitleWidget::Tick(const FGeometry& AllottedGeometry, const double InCurre
 
 }
 
-float SSTitleWidget::GetTimeAlive() const {
+float STitleWidget::GetTimeAlive() const {
 
 	if (OwnerWorld == nullptr) {
 		return 0.0f;

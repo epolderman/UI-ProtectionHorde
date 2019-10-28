@@ -13,10 +13,10 @@
 
 class APlayerState;
 
-class HORDEMODE_API SSTotalScoresWidget : public SCompoundWidget
+class HORDEMODE_API STotalScoresWidget : public SCompoundWidget
 {
 public:
-	SLATE_BEGIN_ARGS(SSTotalScoresWidget): _ScoreArray()
+	SLATE_BEGIN_ARGS(STotalScoresWidget): _ScoreArray()
 
 	{}
 

@@ -18,7 +18,6 @@ ASPickupActor::ASPickupActor()
 	// thickness
 	DecalComp->DecalSize = FVector(64, 75, 75);
 	DecalComp->SetupAttachment(RootComponent);
-	UE_LOG(LogTemp, Warning, TEXT("SPickupActor()"));
 	SetReplicates(true);
 }
 
@@ -33,10 +32,7 @@ void ASPickupActor::BeginPlay()
 
 void ASPickupActor::Respawn()
 {
-	UE_LOG(LogTemp, Warning, TEXT("<------------Respawn()------------->"));
-
 	if (PowerUpClass == nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("Warning for Power Up: Please assign PowerUpClass instance."))
 		return;
 	}
 	FActorSpawnParameters params;

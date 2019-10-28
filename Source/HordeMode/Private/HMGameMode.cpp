@@ -7,7 +7,7 @@
 #include "HMPlayerState.h"
 #include "UI/HMHUD.h"
 #include <DeclarativeSyntaxSupport.h>
-#include "Components/SSTitleWidget.h"
+#include "Components/STitleWidget.h"
 
 
 // Tick Runs 60 times per sec / 1 for each frame

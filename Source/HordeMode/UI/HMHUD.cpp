@@ -3,11 +3,11 @@
 #include "HMGameMode.h"
 #include <Engine/Engine.h>
 #include <DeclarativeSyntaxSupport.h>
-#include "Components/SSTitleWidget.h"
+#include "UI/Components/STitleWidget.h"
 #include "HMPlayerState.h"
 #include "Widgets/SWeakWidget.h" 
-#include "Components/SKillWidget.h"
-#include "UI/Components/SSTotalScoresWidget.h"
+#include "UI/Components/SKillWidget.h"
+#include "UI/Components/STotalScoresWidget.h"
 #include "HMGameState.h"
 
 
@@ -54,7 +54,7 @@ void AHMHUD::InitializeTotalScoresWidget()
 
 	UWorld * const MyWorld = GetWorld();
 	AHMGameState * GameState = MyWorld != nullptr ? Cast<AHMGameState>(MyWorld->GetGameState()) : nullptr;
-	TotalScoresWidget = SNew(SSTotalScoresWidget).OwnerHud(this).ScoreArray(GameState->PlayerArray);
+	TotalScoresWidget = SNew(STotalScoresWidget).OwnerHud(this).ScoreArray(GameState->PlayerArray);
 	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(TotalScoresWidget.ToSharedRef()));
 	bisTotalScoreWidgetInitialized = true;
 
@@ -69,7 +69,7 @@ void AHMHUD::ShowWaveTitle(int WaveNumber) {
 	if (MyWorld == nullptr || bIsTitleVisible) 
 	return;
 
-	SAssignNew(this->TitleWaveWidget, SSTitleWidget).OwnerWorld(MyWorld).OwnerHud(this);
+	SAssignNew(this->TitleWaveWidget, STitleWidget).OwnerWorld(MyWorld).OwnerHud(this);
 	FText Wave = FText::Format(NSLOCTEXT("GameFlow", "WaveNr", "Wave {0}"), FText::AsNumber(WaveNumber));
 	this->TitleWaveWidget->ShowTitle(Wave);
 	bIsTitleVisible = true;

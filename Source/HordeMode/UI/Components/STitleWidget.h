@@ -34,10 +34,10 @@ class AHMHUD;
 		by a floating window. That window cannot own the tooltip
 		and must therefore use an SWeakWidget.
 */
-class HORDEMODE_API SSTitleWidget : public SCompoundWidget
+class HORDEMODE_API STitleWidget : public SCompoundWidget
 {
 public:
-	SLATE_BEGIN_ARGS(SSTitleWidget)
+	SLATE_BEGIN_ARGS(STitleWidget)
 	{}
 	SLATE_ARGUMENT(TWeakObjectPtr<class UWorld>, OwnerWorld)
 	SLATE_ARGUMENT(TWeakObjectPtr<class AHMHUD>, OwnerHud)

@@ -27,6 +27,7 @@ class HORDEMODE_API AHMGameState : public AGameStateBase
 {
 	GENERATED_BODY()
 public:
+
 	AHMGameState();
 
 	void SetWaveState(EWaveState NewWaveState);
@@ -41,6 +42,7 @@ protected:
 	UFUNCTION()
 	void OnRep_WaveState(EWaveState OldState);
 
+	// we can get away with not replicating this variable
 	int32 WaveNumber;
 };
 

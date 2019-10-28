@@ -1,13 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "SSTotalScoresWidget.h"
+#include "STotalScoresWidget.h"
 #include "SlateOptMacros.h"
 #include <SUniformGridPanel.h>
 #include <STextBlock.h>
 #include "HMPlayerState.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
-void SSTotalScoresWidget::Construct(const FArguments& InArgs)
+void STotalScoresWidget::Construct(const FArguments& InArgs)
 {
 	
 	OwnerHUD = InArgs._OwnerHud;
@@ -27,7 +27,7 @@ void SSTotalScoresWidget::Construct(const FArguments& InArgs)
 				.ShadowOffset(FIntPoint(-1, 1))
 				.Font(ResultFont)
 				.WrapTextAt(10)
-				.Text(this, &SSTotalScoresWidget::GetFirstPlayerName)
+				.Text(this, &STotalScoresWidget::GetFirstPlayerName)
 		]
 		+ SUniformGridPanel::Slot(0, 1).HAlign(HAlign_Right)[
 			SNew(STextBlock)
@@ -36,7 +36,7 @@ void SSTotalScoresWidget::Construct(const FArguments& InArgs)
 				.ShadowOffset(FIntPoint(-1, 1))
 				.Font(ResultFont)
 				.WrapTextAt(10)
-				.Text(this, &SSTotalScoresWidget::GetSecondPlayerName)
+				.Text(this, &STotalScoresWidget::GetSecondPlayerName)
 		]
 		+ SUniformGridPanel::Slot(1, 0).HAlign(HAlign_Right)[
 			SNew(STextBlock)
@@ -44,7 +44,7 @@ void SSTotalScoresWidget::Construct(const FArguments& InArgs)
 				.ColorAndOpacity(FLinearColor::Red)
 				.ShadowOffset(FIntPoint(-1, 1))
 				.Font(ResultFont)
-				.Text(this, &SSTotalScoresWidget::GetFirstPlayerScore)
+				.Text(this, &STotalScoresWidget::GetFirstPlayerScore)
 				]
 				+ SUniformGridPanel::Slot(1, 1).HAlign(HAlign_Right)[
 			SNew(STextBlock)
@@ -52,7 +52,7 @@ void SSTotalScoresWidget::Construct(const FArguments& InArgs)
 				.ColorAndOpacity(FLinearColor::Red)
 				.ShadowOffset(FIntPoint(-1, 1))
 				.Font(ResultFont)
-				.Text(this, &SSTotalScoresWidget::GetSecondPlayerScore)
+				.Text(this, &STotalScoresWidget::GetSecondPlayerScore)
 				]
 	];
 	
@@ -60,7 +60,7 @@ void SSTotalScoresWidget::Construct(const FArguments& InArgs)
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
 /* Optimize these function */
-void SSTotalScoresWidget::SetPlayerScores(TArray<APlayerState*> PlayerScores)
+void STotalScoresWidget::SetPlayerScores(TArray<APlayerState*> PlayerScores)
 {
 	ScoreArray = PlayerScores;
 	AHMPlayerState * PlayerOnePS = Cast<AHMPlayerState>(ScoreArray[0]);
@@ -74,7 +74,7 @@ void SSTotalScoresWidget::SetPlayerScores(TArray<APlayerState*> PlayerScores)
 
 
 
-FText SSTotalScoresWidget::GetFirstPlayerScore() const
+FText STotalScoresWidget::GetFirstPlayerScore() const
 {
 	float UpdatedScore = 0.0f;
 	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(UpdatedScore));
@@ -86,7 +86,7 @@ FText SSTotalScoresWidget::GetFirstPlayerScore() const
 	return ScoreUpdate;
 }
 
-FText SSTotalScoresWidget::GetFirstPlayerName() const
+FText STotalScoresWidget::GetFirstPlayerName() const
 {
 	FString Name = FString("Empty Name");
 	FText NameUpdate = FText::FromString(Name);
@@ -98,7 +98,7 @@ FText SSTotalScoresWidget::GetFirstPlayerName() const
 	return NameUpdate;
 }
 
-FText SSTotalScoresWidget::GetSecondPlayerScore() const
+FText STotalScoresWidget::GetSecondPlayerScore() const
 {
 	float UpdatedScore = 0.0f;
 	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(UpdatedScore));
@@ -110,7 +110,7 @@ FText SSTotalScoresWidget::GetSecondPlayerScore() const
 	return ScoreUpdate;
 }
 
-FText SSTotalScoresWidget::GetSecondPlayerName() const
+FText STotalScoresWidget::GetSecondPlayerName() const
 {
 	FString Name = FString("Empty Name");
 	FText NameUpdate = FText::FromString(Name);

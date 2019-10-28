@@ -19,9 +19,9 @@
 	*/
 
 
-class SSTitleWidget;
+class STitleWidget;
 class SKillWidget;
-class SSTotalScoresWidget;
+class STotalScoresWidget;
 
 UCLASS()
 class HORDEMODE_API AHMHUD : public AHUD
@@ -31,9 +31,7 @@ public:
 	AHMHUD();
 
 	UFUNCTION(BlueprintCallable, Category = "UIActions")
-	void ShowWaveTitle(int WaveNumber);
-
-	void HideWaveTitle();
+	void ShowWaveTitle(int32 WaveNumber);
 
 	UFUNCTION(BlueprintCallable, Category = "UIActions")
 	void UpdateTotalKills();
@@ -41,18 +39,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UIActions")
 	void UpdateTotalScores();
 
-	UFUNCTION(BlueprintCallable, Category = "UIActions")
+	void HideWaveTitle();
+
 	void InitializeTotalKillsWidget();
 
-	UFUNCTION(BlueprintCallable, Category = "UIActions")
 	void InitializeTotalScoresWidget();
 
 protected:
-	TSharedPtr<SSTitleWidget> TitleWaveWidget;
+	TSharedPtr<STitleWidget> TitleWaveWidget;
 
 	TSharedPtr<SKillWidget> TotalKillsWidget;
 
-	TSharedPtr<SSTotalScoresWidget> TotalScoresWidget;
+	TSharedPtr<STotalScoresWidget> TotalScoresWidget;
 
 	bool bIsTitleVisible;
 
