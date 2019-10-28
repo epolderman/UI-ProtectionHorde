@@ -1,9 +1,15 @@
-### Multiplayer Game
+# Protection-Horde Game Prototype
 
-#### High Level Goals
+** Description: Protect an asset while fighting horde's of enemies in a multiplayer environment.**
 
-### Main Menu written in Slate
+## High Level Goals -->
 
-### Gameplay and UI around gameplay networked.
+### User Interface
 
-### Less UMG more Slate Declaritive UI
+** HUD: Incorporate Slate Widgets + UMG and build HUD around replication. **
+** In Game Menu: Imperative animations, inventory, ammo **
+** Main Menu: Built around Slate. **
+
+### Gameplay
+
+** TBD ... **
