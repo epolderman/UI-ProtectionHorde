@@ -71,8 +71,10 @@ void USHealthComponent::Heal(float HealAmount)
 	if (HealAmount <= 0.0f || Health <= 0.0f) {
 		return;
 	}
+	
 	// clamp = value, min, max
 	Health = FMath::Clamp(Health + HealAmount, 0.0f, DefaultHealth);
+	UE_LOG(LogTemp, Warning, TEXT("Healing--->...%f....%f"), Health, -HealAmount);
 	OnHealthChanged.Broadcast(this, Health, -HealAmount, nullptr, nullptr, nullptr);
 }
 
