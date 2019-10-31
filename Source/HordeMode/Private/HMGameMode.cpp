@@ -7,7 +7,6 @@
 #include "HMPlayerState.h"
 #include "UI/HMHUD.h"
 #include <DeclarativeSyntaxSupport.h>
-#include "Components/STitleWidget.h"
 
 
 // Tick Runs 60 times per sec / 1 for each frame
@@ -76,7 +75,7 @@ void AHMGameMode::StartWave()
 {
 	WaveCount++;
 
-	NumberOfBotsToSpawnInCurrentWave = 2 * WaveCount;
+	NumberOfBotsToSpawnInCurrentWave = 1 * WaveCount;
 
 	GetWorldTimerManager().SetTimer(TimerHandle_BotSpawner, this, &AHMGameMode::SpawnBotTimerElapsed, 1.0f, true, 0.0f);
 

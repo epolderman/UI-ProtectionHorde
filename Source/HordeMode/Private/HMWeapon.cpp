@@ -24,7 +24,7 @@ AHMWeapon::AHMWeapon()
 	RootComponent = MeshComponent;
 	MuzzleSocketName = "MuzzleSocket";
 	TracerTargetName = "Target";
-	BaseHitPointDamage = 20.0f;
+	BaseHitPointDamage = 1.0f;
 	RateOfFire = 600.0f;
 
 	// spawn on a server, spawn it on clients, sets up actor channel
@@ -97,7 +97,7 @@ void AHMWeapon::Fire()
 
 			float damageApplied = BaseHitPointDamage;
 			if (SurfaceType == SURFACE_FLESH_VULNERABLE) {
-				damageApplied = 40.0f;
+				damageApplied = 2.0f;
 			}
 			UGameplayStatics::ApplyPointDamage(HitActor, damageApplied, ShotDirection, Hit, Owner->GetInstigatorController(), Owner, DamageType);
 

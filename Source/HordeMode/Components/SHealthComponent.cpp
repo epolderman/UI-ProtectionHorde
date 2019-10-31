@@ -61,8 +61,10 @@ void USHealthComponent::BeginPlay()
 // on rep function trick, gets prev value
 void USHealthComponent::OnRep_Health(float oldHealth)
 {
-	float damage = Health = oldHealth;
-	OnHealthChanged.Broadcast(this, Health, damage, nullptr, nullptr, nullptr);
+	
+	float Damage = Health = oldHealth;
+	UE_LOG(LogTemp, Warning, TEXT("OnRepHealth:--->...%f...%f....%f"), Health, Damage, oldHealth);
+	OnHealthChanged.Broadcast(this, Health, Damage, nullptr, nullptr, nullptr);
 }
 
 // todo: breakdown this functionality and see why it works under the hood? optimization?
@@ -74,7 +76,6 @@ void USHealthComponent::Heal(float HealAmount)
 	
 	// clamp = value, min, max
 	Health = FMath::Clamp(Health + HealAmount, 0.0f, DefaultHealth);
-	UE_LOG(LogTemp, Warning, TEXT("Healing--->...%f....%f"), Health, -HealAmount);
 	OnHealthChanged.Broadcast(this, Health, -HealAmount, nullptr, nullptr, nullptr);
 }
 
@@ -86,8 +87,10 @@ void USHealthComponent::HandleDamage(AActor * DamagedActor, float Damage, const 
 	if (DamageCauser != DamagedActor && IsFriendly(DamagedActor, DamageCauser))
 	return;
 
-	Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
+	Health = Health - Damage;
 	bIsDead = Health <= 0.0f;
+	UE_LOG(LogTemp, Warning, TEXT("HealthOnTakeDamage Health:--->...%f"), Health);
+	UE_LOG(LogTemp, Warning, TEXT("HealthOnTakeDamage...%f"), Damage);
 	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
 
 	if (bIsDead) {
