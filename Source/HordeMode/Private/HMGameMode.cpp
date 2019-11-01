@@ -64,9 +64,8 @@ void AHMGameMode::Tick(float DeltaSeconds)
 	if (isGameOver)
 	return;
 
-	if (hasGameStarted && !IsAnyPlayerAlive()) {
-		GameOver();
-	}
+	if (hasGameStarted && !IsAnyPlayerAlive())
+	GameOver();
 
 	CheckWaveState();
 }
@@ -81,9 +80,8 @@ void AHMGameMode::StartWave()
 
 	SetWaveState(EWaveState::WaveStart);
 
-	if (!hasGameStarted) {
-		hasGameStarted = true;
-	}
+	if (!hasGameStarted)
+	hasGameStarted = true;
 }
 
 void AHMGameMode::EndWave()
