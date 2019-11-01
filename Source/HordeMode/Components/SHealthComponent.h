@@ -43,7 +43,7 @@ protected:
 	float Health;
 
 	UFUNCTION()
-	void OnRep_Health(float oldHealth);
+	void OnRep_Health(float LastHealthValue);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HealthComponent")
 	float DefaultHealth;

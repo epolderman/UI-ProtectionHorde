@@ -75,7 +75,7 @@ void AHMGameMode::StartWave()
 {
 	WaveCount++;
 
-	NumberOfBotsToSpawnInCurrentWave = 1 * WaveCount;
+	NumberOfBotsToSpawnInCurrentWave = 2 * WaveCount;
 
 	GetWorldTimerManager().SetTimer(TimerHandle_BotSpawner, this, &AHMGameMode::SpawnBotTimerElapsed, 1.0f, true, 0.0f);
 

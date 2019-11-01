@@ -9,7 +9,6 @@
 // todo: Network grenade weapon, look into inheritance hierarchy via base class weapon
 // todo: look into weapon replicated breaking UI widgets on the clients
 // todo: do explosive barrel challenge networking
-// todo: bug in tracker bot networking on clients
 
 USHealthComponent::USHealthComponent()
 {
@@ -59,11 +58,9 @@ void USHealthComponent::BeginPlay()
 }
 
 // on rep function trick, gets prev value
-void USHealthComponent::OnRep_Health(float oldHealth)
+void USHealthComponent::OnRep_Health(float LastHealthValue)
 {
-	
-	float Damage = Health = oldHealth;
-	UE_LOG(LogTemp, Warning, TEXT("OnRepHealth:--->...%f...%f....%f"), Health, Damage, oldHealth);
+	float Damage = Health - LastHealthValue;
 	OnHealthChanged.Broadcast(this, Health, Damage, nullptr, nullptr, nullptr);
 }
 
@@ -87,10 +84,8 @@ void USHealthComponent::HandleDamage(AActor * DamagedActor, float Damage, const 
 	if (DamageCauser != DamagedActor && IsFriendly(DamagedActor, DamageCauser))
 	return;
 
-	Health = Health - Damage;
+	Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
 	bIsDead = Health <= 0.0f;
-	UE_LOG(LogTemp, Warning, TEXT("HealthOnTakeDamage Health:--->...%f"), Health);
-	UE_LOG(LogTemp, Warning, TEXT("HealthOnTakeDamage...%f"), Damage);
 	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
 
 	if (bIsDead) {
