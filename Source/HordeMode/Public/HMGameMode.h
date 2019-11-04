@@ -18,6 +18,8 @@ enum class EWaveState : uint8;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnActorKilledSig, AActor*, killer,  AActor*, victim, AController*, controlledBy);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnTargetHitEvent, FVector, LocationHit, float, HitValue);
+
 UCLASS()
 class HORDEMODE_API AHMGameMode : public AGameModeBase
 {
@@ -31,6 +33,9 @@ public:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaSeconds) override;
+
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FOnTargetHitEvent OnHitEvent;
 
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnActorKilledSig OnActorKilled;

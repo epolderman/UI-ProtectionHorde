@@ -9,6 +9,7 @@
 // OnHealthChanged Event
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnHealthChangedSignature, USHealthComponent*, HealthComp, float, Health, float, HealthDelta, const class UDamageType*, DamageType, class AController*, InstigatedBy, AActor*, DamageCauser);
 
+
 UCLASS( ClassGroup=(HordeMode), meta=(BlueprintSpawnableComponent) )
 class HORDEMODE_API USHealthComponent : public UActorComponent
 {
