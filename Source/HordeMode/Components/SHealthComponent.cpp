@@ -6,9 +6,6 @@
 #include "HMGameMode.h"
 #include <UnrealNetwork.h>
 
-// todo: Network grenade weapon, look into inheritance hierarchy via base class weapon
-// todo: look into weapon replicated breaking UI widgets on the clients
-// todo: do explosive barrel challenge networking
 
 USHealthComponent::USHealthComponent()
 {
