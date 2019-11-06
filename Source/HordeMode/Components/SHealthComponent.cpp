@@ -86,14 +86,14 @@ void USHealthComponent::HandleDamage(AActor * DamagedActor, float Damage, const 
 	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
 
 	AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());
+
 	if (CurrentGameMode) {
-		// display damage ui widget which is replicated to clients 
-		CurrentGameMode->OnHitEvent.Broadcast(GetOwner()->GetTargetLocation(), Damage);
+		FVector WidgetDirection = GetOwner()->GetTargetLocation();
+		CurrentGameMode->OnHitEvent.Broadcast(WidgetDirection, Damage);
 	}
 
+	// only valid on server / only succeeds on serve call GetAuthGameMode
 	if (bIsDead) {
-		
-		// only valid on server / only succeeds on serve call GetAuthGameMode
 		AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());
 		if (CurrentGameMode) {
 			CurrentGameMode->OnActorKilled.Broadcast(DamageCauser, GetOwner(), InstigatedBy);
