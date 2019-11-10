@@ -88,7 +88,7 @@ void USHealthComponent::HandleDamage(AActor * DamagedActor, float Damage, const 
 
 	if (CurrentGameMode) {
 		FVector WidgetDirection = GetOwner()->GetTargetLocation();
-		CurrentGameMode->OnHitEvent.Broadcast(WidgetDirection, Damage);
+		CurrentGameMode->OnHitEvent.Broadcast(WidgetDirection, Damage, GetOwner());
 	}
 
 	// only valid on server / only succeeds on serve call GetAuthGameMode
