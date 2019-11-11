@@ -177,23 +177,17 @@ void AHMWeapon::PlayImpactEffect(EPhysicalSurface SurfaceType, FVector ImpactPoi
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SelectedEffect, ImpactPoint, shotDirection.Rotation());
 	}
 }
- // server play
+ // Server Play
 void AHMWeapon::OnRep_HitScanTrace()
 {
-
 	PlayerWeaponFireEffects(HitScan.TraceEnd);
-
 	PlayImpactEffect(HitScan.SurfaceType, HitScan.TraceEnd);
 }
 
 // doesn't need to specified in the header file, unreal header tool auto generates this for us
-
-
 void AHMWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const
 {
-
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
 	DOREPLIFETIME_CONDITION(AHMWeapon, HitScan, COND_SkipOwner);
 }
 

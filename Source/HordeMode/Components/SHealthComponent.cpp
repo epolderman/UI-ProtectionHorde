@@ -12,7 +12,6 @@ USHealthComponent::USHealthComponent()
 	DefaultHealth = 100.0f;
 	bIsDead = false;
 	TeamNumber = 255;
-
 	SetIsReplicated(true);
 }
 
@@ -42,12 +41,11 @@ void USHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// health should be dictated only on the server
+	// health should be dictated on the server only
 	if (GetOwnerRole() == ROLE_Authority) {
-
 		AActor * myOwner = GetOwner();
 		if (myOwner) {
-			// binding a delegate on the OnTakeAnyDamage delegate => which then broadcasts another delegate
+			// onTakeAnyDamage delegate -> HandleDamage delegate => Blueprint invoke some function
 			myOwner->OnTakeAnyDamage.AddDynamic(this, &USHealthComponent::HandleDamage);
 		}
 	}
@@ -84,26 +82,20 @@ void USHealthComponent::HandleDamage(AActor * DamagedActor, float Damage, const 
 	bIsDead = Health <= 0.0f;
 	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
 
+	// only valid on server / only succeeds on serve call GetAuthGameMode
 	AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());
 
 	if (CurrentGameMode) {
 		FVector WidgetDirection = GetOwner()->GetTargetLocation();
-		CurrentGameMode->OnHitEvent.Broadcast(WidgetDirection, Damage, GetOwner());
+		CurrentGameMode->OnHitEvent.Broadcast(WidgetDirection, Damage, GetOwner(), DamageCauser);
 	}
 
-	// only valid on server / only succeeds on serve call GetAuthGameMode
-	if (bIsDead) {
-		AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());
-		if (CurrentGameMode) {
-			CurrentGameMode->OnActorKilled.Broadcast(DamageCauser, GetOwner(), InstigatedBy);
-		}
-	}
+	if (bIsDead && CurrentGameMode)
+	CurrentGameMode->OnActorKilled.Broadcast(DamageCauser, GetOwner(), InstigatedBy);
 }
 void USHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const
 {
-
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
 	DOREPLIFETIME(USHealthComponent, Health);
 }
 

@@ -18,7 +18,7 @@ enum class EWaveState : uint8;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnActorKilledSig, AActor*, killer,  AActor*, victim, AController*, controlledBy);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnTargetHitEvent, FVector, LocationHit, float, HitValue, AActor*, HitOwner);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnTargetHitEvent, FVector, LocationHit, float, HitValue, AActor*, HitOwner, AActor*, HitCauser);
 
 UCLASS()
 class HORDEMODE_API AHMGameMode : public AGameModeBase
