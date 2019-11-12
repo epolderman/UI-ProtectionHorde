@@ -46,7 +46,7 @@ void USHealthComponent::BeginPlay()
 		AActor * myOwner = GetOwner();
 		if (myOwner) {
 			// onTakeAnyDamage delegate -> HandleDamage delegate => Blueprint invoke some function
-			myOwner->OnTakeAnyDamage.AddDynamic(this, &USHealthComponent::HandleDamage);
+			myOwner->OnTakePointDamage.AddDynamic(this, &USHealthComponent::HandleDamageHit);
 		}
 	}
 	Health = DefaultHealth;
@@ -70,29 +70,30 @@ void USHealthComponent::Heal(float HealAmount)
 	OnHealthChanged.Broadcast(this, Health, -HealAmount, nullptr, nullptr, nullptr);
 }
 
-void USHealthComponent::HandleDamage(AActor * DamagedActor, float Damage, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser)
+void USHealthComponent::HandleDamageHit(AActor * DamagedActor, float Damage, AController * InstigatedBy, FVector HitLocation, UPrimitiveComponent * FHitComponent, FName BoneName, FVector ShotFromDirection, const UDamageType * DamageType, AActor * DamageCauser)
 {
 	if (Damage <= 0.0f || bIsDead)
-	return;
+		return;
 
 	if (DamageCauser != DamagedActor && IsFriendly(DamagedActor, DamageCauser))
-	return;
+		return;
 
 	Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
 	bIsDead = Health <= 0.0f;
+
 	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
 
 	// only valid on server / only succeeds on serve call GetAuthGameMode
 	AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());
 
-	if (CurrentGameMode) {
-		FVector WidgetDirection = GetOwner()->GetTargetLocation();
-		CurrentGameMode->OnHitEvent.Broadcast(WidgetDirection, Damage, GetOwner(), DamageCauser);
-	}
+	if (CurrentGameMode)
+		CurrentGameMode->OnHitEvent.Broadcast(HitLocation,ShotFromDirection, Damage, GetOwner());
 
 	if (bIsDead && CurrentGameMode)
-	CurrentGameMode->OnActorKilled.Broadcast(DamageCauser, GetOwner(), InstigatedBy);
+		CurrentGameMode->OnActorKilled.Broadcast(DamageCauser, GetOwner(), InstigatedBy);
 }
+
+
 void USHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
