@@ -206,6 +206,7 @@ void AHMCharacter::OnHealthChanged(USHealthComponent* HealthComp, float Health, 
 {
 	if (Health <= 0.0f && !isDead) {
 		isDead = true;
+		StopFire();
 		GetMovementComponent()->StopMovementImmediately();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		DetachFromControllerPendingDestroy();
