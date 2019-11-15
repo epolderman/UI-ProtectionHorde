@@ -73,7 +73,7 @@ protected:
 
 	/* Weapons */
 	UPROPERTY(Replicated)
-	AHMWeapon * currentWeapon;
+	AHMWeapon * CurrentWeapon;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	TSubclassOf<AHMWeapon> StarterWeaponClass;
@@ -88,12 +88,10 @@ protected:
 
 	void SpawnWeapon(EWeaponState &weaponIndex);
 
-
-
-	EWeaponState currentWeaponIndex;
+	EWeaponState CurrentWeaponIndex;
 
 	UFUNCTION()
-	void HandleWeaponChange(EWeaponState currentWeaponIndex);
+	void HandleWeaponChange(EWeaponState IncomingWeaponIndex);
 	/* End Weapons */
 
 	/* Health */

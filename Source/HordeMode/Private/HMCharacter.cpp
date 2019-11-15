@@ -10,6 +10,7 @@
 #include <HordeMode/HordeMode.h>
 #include "HordeMode/Components/SHealthComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "HMPlayerState.h"
 
 /*	
 	Notes / Hot keys 
@@ -63,53 +64,64 @@ void AHMCharacter::BeginPlay()
 
 	Weapons.Add(StarterWeaponClass);
 	Weapons.Add(SecondaryWeaponClass);
-	currentWeaponIndex = EWeaponState::Regular;
+	CurrentWeaponIndex = EWeaponState::Regular;
 
 
 	if (Role == ROLE_Authority) {
 		// could be dedicated server, or a client acting as a server
-		SpawnWeapon(currentWeaponIndex);
+		SpawnWeapon(CurrentWeaponIndex);
 	}
 }
 
 void AHMCharacter::SpawnWeapon(EWeaponState &weaponIndex) 
 {
-		int index = weaponIndex == EWeaponState::Grenade ? 1 : 0;
+		int32 index = weaponIndex == EWeaponState::Grenade ? 1 : 0;
 
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		currentWeapon = GetWorld()->SpawnActor<AHMWeapon>(Weapons[index], FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
-		if (currentWeapon) {
-
-			currentWeapon->SetOwner(this);
-			currentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponAttachmentSocketName);
+		CurrentWeapon = GetWorld()->SpawnActor<AHMWeapon>(Weapons[index], FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+		if (CurrentWeapon) {
+			CurrentWeapon->SetOwner(this);
+			CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponAttachmentSocketName);
 			HandleWeaponChange(weaponIndex);
 		}
 }
 
+/*
+
+	This weapon breaks replication and damage currently when we switch the weapon
+	The weapon data needs held in player state WIP
+
+*/
 void AHMCharacter::SwitchWeapon()
 {
-	if (currentWeapon) {
-		currentWeapon->Destroy();
-	}
-	currentWeaponIndex = currentWeaponIndex == EWeaponState::Regular ? EWeaponState::Grenade : EWeaponState::Regular;
-	SpawnWeapon(currentWeaponIndex);
+	if (CurrentWeapon) 
+	CurrentWeapon->Destroy();
+	
+	CurrentWeaponIndex = CurrentWeaponIndex == EWeaponState::Regular ? EWeaponState::Grenade : EWeaponState::Regular;
+
+	//AController * OwningPlayerController = GetController();
+	//if (OwningPlayerController) {
+	//	AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);
+	//	PlayerState->UpdateWeaponIndex(CurrentWeaponIndex);
+	//}
+
+	SpawnWeapon(CurrentWeaponIndex);
 }
 
-void AHMCharacter::HandleWeaponChange(EWeaponState currentWeaponIndex) {
+// ui change -> different reticles, etc..
+void AHMCharacter::HandleWeaponChange(EWeaponState IncomingWeaponIndex) {
 	
 	if (OnWeaponChange.IsBound()) {
-		OnWeaponChange.Broadcast(currentWeaponIndex);
+		OnWeaponChange.Broadcast(IncomingWeaponIndex);
 	}
 }
 
 void AHMCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	float targetFOV = isZooming ? zoomedFOV : defaultFOV;
 	float currentFOV = FMath::FInterpTo(CameraComponent->FieldOfView,targetFOV,DeltaTime,zoomSpeed);
-
 	CameraComponent->SetFieldOfView(currentFOV);
 }
 
@@ -121,18 +133,13 @@ void AHMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("MoveRight", this, &AHMCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("LookUp", this, &AHMCharacter::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("Turn", this, &AHMCharacter::AddControllerYawInput);
-
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AHMCharacter::BeginCrouch);
 	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &AHMCharacter::EndCrouch);
-
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AHMCharacter::JumpAction);
-
 	PlayerInputComponent->BindAction("BeginZoom", IE_Pressed, this, &AHMCharacter::BeginZoomAction);
 	PlayerInputComponent->BindAction("BeginZoom", IE_Released, this, &AHMCharacter::EndZoomAction);
-
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AHMCharacter::StartFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AHMCharacter::StopFire);
-
 	PlayerInputComponent->BindAction("SwitchWeapon", IE_Pressed, this, &AHMCharacter::SwitchWeapon);
 }
 
@@ -191,14 +198,14 @@ void AHMCharacter::EndZoomAction()
 
 void AHMCharacter::StartFire()
 {
-	if (currentWeapon)
-	currentWeapon->StartFire();
+	if (CurrentWeapon)
+	CurrentWeapon->StartFire();
 }
 
 void AHMCharacter::StopFire()
 {
-	if (currentWeapon)
-	currentWeapon->StopFire();
+	if (CurrentWeapon)
+	CurrentWeapon->StopFire();
 }
 
 void AHMCharacter::OnHealthChanged(USHealthComponent* HealthComp, float Health, float HealthDelta, 
@@ -210,7 +217,7 @@ void AHMCharacter::OnHealthChanged(USHealthComponent* HealthComp, float Health, 
 		GetMovementComponent()->StopMovementImmediately();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		DetachFromControllerPendingDestroy();
-		currentWeapon->SetLifeSpan(timePlayerIsRemovedFromWorld);
+		CurrentWeapon->SetLifeSpan(timePlayerIsRemovedFromWorld);
 		SetLifeSpan(timePlayerIsRemovedFromWorld);
 	}
 }
@@ -220,7 +227,7 @@ void AHMCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLife
 	
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AHMCharacter, currentWeapon);
+	DOREPLIFETIME(AHMCharacter, CurrentWeapon);
 
 	DOREPLIFETIME(AHMCharacter, isDead);
 }
