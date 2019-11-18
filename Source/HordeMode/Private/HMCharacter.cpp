@@ -61,16 +61,13 @@ void AHMCharacter::BeginPlay()
 	
 	defaultFOV = CameraComponent->FieldOfView;
 	HealthComponent->OnHealthChanged.AddDynamic(this, &AHMCharacter::OnHealthChanged);
-
 	Weapons.Add(StarterWeaponClass);
 	Weapons.Add(SecondaryWeaponClass);
 	CurrentWeaponIndex = EWeaponState::Regular;
 
-
-	if (Role == ROLE_Authority) {
-		// could be dedicated server, or a client acting as a server
-		SpawnWeapon(CurrentWeaponIndex);
-	}
+	// dedicated or client listen server (hosting)
+	if (Role == ROLE_Authority) 
+	SpawnWeapon(CurrentWeaponIndex);
 }
 
 void AHMCharacter::SpawnWeapon(EWeaponState &weaponIndex) 
@@ -83,6 +80,7 @@ void AHMCharacter::SpawnWeapon(EWeaponState &weaponIndex)
 		if (CurrentWeapon) {
 			CurrentWeapon->SetOwner(this);
 			CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponAttachmentSocketName);
+			UE_LOG(LogTemp, Warning, TEXT("CurrentWeaponChange %i"), index);
 			HandleWeaponChange(weaponIndex);
 		}
 }
@@ -102,6 +100,7 @@ void AHMCharacter::SwitchWeapon()
 
 	//AController * OwningPlayerController = GetController();
 	//if (OwningPlayerController) {
+	//	UE_LOG(LogTemp, Warning, TEXT("Updating Player State Index--->"));
 	//	AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);
 	//	PlayerState->UpdateWeaponIndex(CurrentWeaponIndex);
 	//}
@@ -224,12 +223,9 @@ void AHMCharacter::OnHealthChanged(USHealthComponent* HealthComp, float Health, 
 
 void AHMCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const 
 {
-	
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(AHMCharacter, CurrentWeapon);
-
 	DOREPLIFETIME(AHMCharacter, isDead);
+	DOREPLIFETIME(AHMCharacter, CurrentWeapon);
 }
 
 

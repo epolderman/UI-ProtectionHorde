@@ -44,6 +44,7 @@ void AHMPlayerState::AddKill(int32 Kill)
 void AHMPlayerState::UpdateWeaponIndex(EWeaponState WeaponIndex)
 {
 	int32 index = WeaponIndex == EWeaponState::Regular ? 0 : 1;
+	UE_LOG(LogTemp, Warning, TEXT("PlayerState settings weapon index %i"), index);
 	CurrentWeaponIndex = index;
 }
 
@@ -67,6 +68,7 @@ void AHMPlayerState::OnRep_Kills()
 
 void AHMPlayerState::OnRep_CurrentWeaponIndex()
 {
+	UE_LOG(LogTemp, Warning, TEXT("OnRepIndex %i"), CurrentWeaponIndex);
 	AHMCharacter * Character = Cast<AHMCharacter>(UGameplayStatics::GetPlayerController(this, 0)->GetCharacter());
 	if (Character) {
 		// handle weapon change / notify / spawn weapon
