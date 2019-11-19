@@ -19,14 +19,14 @@ class HORDEMODE_API AHMPlayerState : public APlayerState
 	UFUNCTION()
 	void OnRep_Kills();
 
-	UFUNCTION()
-	void OnRep_CurrentWeaponIndex();
+	//UFUNCTION()
+	//void OnRep_CurrentWeaponIndex();
 
 	UPROPERTY(ReplicatedUsing = OnRep_Kills, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = "Kills")
 	int32 Kills;
 
-	UPROPERTY(ReplicatedUsing = OnRep_CurrentWeaponIndex)
-	int32 CurrentWeaponIndex;
+	/*UPROPERTY(ReplicatedUsing = OnRep_CurrentWeaponIndex)
+	int32 CurrentWeaponIndex;*/
 public:
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	void AddScore(float DeltaScore);
@@ -36,12 +36,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Kills")
 	void AddKill(int32 KillCount);
 
-	UFUNCTION()
-	void UpdateWeaponIndex(EWeaponState WeaponIndex);
+	/*UFUNCTION()
+	void UpdateWeaponIndex(EWeaponState WeaponIndex);*/
 
 	int32 GetKills() const;
 
-	int32 GetCurrentWeaponIndex() const;
+	/*int32 GetCurrentWeaponIndex() const;*/
 };
 
 

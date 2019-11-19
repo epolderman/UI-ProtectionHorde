@@ -86,12 +86,24 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, Category="Weapon")
 	FName WeaponAttachmentSocketName;
 
-	void SpawnWeapon(EWeaponState &weaponIndex);
+	UFUNCTION()
+	void SpawnWeapon();
 
+	// push request to the hosting server, withValidation = ...
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerSpawnWeapon();
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerWeaponIndexChange();
+
+	UFUNCTION()
+	void WeaponIndexChange();
+
+	UPROPERTY(Replicated)
 	EWeaponState CurrentWeaponIndex;
 
 	UFUNCTION()
-	void HandleWeaponChange(EWeaponState IncomingWeaponIndex);
+	void HandleWeaponChange();
 	/* End Weapons */
 
 	/* Health */

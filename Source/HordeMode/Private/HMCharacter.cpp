@@ -67,52 +67,86 @@ void AHMCharacter::BeginPlay()
 
 	// dedicated or client listen server (hosting)
 	if (Role == ROLE_Authority) 
-	SpawnWeapon(CurrentWeaponIndex);
+	SpawnWeapon();
 }
 
-void AHMCharacter::SpawnWeapon(EWeaponState &weaponIndex) 
+/* 
+
+@todo: clean up nasty weapon replication logic
+sync issues with weapon change logic from client / server
+not destroying weapon on client
+this should live on player state
+whole refactor on weapon changing logic
+*/
+void AHMCharacter::SpawnWeapon() 
 {
-		int32 index = weaponIndex == EWeaponState::Grenade ? 1 : 0;
+		int32 NextIndex = CurrentWeaponIndex == EWeaponState::Regular ? 0 : 1;
+
+		if (Role < ROLE_Authority) {
+			ServerSpawnWeapon();
+		}
+
+		if (CurrentWeapon) {
+			CurrentWeapon->Destroy();
+		}
 
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		CurrentWeapon = GetWorld()->SpawnActor<AHMWeapon>(Weapons[index], FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+		CurrentWeapon = GetWorld()->SpawnActor<AHMWeapon>(Weapons[NextIndex], FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 		if (CurrentWeapon) {
 			CurrentWeapon->SetOwner(this);
 			CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponAttachmentSocketName);
-			UE_LOG(LogTemp, Warning, TEXT("CurrentWeaponChange %i"), index);
-			HandleWeaponChange(weaponIndex);
+			if (Role == ROLE_Authority) {
+				UE_LOG(LogTemp, Warning, TEXT("Server:CurrentWeaponChange %i"), NextIndex);
+			}
+			else {
+				UE_LOG(LogTemp, Warning, TEXT("Client:CurrentWeaponChange %i"), NextIndex);
+			}
+			HandleWeaponChange();
 		}
 }
 
-/*
+void AHMCharacter::ServerWeaponIndexChange_Implementation()
+{
+	WeaponIndexChange();
+}
 
-	This weapon breaks replication and damage currently when we switch the weapon
-	The weapon data needs held in player state WIP
+bool AHMCharacter::ServerWeaponIndexChange_Validate()
+{
+	return true;
+}
 
-*/
+void AHMCharacter::ServerSpawnWeapon_Implementation()
+{
+	SpawnWeapon();
+}
+
+bool AHMCharacter::ServerSpawnWeapon_Validate()
+{
+	return true;
+}
+
 void AHMCharacter::SwitchWeapon()
 {
-	if (CurrentWeapon) 
-	CurrentWeapon->Destroy();
+
+	if (Role < ROLE_Authority) 
+	ServerWeaponIndexChange();
+	else
+	WeaponIndexChange();
 	
+	SpawnWeapon();
+}
+
+void AHMCharacter::WeaponIndexChange()
+{
 	CurrentWeaponIndex = CurrentWeaponIndex == EWeaponState::Regular ? EWeaponState::Grenade : EWeaponState::Regular;
-
-	//AController * OwningPlayerController = GetController();
-	//if (OwningPlayerController) {
-	//	UE_LOG(LogTemp, Warning, TEXT("Updating Player State Index--->"));
-	//	AHMPlayerState * PlayerState = Cast<AHMPlayerState>(OwningPlayerController->PlayerState);
-	//	PlayerState->UpdateWeaponIndex(CurrentWeaponIndex);
-	//}
-
-	SpawnWeapon(CurrentWeaponIndex);
 }
 
 // ui change -> different reticles, etc..
-void AHMCharacter::HandleWeaponChange(EWeaponState IncomingWeaponIndex) {
+void AHMCharacter::HandleWeaponChange() {
 	
 	if (OnWeaponChange.IsBound()) {
-		OnWeaponChange.Broadcast(IncomingWeaponIndex);
+		OnWeaponChange.Broadcast(CurrentWeaponIndex);
 	}
 }
 
@@ -226,6 +260,8 @@ void AHMCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLife
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AHMCharacter, isDead);
 	DOREPLIFETIME(AHMCharacter, CurrentWeapon);
+	DOREPLIFETIME(AHMCharacter, CurrentWeaponIndex);
+
 }
 
 
