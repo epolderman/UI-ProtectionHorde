@@ -72,9 +72,10 @@ void AHMCharacter::BeginPlay()
 }
 
 /*	
-	There is a bug on the client you are playing on that is not rendering the current weapon
-	Nitpick bug on the UI reticle Y location
-	This needs a total refactor. Too nasty. 
+	1. There is a bug on the client you are playing on that is not rendering the current weapon after
+	the first successful change. 
+	2. Nitpick bug on the UI reticle Y location
+	3. This needs a total refactor. Too nasty. 
 */
 void AHMCharacter::SpawnWeapon() 
 {
@@ -85,6 +86,7 @@ void AHMCharacter::SpawnWeapon()
 		
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
 	CurrentWeapon = GetWorld()->SpawnActor<AHMWeapon>(Weapons[NextIndex], FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 	if (CurrentWeapon) {
 		CurrentWeapon->SetOwner(this);
@@ -121,11 +123,9 @@ void AHMCharacter::SwitchWeapon()
 {
 	if (Role < ROLE_Authority)
 	ServerWeaponIndexChange();
-	else {
-	WeaponIndexChange();
+
 	if (CurrentWeapon)
-	CurrentWeapon->Destroy();
-	}
+		CurrentWeapon->Destroy();
 
 	SpawnWeapon();
 }
