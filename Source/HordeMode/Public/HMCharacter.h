@@ -103,7 +103,7 @@ protected:
 	EWeaponState CurrentWeaponIndex;
 
 	UFUNCTION()
-	void HandleWeaponChange();
+	void UpdateWeaponReticle();
 	/* End Weapons */
 
 	/* Health */

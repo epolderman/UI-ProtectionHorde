@@ -70,40 +70,22 @@ void AHMCharacter::BeginPlay()
 	SpawnWeapon();
 }
 
-/* 
-
-@todo: clean up nasty weapon replication logic
-sync issues with weapon change logic from client / server
-not destroying weapon on client
-this should live on player state
-whole refactor on weapon changing logic
-*/
 void AHMCharacter::SpawnWeapon() 
 {
-		int32 NextIndex = CurrentWeaponIndex == EWeaponState::Regular ? 0 : 1;
+	int32 NextIndex = CurrentWeaponIndex == EWeaponState::Regular ? 0 : 1;
 
-		if (Role < ROLE_Authority) {
-			ServerSpawnWeapon();
-		}
-
-		if (CurrentWeapon) {
-			CurrentWeapon->Destroy();
-		}
-
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		CurrentWeapon = GetWorld()->SpawnActor<AHMWeapon>(Weapons[NextIndex], FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
-		if (CurrentWeapon) {
-			CurrentWeapon->SetOwner(this);
-			CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponAttachmentSocketName);
-			if (Role == ROLE_Authority) {
-				UE_LOG(LogTemp, Warning, TEXT("Server:CurrentWeaponChange %i"), NextIndex);
-			}
-			else {
-				UE_LOG(LogTemp, Warning, TEXT("Client:CurrentWeaponChange %i"), NextIndex);
-			}
-			HandleWeaponChange();
-		}
+	if (Role < ROLE_Authority)
+		ServerSpawnWeapon();
+		
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	CurrentWeapon = GetWorld()->SpawnActor<AHMWeapon>(Weapons[NextIndex], FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+	if (CurrentWeapon) {
+		CurrentWeapon->SetOwner(this);
+		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponAttachmentSocketName);
+		UpdateWeaponReticle();
+	}
+		
 }
 
 void AHMCharacter::ServerWeaponIndexChange_Implementation()
@@ -111,14 +93,17 @@ void AHMCharacter::ServerWeaponIndexChange_Implementation()
 	WeaponIndexChange();
 }
 
+void AHMCharacter::ServerSpawnWeapon_Implementation()
+{
+	if (CurrentWeapon)
+		CurrentWeapon->Destroy();
+
+	SpawnWeapon();
+}
+
 bool AHMCharacter::ServerWeaponIndexChange_Validate()
 {
 	return true;
-}
-
-void AHMCharacter::ServerSpawnWeapon_Implementation()
-{
-	SpawnWeapon();
 }
 
 bool AHMCharacter::ServerSpawnWeapon_Validate()
@@ -128,12 +113,14 @@ bool AHMCharacter::ServerSpawnWeapon_Validate()
 
 void AHMCharacter::SwitchWeapon()
 {
-
-	if (Role < ROLE_Authority) 
+	if (Role < ROLE_Authority)
 	ServerWeaponIndexChange();
-	else
-	WeaponIndexChange();
-	
+	else {
+		WeaponIndexChange();
+		if (CurrentWeapon)
+			CurrentWeapon->Destroy();
+	}
+
 	SpawnWeapon();
 }
 
@@ -142,12 +129,9 @@ void AHMCharacter::WeaponIndexChange()
 	CurrentWeaponIndex = CurrentWeaponIndex == EWeaponState::Regular ? EWeaponState::Grenade : EWeaponState::Regular;
 }
 
-// ui change -> different reticles, etc..
-void AHMCharacter::HandleWeaponChange() {
+void AHMCharacter::UpdateWeaponReticle() {
 	
-	if (OnWeaponChange.IsBound()) {
-		OnWeaponChange.Broadcast(CurrentWeaponIndex);
-	}
+	OnWeaponChange.Broadcast(CurrentWeaponIndex);
 }
 
 void AHMCharacter::Tick(float DeltaTime)
