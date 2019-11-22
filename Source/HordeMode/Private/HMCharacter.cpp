@@ -71,6 +71,11 @@ void AHMCharacter::BeginPlay()
 	UpdateWeaponReticle();
 }
 
+/*	
+	There is a bug on the client you are playing on that is not rendering the current weapon
+	Nitpick bug on the UI reticle Y location
+	This needs a total refactor. Too nasty. 
+*/
 void AHMCharacter::SpawnWeapon() 
 {
 	int32 NextIndex = CurrentWeaponIndex == EWeaponState::Regular ? 0 : 1;
@@ -128,6 +133,7 @@ void AHMCharacter::SwitchWeapon()
 void AHMCharacter::WeaponIndexChange()
 {
 	CurrentWeaponIndex = CurrentWeaponIndex == EWeaponState::Regular ? EWeaponState::Grenade : EWeaponState::Regular;
+	
 }
 
 void AHMCharacter::UpdateWeaponReticle() {
