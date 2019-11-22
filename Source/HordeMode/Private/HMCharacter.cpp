@@ -54,7 +54,6 @@ AHMCharacter::AHMCharacter()
 	WeaponAttachmentSocketName = "WeaponSocket";
 }
 
-// executed on both client and server / executes on server -> replicates weapon on client?
 void AHMCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -65,9 +64,11 @@ void AHMCharacter::BeginPlay()
 	Weapons.Add(SecondaryWeaponClass);
 	CurrentWeaponIndex = EWeaponState::Regular;
 
-	// dedicated or client listen server (hosting)
+	// dedicated / client server
 	if (Role == ROLE_Authority) 
 	SpawnWeapon();
+
+	UpdateWeaponReticle();
 }
 
 void AHMCharacter::SpawnWeapon() 
@@ -75,7 +76,7 @@ void AHMCharacter::SpawnWeapon()
 	int32 NextIndex = CurrentWeaponIndex == EWeaponState::Regular ? 0 : 1;
 
 	if (Role < ROLE_Authority)
-		ServerSpawnWeapon();
+	ServerSpawnWeapon();
 		
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -116,9 +117,9 @@ void AHMCharacter::SwitchWeapon()
 	if (Role < ROLE_Authority)
 	ServerWeaponIndexChange();
 	else {
-		WeaponIndexChange();
-		if (CurrentWeapon)
-			CurrentWeapon->Destroy();
+	WeaponIndexChange();
+	if (CurrentWeapon)
+	CurrentWeapon->Destroy();
 	}
 
 	SpawnWeapon();
