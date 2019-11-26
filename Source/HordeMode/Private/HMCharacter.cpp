@@ -73,7 +73,7 @@ void AHMCharacter::BeginPlay()
 
 /*	
 	1. There is a bug on the client you are playing on that is not rendering the current weapon after
-	the first successful change. 
+	the first successful change. (Fixed for now, return statement in SpawnWeapon)
 	2. Nitpick bug on the UI reticle Y location
 	3. This needs a total refactor. Too nasty. 
 */
@@ -81,12 +81,17 @@ void AHMCharacter::SpawnWeapon()
 {
 	int32 NextIndex = CurrentWeaponIndex == EWeaponState::Regular ? 0 : 1;
 
-	if (Role < ROLE_Authority)
-	ServerSpawnWeapon();
-		
+	if (CurrentWeapon)
+		CurrentWeapon->Destroy();
+
+	if (Role < ROLE_Authority) {
+		ServerSpawnWeapon();
+		return;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Client: %i"), NextIndex);
+	
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
 	CurrentWeapon = GetWorld()->SpawnActor<AHMWeapon>(Weapons[NextIndex], FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 	if (CurrentWeapon) {
 		CurrentWeapon->SetOwner(this);
@@ -103,9 +108,6 @@ void AHMCharacter::ServerWeaponIndexChange_Implementation()
 
 void AHMCharacter::ServerSpawnWeapon_Implementation()
 {
-	if (CurrentWeapon)
-		CurrentWeapon->Destroy();
-
 	SpawnWeapon();
 }
 
@@ -124,8 +126,7 @@ void AHMCharacter::SwitchWeapon()
 	if (Role < ROLE_Authority)
 	ServerWeaponIndexChange();
 
-	if (CurrentWeapon)
-		CurrentWeapon->Destroy();
+	WeaponIndexChange();
 
 	SpawnWeapon();
 }
