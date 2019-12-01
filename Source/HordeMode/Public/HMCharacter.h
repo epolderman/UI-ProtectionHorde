@@ -10,7 +10,6 @@ class USpringArmComponent;
 class AHMWeapon;
 class USHealthComponent;
 
-// TODO: Still a WIP on how weapons should communicate with our weapon class to our HUD
 UENUM(BlueprintType)
 enum class EWeaponState : uint8 {
 	Regular UMETA(DisplayName = "Rifle"),

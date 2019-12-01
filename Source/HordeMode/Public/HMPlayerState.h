@@ -28,12 +28,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Kills")
 	void AddKill(int32 KillCount);
 
-	/*UFUNCTION()
-	void UpdateWeaponIndex(EWeaponState WeaponIndex);*/
-
 	int32 GetKills() const;
-
-	/*int32 GetCurrentWeaponIndex() const;*/
 };
 
 
