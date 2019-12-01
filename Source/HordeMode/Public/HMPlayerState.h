@@ -4,10 +4,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
 #include "HMGameMode.h"
-#include "HMCharacter.h"
 #include "HMPlayerState.generated.h"
 
-/* Replicated Player State Todo: Remove Character include and forward declare*/
 
 UCLASS()
 class HORDEMODE_API AHMPlayerState : public APlayerState
@@ -19,14 +17,8 @@ class HORDEMODE_API AHMPlayerState : public APlayerState
 	UFUNCTION()
 	void OnRep_Kills();
 
-	//UFUNCTION()
-	//void OnRep_CurrentWeaponIndex();
-
 	UPROPERTY(ReplicatedUsing = OnRep_Kills, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = "Kills")
 	int32 Kills;
-
-	/*UPROPERTY(ReplicatedUsing = OnRep_CurrentWeaponIndex)
-	int32 CurrentWeaponIndex;*/
 public:
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	void AddScore(float DeltaScore);
@@ -45,7 +37,7 @@ public:
 };
 
 
-/**
+/*
 GameInstance (an object spawned when you launch the application and that remains the same until you close it)
 GameMode (spawned when a level is loaded)
 GameState (spawned by the gameMode)

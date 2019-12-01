@@ -41,22 +41,10 @@ void AHMPlayerState::AddKill(int32 Kill)
 	Kills += Kill;
 }
 
-//void AHMPlayerState::UpdateWeaponIndex(EWeaponState WeaponIndex)
-//{
-//	int32 index = WeaponIndex == EWeaponState::Regular ? 0 : 1;
-//	UE_LOG(LogTemp, Warning, TEXT("PlayerState settings weapon index %i"), index);
-//	CurrentWeaponIndex = index;
-//}
-
 int32 AHMPlayerState::GetKills() const
 {
 	return Kills;
 }
-
-//int32 AHMPlayerState::GetCurrentWeaponIndex() const
-//{
-//	return CurrentWeaponIndex;
-//}
 
 // Notify HUD
 void AHMPlayerState::OnRep_Kills()
@@ -65,16 +53,6 @@ void AHMPlayerState::OnRep_Kills()
 	if (PlayerHud)
 	PlayerHud->UpdateTotalKills();
 }
-
-//void AHMPlayerState::OnRep_CurrentWeaponIndex()
-//{
-//	UE_LOG(LogTemp, Warning, TEXT("OnRepIndex %i"), CurrentWeaponIndex);
-//	AHMCharacter * Character = Cast<AHMCharacter>(UGameplayStatics::GetPlayerController(this, 0)->GetCharacter());
-//	if (Character) {
-//		// handle weapon change / notify / spawn weapon
-//		UE_LOG(LogTemp, Warning, TEXT("OnRepIndex %i"), CurrentWeaponIndex);
-//	}
-//}
 
 /* Callback to tell the client it has been replicated to clients */
 void AHMPlayerState::OnRep_Score()
@@ -88,6 +66,5 @@ void AHMPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLi
 
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AHMPlayerState, Kills);
-	// DOREPLIFETIME(AHMPlayerState, CurrentWeaponIndex);
 }
 

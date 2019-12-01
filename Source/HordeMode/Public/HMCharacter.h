@@ -17,7 +17,7 @@ enum class EWeaponState : uint8 {
 	Grenade UMETA(DisplayName = "Grenade"),
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponChangeSignature, EWeaponState, currentWeaponIndex);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponChangeSignature, EWeaponState, CurrentWeaponIndex);
 
 UCLASS()
 class HORDEMODE_API AHMCharacter : public ACharacter
@@ -40,6 +40,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void StopFire();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -89,17 +90,19 @@ protected:
 	UFUNCTION()
 	void SpawnWeapon();
 
-	// push request to the hosting server, withValidation = ...
 	UFUNCTION(Server, Reliable, WithValidation)
 	void ServerSpawnWeapon();
 
 	UFUNCTION(Server, Reliable, WithValidation)
-	void ServerWeaponIndexChange();
+	void ServerWeaponChange();
 
 	UFUNCTION()
-	void WeaponIndexChange();
+	void WeaponChange();
 
-	UPROPERTY(Replicated)
+	UFUNCTION()
+	void OnRep_WeaponChangeCallback(EWeaponState LastWeaponIndex);
+
+	UPROPERTY(ReplicatedUsing=OnRep_WeaponChangeCallback)
 	EWeaponState CurrentWeaponIndex;
 
 	UFUNCTION()

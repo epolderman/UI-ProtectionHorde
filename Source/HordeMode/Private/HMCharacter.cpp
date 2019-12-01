@@ -64,19 +64,10 @@ void AHMCharacter::BeginPlay()
 	Weapons.Add(SecondaryWeaponClass);
 	CurrentWeaponIndex = EWeaponState::Regular;
 
-	// dedicated / client server
-	if (Role == ROLE_Authority) 
 	SpawnWeapon();
-
 	UpdateWeaponReticle();
 }
 
-/*	
-	1. There is a bug on the client you are playing on that is not rendering the current weapon after
-	the first successful change. (Fixed for now, return statement in SpawnWeapon)
-	2. Nitpick bug on the UI reticle Y location
-	3. This needs a total refactor. Too nasty. 
-*/
 void AHMCharacter::SpawnWeapon() 
 {
 	int32 NextIndex = CurrentWeaponIndex == EWeaponState::Regular ? 0 : 1;
@@ -88,7 +79,6 @@ void AHMCharacter::SpawnWeapon()
 		ServerSpawnWeapon();
 		return;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Client: %i"), NextIndex);
 	
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -96,14 +86,18 @@ void AHMCharacter::SpawnWeapon()
 	if (CurrentWeapon) {
 		CurrentWeapon->SetOwner(this);
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponAttachmentSocketName);
-		UpdateWeaponReticle();
 	}
 		
 }
 
-void AHMCharacter::ServerWeaponIndexChange_Implementation()
+void AHMCharacter::OnRep_WeaponChangeCallback(EWeaponState LastWeaponIndex) {
+		SpawnWeapon();
+		UpdateWeaponReticle();
+}
+
+void AHMCharacter::ServerWeaponChange_Implementation()
 {
-	WeaponIndexChange();
+	WeaponChange();
 }
 
 void AHMCharacter::ServerSpawnWeapon_Implementation()
@@ -111,7 +105,7 @@ void AHMCharacter::ServerSpawnWeapon_Implementation()
 	SpawnWeapon();
 }
 
-bool AHMCharacter::ServerWeaponIndexChange_Validate()
+bool AHMCharacter::ServerWeaponChange_Validate()
 {
 	return true;
 }
@@ -124,21 +118,15 @@ bool AHMCharacter::ServerSpawnWeapon_Validate()
 void AHMCharacter::SwitchWeapon()
 {
 	if (Role < ROLE_Authority)
-	ServerWeaponIndexChange();
-
-	WeaponIndexChange();
-
-	SpawnWeapon();
+		ServerWeaponChange();
 }
 
-void AHMCharacter::WeaponIndexChange()
+void AHMCharacter::WeaponChange()
 {
 	CurrentWeaponIndex = CurrentWeaponIndex == EWeaponState::Regular ? EWeaponState::Grenade : EWeaponState::Regular;
-	
 }
 
 void AHMCharacter::UpdateWeaponReticle() {
-	
 	OnWeaponChange.Broadcast(CurrentWeaponIndex);
 }
 
