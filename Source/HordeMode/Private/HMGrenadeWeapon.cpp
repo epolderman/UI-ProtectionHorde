@@ -4,6 +4,8 @@
 #include "Kismet/GameplayStatics.h"
 #include <GameFramework/PlayerController.h>
 
+/* Todo: Network the projectile, redo the reticle, update the projectile reticle */
+
 AHMGrenadeWeapon::AHMGrenadeWeapon()
 {
 	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComponentz"));
