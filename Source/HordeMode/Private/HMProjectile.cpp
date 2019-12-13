@@ -28,6 +28,8 @@ AHMProjectile::AHMProjectile()
 	LaunchVelocity = 350.0f;
 	BaseDamage = 20.0f;
 	DamageRadius = 300.0f;
+	SetReplicates(true);
+	SetReplicateMovement(true);
 }
 
 void AHMProjectile::BeginPlay() {

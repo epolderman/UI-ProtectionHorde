@@ -20,6 +20,10 @@ void AHMGrenadeWeapon::Fire()
 	AActor * WeaponOwner = GetOwner();
 	if (WeaponOwner && ProjectileClass) 
 	{
+
+		if (Role < ROLE_Authority) {
+			ServerFire();
+		}
 		
 		FVector EyeLocation;
 		FRotator EyeRotation;
@@ -40,6 +44,7 @@ void AHMGrenadeWeapon::Fire()
 		PlayerWeaponFireEffects(EyeLocation);
 	}
 }
+
 
 void AHMGrenadeWeapon::PlayerWeaponFireEffects(FVector &TracerEndPoint) {
 
