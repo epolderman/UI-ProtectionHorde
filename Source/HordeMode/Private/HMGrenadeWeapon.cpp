@@ -23,6 +23,7 @@ void AHMGrenadeWeapon::Fire()
 
 		if (Role < ROLE_Authority) {
 			ServerFire();
+			return;
 		}
 		
 		FVector EyeLocation;
