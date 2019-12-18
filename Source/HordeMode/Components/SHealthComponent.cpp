@@ -83,11 +83,11 @@ void USHealthComponent::HandleDamageHit(AActor * DamagedActor, float Damage, ACo
 
 	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
 
-	// only valid on server / only succeeds on serve call GetAuthGameMode
+	/* Call will only succeed on the server */
 	AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());
 
 	if (CurrentGameMode)
-		CurrentGameMode->OnHitEvent.Broadcast(HitLocation,ShotFromDirection, Damage, GetOwner());
+		CurrentGameMode->OnHitEvent.Broadcast(HitLocation, ShotFromDirection, Damage, GetOwner());
 
 	if (bIsDead && CurrentGameMode)
 		CurrentGameMode->OnActorKilled.Broadcast(DamageCauser, GetOwner(), InstigatedBy);

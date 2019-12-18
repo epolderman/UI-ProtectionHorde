@@ -55,12 +55,10 @@ void AHMProjectile::BeginPlay() {
 }
 
 void AHMProjectile::OnExplode() {
-	if (ExplodeEffect) {
 
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplodeEffect, GetActorLocation(), GetActorRotation());
+	if (ExplodeEffect) 
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplodeEffect, GetActorLocation(), GetActorRotation());
 
-	}
-	//RadialFoceComponent->FireImpulse();
 	UGameplayStatics::ApplyRadialDamage(GetWorld(), BaseDamage, GetActorLocation(), DamageRadius, DamageType, TArray<AActor*>(), this, this->GetInstigatorController(),true,ECC_Visibility);
 }
 

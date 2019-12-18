@@ -16,7 +16,7 @@
 /* Rifle Blueprint = Default Weapon */
 
 
-const int DISTANCE = 10000;
+const int32 DISTANCE = 10000;
 
 AHMWeapon::AHMWeapon()
 {

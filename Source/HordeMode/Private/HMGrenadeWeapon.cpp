@@ -38,9 +38,8 @@ void AHMGrenadeWeapon::Fire()
 
 		GetWorld()->SpawnActor<AHMProjectile>(ProjectileClass, MuzzleLocation, EyeRotation, ActorSpawnParams);
 
-		if (MuzzleEffect) {
-			UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, MeshComponent, MuzzleSocketName);
-		}
+		if (MuzzleEffect)
+		UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, MeshComponent, MuzzleSocketName);
 		
 		PlayerWeaponFireEffects(EyeLocation);
 	}
@@ -49,12 +48,14 @@ void AHMGrenadeWeapon::Fire()
 
 void AHMGrenadeWeapon::PlayerWeaponFireEffects(FVector &TracerEndPoint) {
 
-	APawn * myOwner = Cast<APawn>(GetOwner());
-	if (myOwner) {
-		APlayerController * controller = Cast<APlayerController>(myOwner->GetController());
-		if (controller && FireCameraShake) {
-			controller->ClientPlayCameraShake(FireCameraShake);
-		}
+	APawn * PawnOwner = Cast<APawn>(GetOwner());
+
+	if (PawnOwner) {
+
+		APlayerController * PlayerController = Cast<APlayerController>(PawnOwner->GetController());
+
+		if (PlayerController && FireCameraShake)
+		PlayerController->ClientPlayCameraShake(FireCameraShake);
 	}
 
 }
