@@ -59,7 +59,9 @@ void AHMProjectile::OnExplode() {
 	if (ExplodeEffect) 
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplodeEffect, GetActorLocation(), GetActorRotation());
 
-	UGameplayStatics::ApplyRadialDamage(GetWorld(), BaseDamage, GetActorLocation(), DamageRadius, DamageType, TArray<AActor*>(), this, this->GetInstigatorController(),true,ECC_Visibility);
+	if (Role == ROLE_Authority)
+		UGameplayStatics::ApplyRadialDamage(GetWorld(), BaseDamage, GetActorLocation(), 
+			DamageRadius, DamageType, TArray<AActor*>(), this, this->GetInstigatorController(), true, ECC_Visibility);
 }
 
 void AHMProjectile::LifeSpanExpired()

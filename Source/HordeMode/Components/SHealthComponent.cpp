@@ -43,10 +43,12 @@ void USHealthComponent::BeginPlay()
 
 	// health should be dictated on the server only
 	if (GetOwnerRole() == ROLE_Authority) {
-		AActor * myOwner = GetOwner();
-		if (myOwner) {
+		AActor * MyOwner = GetOwner();
+		if (MyOwner) {
 			// onTakeAnyDamage delegate -> HandleDamage delegate => Blueprint invoke some function
-			myOwner->OnTakePointDamage.AddDynamic(this, &USHealthComponent::HandleDamageHit);
+			MyOwner->OnTakePointDamage.AddDynamic(this, &USHealthComponent::HandleDamageHit);
+			MyOwner->OnTakeRadialDamage.AddDynamic(this, &USHealthComponent::HandleRadialDamage);
+		
 		}
 	}
 	Health = DefaultHealth;
@@ -59,6 +61,7 @@ void USHealthComponent::OnRep_Health(float LastHealthValue)
 	OnHealthChanged.Broadcast(this, Health, Damage, nullptr, nullptr, nullptr);
 }
 
+
 void USHealthComponent::Heal(float HealAmount)
 {
 	if (HealAmount <= 0.0f || Health <= 0.0f) {
@@ -68,6 +71,23 @@ void USHealthComponent::Heal(float HealAmount)
 	// clamp = value, min, max
 	Health = FMath::Clamp(Health + HealAmount, 0.0f, DefaultHealth);
 	OnHealthChanged.Broadcast(this, Health, -HealAmount, nullptr, nullptr, nullptr);
+}
+
+/* Todo: Tweak this logic to feel right */
+void USHealthComponent::HandleRadialDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, FVector Origin, FHitResult HitInfo, class AController* InstigatedBy, AActor* DamageCauser)
+{
+	if (Damage <= 0.0f || bIsDead)
+		return;
+
+	Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
+	bIsDead = Health <= 0.0f;
+	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
+
+	/* Call will only succeed on the server */
+	AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());
+
+	if (bIsDead && CurrentGameMode)
+		CurrentGameMode->OnActorKilled.Broadcast(DamageCauser, GetOwner(), InstigatedBy);
 }
 
 void USHealthComponent::HandleDamageHit(AActor * DamagedActor, float Damage, AController * InstigatedBy, FVector HitLocation, UPrimitiveComponent * FHitComponent, FName BoneName, FVector ShotFromDirection, const UDamageType * DamageType, AActor * DamageCauser)
@@ -82,6 +102,7 @@ void USHealthComponent::HandleDamageHit(AActor * DamagedActor, float Damage, ACo
 	bIsDead = Health <= 0.0f;
 
 	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
+	
 
 	/* Call will only succeed on the server */
 	AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());

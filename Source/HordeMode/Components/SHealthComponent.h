@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include <Engine/EngineTypes.h>
 #include "SHealthComponent.generated.h"
 
 // OnHealthChanged Event
@@ -47,8 +48,11 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HealthComponent")
 	float DefaultHealth;
+
+	UFUNCTION()
+	void HandleRadialDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, FVector Origin, FHitResult HitInfo, class AController* InstigatedBy, AActor* DamageCauser);
 	 
 	UFUNCTION()
-	void HandleDamageHit(AActor* DamagedActor, float Damage,  class AController* InstigatedBy, FVector HitLocation, class UPrimitiveComponent* FHitComponent,
-		FName BoneName, FVector ShotFromDirection, const class UDamageType* DamageType, AActor* DamageCauser );
+	void HandleDamageHit(AActor* DamagedActor, float Damage, class AController* InstigatedBy, FVector HitLocation, class UPrimitiveComponent* FHitComponent,
+			FName BoneName, FVector ShotFromDirection, const class UDamageType* DamageType, AActor* DamageCauser);
 };

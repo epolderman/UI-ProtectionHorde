@@ -93,12 +93,14 @@ void AHMWeapon::Fire()
 
 			//blocking hit! process damage
 			AActor * HitActor = Hit.GetActor();
+
 			EPhysicalSurface SurfaceType = UPhysicalMaterial::DetermineSurfaceType(Hit.PhysMaterial.Get());
 
 			float damageApplied = BaseHitPointDamage;
-			if (SurfaceType == SURFACE_FLESH_VULNERABLE) {
-				damageApplied = 2.0f;
-			}
+
+			if (SurfaceType == SURFACE_FLESH_VULNERABLE)
+			damageApplied = 2.0f;
+			
 			UGameplayStatics::ApplyPointDamage(HitActor, damageApplied, ShotDirection, Hit, Owner->GetInstigatorController(), Owner, DamageType);
 
 			PlayImpactEffect(SurfaceType, Hit.ImpactPoint);
