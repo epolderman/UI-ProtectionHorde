@@ -45,8 +45,9 @@ void USHealthComponent::BeginPlay()
 	if (GetOwnerRole() == ROLE_Authority) {
 		AActor * MyOwner = GetOwner();
 		if (MyOwner) {
-			// onTakeAnyDamage delegate -> HandleDamage delegate => Blueprint invoke some function
+			// Rifle Damage = onTakePointDamage delegate -> HandleDamageHit -> Blueprint / C++ Update UI
 			MyOwner->OnTakePointDamage.AddDynamic(this, &USHealthComponent::HandleDamageHit);
+			// Grenade Damage
 			MyOwner->OnTakeRadialDamage.AddDynamic(this, &USHealthComponent::HandleRadialDamage);
 		
 		}
@@ -64,24 +65,22 @@ void USHealthComponent::OnRep_Health(float LastHealthValue)
 
 void USHealthComponent::Heal(float HealAmount)
 {
-	if (HealAmount <= 0.0f || Health <= 0.0f) {
-		return;
-	}
+	if (HealAmount <= 0.0f || Health <= 0.0f)
+	return;
 	
 	// clamp = value, min, max
 	Health = FMath::Clamp(Health + HealAmount, 0.0f, DefaultHealth);
 	OnHealthChanged.Broadcast(this, Health, -HealAmount, nullptr, nullptr, nullptr);
 }
 
-// @todo Clean this up too much null checking and grendate weapon no firing / spawning projectile because of collision when enemies are in your face
 void USHealthComponent::HandleRadialDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, FVector Origin, FHitResult HitInfo, class AController* InstigatedBy, AActor* DamageCauser)
 {
 	if (Damage <= 0.0f || bIsDead)
 	return;
 
-	AController * InstigatorController = DamageCauser != nullptr && DamageCauser->GetOwner() != nullptr ? DamageCauser->GetOwner()->GetInstigatorController() : nullptr;
+	AController * InstigatorController = DamageCauser && DamageCauser->GetOwner() != nullptr ? DamageCauser->GetOwner()->GetInstigatorController() : nullptr;
 
-	if (DamageCauser != nullptr && DamageCauser != DamagedActor && IsFriendly(DamagedActor, DamageCauser != nullptr ? DamageCauser->GetOwner() : nullptr))
+	if (DamageCauser && DamageCauser != DamagedActor && IsFriendly(DamagedActor, DamageCauser->GetOwner()))
 	return;
 
 	Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
@@ -99,10 +98,10 @@ void USHealthComponent::HandleRadialDamage(AActor* DamagedActor, float Damage, c
 void USHealthComponent::HandleDamageHit(AActor * DamagedActor, float Damage, AController * InstigatedBy, FVector HitLocation, UPrimitiveComponent * FHitComponent, FName BoneName, FVector ShotFromDirection, const UDamageType * DamageType, AActor * DamageCauser)
 {
 	if (Damage <= 0.0f || bIsDead)
-		return;
+	return;
 
 	if (DamageCauser != DamagedActor && IsFriendly(DamagedActor, DamageCauser))
-		return;
+	return;
 
 	Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
 	bIsDead = Health <= 0.0f;

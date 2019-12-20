@@ -33,7 +33,7 @@ void AHMGrenadeWeapon::Fire()
 		FVector MuzzleLocation = MeshComponent->GetSocketLocation(MuzzleSocketName);
 	
 		FActorSpawnParameters ActorSpawnParams;
-		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 		ActorSpawnParams.Owner = WeaponOwner;
 
 		GetWorld()->SpawnActor<AHMProjectile>(ProjectileClass, MuzzleLocation, EyeRotation, ActorSpawnParams);
