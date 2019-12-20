@@ -85,10 +85,9 @@ void STitleWidget::Tick(const FGeometry& AllottedGeometry, const double InCurren
 	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
 
 	const float TotalLifespan = (FadeAnimationDuration + DurationOfTitle);
+
 	if (TitleRequestedTime > 0.0f && GetTimeAlive() >= TotalLifespan)
-	{
-		HideTitle();
-	}
+	HideTitle();
 
 }
 

@@ -79,9 +79,9 @@ FText STotalScoresWidget::GetFirstPlayerScore() const
 	float UpdatedScore = 0.0f;
 	FText ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(UpdatedScore));
 
-	if (PlayerOne.Score == 0.0f) {
-		return ScoreUpdate;
-	}
+	if (PlayerOne.Score == 0.0f)
+	return ScoreUpdate;
+
 	ScoreUpdate = FText::Format(NSLOCTEXT("GameFlow", "ScoreNr", "Score {0}"), FText::AsNumber(PlayerOne.Score));
 	return ScoreUpdate;
 }
@@ -91,9 +91,9 @@ FText STotalScoresWidget::GetFirstPlayerName() const
 	FString Name = FString("Empty Name");
 	FText NameUpdate = FText::FromString(Name);
 
-	if (PlayerOne.Name.IsEmpty()) {
-		return NameUpdate;
-	}
+	if (PlayerOne.Name.IsEmpty())
+	return NameUpdate;
+
 	NameUpdate = FText::FromString(PlayerOne.Name);
 	return NameUpdate;
 }
