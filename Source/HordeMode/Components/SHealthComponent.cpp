@@ -73,11 +73,16 @@ void USHealthComponent::Heal(float HealAmount)
 	OnHealthChanged.Broadcast(this, Health, -HealAmount, nullptr, nullptr, nullptr);
 }
 
-/* Todo: Tweak this logic to feel right */
+// @todo Clean this up too much null checking and grendate weapon no firing / spawning projectile because of collision when enemies are in your face
 void USHealthComponent::HandleRadialDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, FVector Origin, FHitResult HitInfo, class AController* InstigatedBy, AActor* DamageCauser)
 {
 	if (Damage <= 0.0f || bIsDead)
-		return;
+	return;
+
+	AController * InstigatorController = DamageCauser != nullptr && DamageCauser->GetOwner() != nullptr ? DamageCauser->GetOwner()->GetInstigatorController() : nullptr;
+
+	if (DamageCauser != nullptr && DamageCauser != DamagedActor && IsFriendly(DamagedActor, DamageCauser != nullptr ? DamageCauser->GetOwner() : nullptr))
+	return;
 
 	Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
 	bIsDead = Health <= 0.0f;
@@ -86,8 +91,9 @@ void USHealthComponent::HandleRadialDamage(AActor* DamagedActor, float Damage, c
 	/* Call will only succeed on the server */
 	AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());
 
-	if (bIsDead && CurrentGameMode)
-		CurrentGameMode->OnActorKilled.Broadcast(DamageCauser, GetOwner(), InstigatedBy);
+	// Projectile -> Grenade Weapon -> Actor Owner
+	if (bIsDead && CurrentGameMode && InstigatorController) 
+	CurrentGameMode->OnActorKilled.Broadcast(DamageCauser, GetOwner(), InstigatorController);
 }
 
 void USHealthComponent::HandleDamageHit(AActor * DamagedActor, float Damage, AController * InstigatedBy, FVector HitLocation, UPrimitiveComponent * FHitComponent, FName BoneName, FVector ShotFromDirection, const UDamageType * DamageType, AActor * DamageCauser)
@@ -103,7 +109,6 @@ void USHealthComponent::HandleDamageHit(AActor * DamagedActor, float Damage, ACo
 
 	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
 	
-
 	/* Call will only succeed on the server */
 	AHMGameMode * CurrentGameMode = Cast<AHMGameMode>(GetWorld()->GetAuthGameMode());
 
