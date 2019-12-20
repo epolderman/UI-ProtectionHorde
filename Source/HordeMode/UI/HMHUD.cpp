@@ -8,6 +8,7 @@
 #include "Widgets/SWeakWidget.h" 
 #include "UI/Components/SKillWidget.h"
 #include "UI/Components/STotalScoresWidget.h"
+#include "UI/Components/SGameOverlay.h"
 #include "HMGameState.h"
 
 
@@ -32,7 +33,7 @@ void AHMHUD::BeginPlay()
 void AHMHUD::InitializeTotalKillsWidget()
 {
 	if (bisKillWidgetInitialized)
-		return;
+	return;
 
 	APlayerController * OwningPlayerController = this->GetOwningPlayerController();
 	AHMPlayerState * PlayerState = OwningPlayerController != nullptr ? Cast<AHMPlayerState>(OwningPlayerController->PlayerState) : nullptr;
@@ -44,13 +45,13 @@ void AHMHUD::InitializeTotalKillsWidget()
 	bisKillWidgetInitialized = true;
 
 	if (PlayerKills == 0)
-		TotalKillsWidget->SetVisibility(EVisibility::Hidden);
+	TotalKillsWidget->SetVisibility(EVisibility::Hidden);
 }
 
 void AHMHUD::InitializeTotalScoresWidget()
 {
 	if (bisTotalScoreWidgetInitialized)
-		return;
+	return;
 
 	UWorld * const MyWorld = GetWorld();
 	AHMGameState * GameState = MyWorld != nullptr ? Cast<AHMGameState>(MyWorld->GetGameState()) : nullptr;
@@ -59,7 +60,23 @@ void AHMHUD::InitializeTotalScoresWidget()
 	bisTotalScoreWidgetInitialized = true;
 
 	if (GameState->PlayerArray.Num() != 0)
-		TotalScoresWidget->SetVisibility(EVisibility::Visible);
+	TotalScoresWidget->SetVisibility(EVisibility::Visible);
+}
+
+void AHMHUD::ShowGameMenu()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Show Menu"));
+	// create menu, transition in
+	OverlayMenu = SNew(SGameOverlay).OwnerHud(this);
+	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(OverlayMenu.ToSharedRef()));
+
+	// OverlayMenu->TransitionIn();
+}
+
+void AHMHUD::HideGameMenu()
+{
+	// transition out -> remove widget
+	// OverlayMenu->TransitionOut();
 }
 
 void AHMHUD::ShowWaveTitle(int WaveNumber) {
@@ -81,7 +98,6 @@ void AHMHUD::HideWaveTitle() {
 	TitleWaveWidget = nullptr;
 	bIsTitleVisible = false;
 }
-
 
 void AHMHUD::UpdateTotalKills() {
 
@@ -110,7 +126,7 @@ void AHMHUD::UpdateTotalScores()
 	UWorld * const MyWorld = GetWorld();
 	AHMGameState * GameState = MyWorld != nullptr ? Cast<AHMGameState>(MyWorld->GetGameState()) : nullptr;
 	if (GameState == nullptr)
-		return;
+	return;
 
 	TotalScoresWidget->SetVisibility(EVisibility::Visible);
 	TotalScoresWidget->SetPlayerScores(GameState->PlayerArray);

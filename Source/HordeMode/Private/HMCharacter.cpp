@@ -11,6 +11,8 @@
 #include "HordeMode/Components/SHealthComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "HMPlayerState.h"
+#include "UI/HMHUD.h"
+#include <Kismet/GameplayStatics.h>
 
 /*	
 	Notes / Hot keys 
@@ -63,6 +65,7 @@ void AHMCharacter::BeginPlay()
 	Weapons.Add(StarterWeaponClass);
 	Weapons.Add(SecondaryWeaponClass);
 	CurrentWeaponIndex = EWeaponState::Regular;
+	UserHud = Cast<AHMHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
 
 	SpawnWeapon();
 	UpdateWeaponReticle();
@@ -154,6 +157,7 @@ void AHMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AHMCharacter::StartFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AHMCharacter::StopFire);
 	PlayerInputComponent->BindAction("SwitchWeapon", IE_Pressed, this, &AHMCharacter::SwitchWeapon);
+	PlayerInputComponent->BindAction("ShowGameMenu", IE_Pressed, UserHud, &AHMHUD::ShowGameMenu);
 }
 
 FVector AHMCharacter::GetPawnViewLocation() const

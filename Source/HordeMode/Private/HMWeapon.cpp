@@ -54,9 +54,8 @@ void AHMWeapon::StopFire()
 
 void AHMWeapon::Fire()
 {
-	if (Role < ROLE_Authority) {
-		ServerFire();
-	}
+	if (Role < ROLE_Authority)
+	ServerFire();
 
 	AActor * Owner = GetOwner();
 	if (Owner) {

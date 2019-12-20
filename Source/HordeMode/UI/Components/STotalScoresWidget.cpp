@@ -15,7 +15,8 @@ void STotalScoresWidget::Construct(const FArguments& InArgs)
 
 	FSlateFontInfo ResultFont = FSlateFontInfo(FPaths::ProjectContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 24);
 
-	// @todo: set up replication fetching and binding data - WIP
+	// @todo: We are restricting the player count to 2:
+	// set up a more robust score widget that takes an array of vals
 
 	ChildSlot.VAlign(VAlign_Top).HAlign(HAlign_Right)
 	[
@@ -59,7 +60,7 @@ void STotalScoresWidget::Construct(const FArguments& InArgs)
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
-/* Optimize these function */
+/* Todo: Optimize these functions */
 void STotalScoresWidget::SetPlayerScores(TArray<APlayerState*> PlayerScores)
 {
 	ScoreArray = PlayerScores;

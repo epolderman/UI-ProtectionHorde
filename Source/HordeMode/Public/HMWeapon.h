@@ -10,8 +10,10 @@ class UDamageType;
 class UParticleSystem;
 class UCameraShake;
 
-// Container for information hit scan weapon line trace
-// Vectors are less precise, less data over the network, "NetQuantize"
+/* 
+	Container for information hit scan weapon line trace
+	Vectors are less precise, less data over the network, "NetQuantize"
+*/
 
 USTRUCT()
 struct FHitScanTrace {

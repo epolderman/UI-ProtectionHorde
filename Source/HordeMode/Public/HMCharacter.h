@@ -5,6 +5,7 @@
 #include <DelegateCombinations.h>
 #include "HMCharacter.generated.h"
 
+class AHMHUD;
 class UCameraComponent;
 class USpringArmComponent;
 class AHMWeapon;
@@ -41,6 +42,9 @@ public:
 	void StopFire();
 
 protected:
+
+	AHMHUD * UserHud;
+
 	virtual void BeginPlay() override;
 
 	/* Inputs && Movement */
