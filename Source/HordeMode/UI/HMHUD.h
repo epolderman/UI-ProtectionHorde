@@ -42,13 +42,7 @@ public:
 
 	void HideWaveTitle();
 
-	void InitializeTotalKillsWidget();
-
-	void InitializeTotalScoresWidget();
-
-	void ShowGameMenu();
-
-	void HideGameMenu();
+	void ToggleGameMenu();
 
 protected:
 	TSharedPtr<STitleWidget> TitleWaveWidget;
@@ -64,6 +58,14 @@ protected:
 	bool bisKillWidgetInitialized;
 
 	bool bisTotalScoreWidgetInitialized;
+
+	bool bisOverlayMenuVisible;
+
+	void InitializeOverlayMenu();
+
+	void InitializeTotalKillsWidget();
+
+	void InitializeTotalScoresWidget();
 
 	virtual void BeginPlay() override;
 

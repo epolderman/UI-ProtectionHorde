@@ -17,6 +17,7 @@ AHMHUD::AHMHUD()
 	bIsTitleVisible = false;
 	bisKillWidgetInitialized = false;
 	bisTotalScoreWidgetInitialized = false;
+	bisOverlayMenuVisible = false;
 }
 
 void AHMHUD::PostInitializeComponents() {
@@ -28,6 +29,7 @@ void AHMHUD::BeginPlay()
 	Super::BeginPlay();
 	InitializeTotalKillsWidget();
 	InitializeTotalScoresWidget();
+	InitializeOverlayMenu();
 }
 
 void AHMHUD::InitializeTotalKillsWidget()
@@ -63,22 +65,25 @@ void AHMHUD::InitializeTotalScoresWidget()
 	TotalScoresWidget->SetVisibility(EVisibility::Visible);
 }
 
-void AHMHUD::ShowGameMenu()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Show Menu"));
-	// create menu, transition in
+/* Testing animating translate x for slide in like outer worlds */
+void AHMHUD::InitializeOverlayMenu() {
 	OverlayMenu = SNew(SGameOverlay).OwnerHud(this);
 	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(OverlayMenu.ToSharedRef()));
-
-	// OverlayMenu->TransitionIn();
+	OverlayMenu->TransitionOut();
 }
 
-void AHMHUD::HideGameMenu()
+void AHMHUD::ToggleGameMenu()
 {
-	// transition out -> remove widget
-	// OverlayMenu->TransitionOut();
+	UE_LOG(LogTemp, Warning, TEXT("Show Menu"));
+	if (bisOverlayMenuVisible) {
+		OverlayMenu->TransitionOut();
+		bisOverlayMenuVisible = false;
+	}
+	else {
+		bisOverlayMenuVisible = true;
+		OverlayMenu->TransitionIn();
+	}
 }
-
 void AHMHUD::ShowWaveTitle(int WaveNumber) {
 
 	UWorld* const MyWorld = GetWorld();

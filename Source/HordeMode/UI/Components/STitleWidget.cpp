@@ -55,7 +55,7 @@ void STitleWidget::HideTitle()
 {
 	// there is a bug in here because the actual widget is not being removed on one client
 	// the hud slam of the owning pointer is set to null on hidwavetitle
-	if (GEngine  && GEngine->GameViewport)
+	if (GEngine && GEngine->GameViewport)
 	{
 		GEngine->GameViewport->RemoveViewportWidgetContent(TitleContainer.ToSharedRef());
 		OwnerHud->HideWaveTitle();

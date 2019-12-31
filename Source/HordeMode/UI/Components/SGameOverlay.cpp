@@ -14,7 +14,8 @@ void SGameOverlay::Construct(const FArguments& InArgs)
 
 	FSlateFontInfo ResultFont = FSlateFontInfo(FPaths::ProjectContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 24);
 
-	//@todo try out different overlays
+	// @todo try out different overlays
+	// set position in viewport function to move overlay over
 
 	ChildSlot
 		.VAlign(VAlign_Center)
@@ -33,3 +34,18 @@ void SGameOverlay::Construct(const FArguments& InArgs)
 	
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
+
+void SGameOverlay::TransitionIn()
+{
+	this->SetVisibility(EVisibility::Visible);
+}
+
+void SGameOverlay::TransitionOut()
+{
+	this->SetVisibility(EVisibility::Hidden);
+}
+
+void SGameOverlay::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
+{
+	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
+}

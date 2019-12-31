@@ -157,7 +157,7 @@ void AHMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AHMCharacter::StartFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AHMCharacter::StopFire);
 	PlayerInputComponent->BindAction("SwitchWeapon", IE_Pressed, this, &AHMCharacter::SwitchWeapon);
-	PlayerInputComponent->BindAction("ShowGameMenu", IE_Pressed, UserHud, &AHMHUD::ShowGameMenu);
+	PlayerInputComponent->BindAction("ToggleGameMenu", IE_Pressed, UserHud, &AHMHUD::ToggleGameMenu);
 }
 
 FVector AHMCharacter::GetPawnViewLocation() const
