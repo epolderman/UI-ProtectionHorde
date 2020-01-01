@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
+#include <CurveHandle.h>
+#include "Animation/CurveSequence.h"
 
 class AHMHUD;
 
@@ -27,6 +29,12 @@ public:
 protected:
 
 	TWeakObjectPtr<class AHMHUD> OwnerHud;
+
+	FCurveSequence IntroAnimation;
+	FCurveHandle ScaleCurveX;
+	FCurveHandle ScaleCurveY;
+
+	FVector2D GetItemScale() const;
 
 private:
 
