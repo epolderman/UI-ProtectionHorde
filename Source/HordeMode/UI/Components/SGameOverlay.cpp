@@ -40,14 +40,21 @@ END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
 void SGameOverlay::TransitionIn()
 {
+	if (CurrentState == EVisibleState::VS_Visible)
+		return;
+
 	this->SetVisibility(EVisibility::Visible);
 	VisibleAnimation.Play(this->AsShared());
+	CurrentState = EVisibleState::VS_Animating;
 }
 
 void SGameOverlay::TransitionOut()
 {
+	if (CurrentState == EVisibleState::VS_Hidden)
+		return;
+
 	VisibleAnimation.PlayReverse(this->AsShared());
-	this->SetVisibility(EVisibility::Collapsed);
+	CurrentState = EVisibleState::VS_Animating;
 }
 
 
@@ -59,4 +66,17 @@ FVector2D SGameOverlay::GetItemScale() const
 void SGameOverlay::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
 {
 	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
+
+	if (VisibleAnimation.IsAtStart() && CurrentState == EVisibleState::VS_Animating)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Firing -> Collapsed State"));
+		SetVisibility(EVisibility::Collapsed);
+		CurrentState = EVisibleState::VS_Hidden;
+	}
+
+	if (VisibleAnimation.IsAtEnd() && CurrentState == EVisibleState::VS_Animating)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Firing -> Visible State"));
+		CurrentState = EVisibleState::VS_Visible;
+	}
 }
