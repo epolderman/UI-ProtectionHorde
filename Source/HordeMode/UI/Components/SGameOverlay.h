@@ -9,15 +9,16 @@
 
 class AHMHUD;
 
-/**
- * 
+/*
+	Overlay to hold in game menu data.
+	Could be: Ammo, Weapons, &Character, Game Settings.
  */
 class HORDEMODE_API SGameOverlay : public SCompoundWidget
 {
 public:
 	SLATE_BEGIN_ARGS(SGameOverlay)
 	{}
-	SLATE_ARGUMENT(TWeakObjectPtr<class AHMHUD>, OwnerHud)
+	SLATE_ARGUMENT(class AHMHUD*, OwnerHud)
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs);
@@ -26,17 +27,27 @@ public:
 
 	void TransitionOut();
 
+	enum EVisibleState
+	{
+		VS_None,
+		VS_Animating,
+		VS_Visible,
+		VS_Hidden,
+	};
+
 protected:
+	AHMHUD * OwnerHud;
 
-	TWeakObjectPtr<class AHMHUD> OwnerHud;
+	EVisibleState CurrentState;
 
-	FCurveSequence IntroAnimation;
+	FCurveSequence VisibleAnimation;
+
 	FCurveHandle ScaleCurveX;
+
 	FCurveHandle ScaleCurveY;
 
 	FVector2D GetItemScale() const;
 
 private:
-
 	virtual void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;
 };

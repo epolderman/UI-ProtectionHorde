@@ -13,25 +13,27 @@ BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SGameOverlay::Construct(const FArguments& InArgs)
 {
 	OwnerHud = InArgs._OwnerHud;
-
+	CurrentState = EVisibleState::VS_Hidden;
+	this->SetVisibility(EVisibility::Collapsed);
 	FSlateFontInfo ResultFont = FSlateFontInfo(FPaths::ProjectContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 24);
+	VisibleAnimation = FCurveSequence();
+	ScaleCurveX = VisibleAnimation.AddCurve(0.2f, 0.3f, ECurveEaseFunction::QuadOut);
+	ScaleCurveY = VisibleAnimation.AddCurve(0.f, 0.2f);
 
 	// @todo try out different overlays
-	// set position in viewport function to move overlay over
 
-	ChildSlot
+		ChildSlot
 		.VAlign(VAlign_Center)
 		.HAlign(HAlign_Center)
-		[
-	
-		SNew(SBorder)
-.DesiredSizeScale(this, &SGameOverlay::GetItemScale)
+	[
+			SNew(SBorder)
+			.DesiredSizeScale(this, &SGameOverlay::GetItemScale)
 		[
 			SNew(STextBlock)
 			.Font(ResultFont)
 			.Text(FText::FromString("Game Menu Overlay"))
 		]
-		];
+	];
 
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
@@ -39,15 +41,13 @@ END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SGameOverlay::TransitionIn()
 {
 	this->SetVisibility(EVisibility::Visible);
-	IntroAnimation = FCurveSequence();
-	ScaleCurveX = IntroAnimation.AddCurve(0.2f, 0.3f, ECurveEaseFunction::QuadOut);
-	ScaleCurveY = IntroAnimation.AddCurve(0.f, 0.2f);
-	IntroAnimation.Play(this->AsShared());
+	VisibleAnimation.Play(this->AsShared());
 }
 
 void SGameOverlay::TransitionOut()
 {
-	this->SetVisibility(EVisibility::Hidden);
+	VisibleAnimation.PlayReverse(this->AsShared());
+	this->SetVisibility(EVisibility::Collapsed);
 }
 
 
@@ -59,8 +59,4 @@ FVector2D SGameOverlay::GetItemScale() const
 void SGameOverlay::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
 {
 	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
-
-	if (IntroAnimation.IsPlaying()) {
-		UE_LOG(LogTemp, Warning, TEXT("Is Playing--->"));
-	}
 }

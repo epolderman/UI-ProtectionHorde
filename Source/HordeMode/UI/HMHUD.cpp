@@ -69,7 +69,6 @@ void AHMHUD::InitializeTotalScoresWidget()
 void AHMHUD::InitializeOverlayMenu() {
 	OverlayMenu = SNew(SGameOverlay).OwnerHud(this);
 	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(OverlayMenu.ToSharedRef()));
-	OverlayMenu->TransitionOut();
 }
 
 void AHMHUD::ToggleGameMenu()
