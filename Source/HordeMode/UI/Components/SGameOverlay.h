@@ -9,6 +9,13 @@
 
 class AHMHUD;
 
+enum class EVisibleState : uint8 {
+	VS_None,
+	VS_Animating,
+	VS_Visible,
+	VS_Hidden,
+};
+
 /*
 	Overlay to hold in game menu data.
 	Could be: Ammo, Weapons, &Character, Game Settings.
@@ -26,14 +33,6 @@ public:
 	void TransitionIn();
 
 	void TransitionOut();
-
-	enum EVisibleState
-	{
-		VS_None,
-		VS_Animating,
-		VS_Visible,
-		VS_Hidden,
-	};
 
 protected:
 	AHMHUD * OwnerHud;
