@@ -69,14 +69,10 @@ void SGameOverlay::Tick(const FGeometry& AllottedGeometry, const double InCurren
 
 	if (VisibleAnimation.IsAtStart() && CurrentState == EVisibleState::VS_Animating)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Firing -> Collapsed State"));
 		SetVisibility(EVisibility::Collapsed);
 		CurrentState = EVisibleState::VS_Hidden;
 	}
 
 	if (VisibleAnimation.IsAtEnd() && CurrentState == EVisibleState::VS_Animating)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Firing -> Visible State"));
 		CurrentState = EVisibleState::VS_Visible;
-	}
 }
