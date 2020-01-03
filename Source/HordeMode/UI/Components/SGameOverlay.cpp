@@ -18,9 +18,7 @@ void SGameOverlay::Construct(const FArguments& InArgs)
 	FSlateFontInfo ResultFont = FSlateFontInfo(FPaths::ProjectContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 24);
 	VisibleAnimation = FCurveSequence();
 	ScaleCurveX = VisibleAnimation.AddCurve(0.2f, 0.3f, ECurveEaseFunction::QuadOut);
-	ScaleCurveY = VisibleAnimation.AddCurve(0.f, 0.2f);
-
-	// @todo try out different overlays
+	ScaleCurveY = VisibleAnimation.AddCurve(0.0f, 0.2f);
 
 		ChildSlot
 		.VAlign(VAlign_Center)
