@@ -55,7 +55,13 @@ protected:
 
 	FCurveHandle ScaleCurveY;
 
+	FCurveSequence TranslateAnimation;
+
+	FCurveHandle TranslateX;
+
 	FVector2D GetItemScale() const;
+
+	FVector2D GetItemPosition() const;
 
 private:
 	virtual void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;

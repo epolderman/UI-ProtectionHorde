@@ -6,6 +6,9 @@
 #include <SOverlay.h>
 #include <SlateFontInfo.h>
 #include <Paths.h>
+#include <SCanvas.h>
+#include <SBorder.h>
+#include <SConstraintCanvas.h>
 
 /* Take a look at FCurveSequence and FCurveHandle */
 
@@ -19,13 +22,24 @@ void SGameOverlay::Construct(const FArguments& InArgs)
 	VisibleAnimation = FCurveSequence();
 	ScaleCurveX = VisibleAnimation.AddCurve(0.2f, 0.3f, ECurveEaseFunction::QuadOut);
 	ScaleCurveY = VisibleAnimation.AddCurve(0.0f, 0.2f);
+	// TranslateAnimation = FCurveSequence();
+	// TranslateX = TranslateAnimation.AddCurve(0.0, 1.0, ECurveEaseFunction::QuadIn);
+		/*SNew(SConstraintCanvas)
+		+ SConstraintCanvas::Slot()*/
+
+		/*SNew(SCanvas)
+		+ SCanvas::Slot()
+			.HAlign(HAlign_Center)
+			.VAlign(VAlign_Center)
+			.Position(FVector2D(0, 0)) // doesnt take a delegate for polling & animation. how to translate then?
+			.Size(FVector2D(100.0f, 40.0f))*/
+
 
 		ChildSlot
 		.VAlign(VAlign_Center)
 		.HAlign(HAlign_Center)
 	[
-			SNew(SBorder)
-			.DesiredSizeScale(this, &SGameOverlay::GetItemScale)
+		SNew(SBorder).DesiredSizeScale(this, &SGameOverlay::GetItemScale)
 		[
 			SNew(STextBlock)
 			.Font(ResultFont)
@@ -43,6 +57,7 @@ void SGameOverlay::TransitionIn()
 
 	this->SetVisibility(EVisibility::Visible);
 	VisibleAnimation.Play(this->AsShared());
+	// TranslateAnimation.Play(this->AsShared());
 	CurrentState = EVisibleState::VS_Animating;
 }
 
@@ -59,6 +74,11 @@ void SGameOverlay::TransitionOut()
 FVector2D SGameOverlay::GetItemScale() const
 {
 	return FVector2D(ScaleCurveX.GetLerp(), ScaleCurveY.GetLerp());
+}
+
+FVector2D SGameOverlay::GetItemPosition() const
+{
+	return FVector2D(TranslateX.GetLerp(), 0);
 }
 
 void SGameOverlay::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
