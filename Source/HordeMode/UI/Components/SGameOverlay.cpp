@@ -83,6 +83,7 @@ FVector2D SGameOverlay::GetItemPosition() const
 
 void SGameOverlay::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
 {
+
 	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
 
 	if (VisibleAnimation.IsAtStart() && CurrentState == EVisibleState::VS_Animating)

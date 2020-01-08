@@ -69,6 +69,7 @@ FText STitleWidget::GetTitleText() const
 
 FSlateFontInfo STitleWidget::GetTitleFont() const
 {
+	//@todo refactor with FCurveSequence, this is to imperative
 	FSlateFontInfo ResultFont;
 	const int32 StartFontSize = 12;
 
