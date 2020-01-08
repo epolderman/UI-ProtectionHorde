@@ -24,16 +24,30 @@ void SGameOverlay::Construct(const FArguments& InArgs)
 	ScaleCurveY = VisibleAnimation.AddCurve(0.0f, 0.2f);
 	// TranslateAnimation = FCurveSequence();
 	// TranslateX = TranslateAnimation.AddCurve(0.0, 1.0, ECurveEaseFunction::QuadIn);
-		/*SNew(SConstraintCanvas)
+
+	/* Perfect Layout for Erik killed AI_Player_One Widget*/
+	//ChildSlot
+	//	.VAlign(VAlign_Center)
+	//	.HAlign(HAlign_Center)
+	//	[
+	//		SNew(SBorder).DesiredSizeScale(this, &SGameOverlay::GetItemScale)
+	//		[
+	//			SNew(STextBlock)
+	//			.Font(ResultFont)
+	//	.Text(FText::FromString("Game Menu Overlay"))
+	//		]
+	//	];
+
+
+			/*SNew(SConstraintCanvas)
 		+ SConstraintCanvas::Slot()*/
 
-		/*SNew(SCanvas)
+		/* SNew(SCanvas)
 		+ SCanvas::Slot()
-			.HAlign(HAlign_Center)
-			.VAlign(VAlign_Center)
-			.Position(FVector2D(0, 0)) // doesnt take a delegate for polling & animation. how to translate then?
-			.Size(FVector2D(100.0f, 40.0f))*/
-
+		.HAlign(HAlign_Center)
+		.VAlign(VAlign_Center)
+		.Position(FVector2D(0, 0)) // doesnt take a delegate for polling & animation. how to translate then?
+		.Size(FVector2D(100.0f, 40.0f))*/
 
 		ChildSlot
 		.VAlign(VAlign_Center)
