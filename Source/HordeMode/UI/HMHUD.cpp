@@ -67,13 +67,12 @@ void AHMHUD::InitializeTotalScoresWidget()
 
 /* Testing animating translate x for slide in like outer worlds */
 void AHMHUD::InitializeOverlayMenu() {
-	OverlayMenu = SNew(SGameOverlay).OwnerHud(this);
+	OverlayMenu = SNew(SGameOverlay).OwnerHud(this).Text(FText::FromString("SOverlay"));
 	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(OverlayMenu.ToSharedRef()));
 }
 
 void AHMHUD::ToggleGameMenu()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Show Menu"));
 	if (bisOverlayMenuVisible) {
 		OverlayMenu->TransitionOut();
 		bisOverlayMenuVisible = false;
