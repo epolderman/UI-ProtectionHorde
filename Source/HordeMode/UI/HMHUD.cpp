@@ -65,7 +65,10 @@ void AHMHUD::InitializeTotalScoresWidget()
 	TotalScoresWidget->SetVisibility(EVisibility::Visible);
 }
 
-/* Testing animating translate x for slide in like outer worlds */
+/* @todo This needs to be a bigger container component that holds a list of these SGameOverlay
+	Widgets so in case 2 enemies die at the same time, it displays in a list.
+*/
+
 void AHMHUD::InitializeOverlayMenu() {
 	OverlayMenu = SNew(SGameOverlay).OwnerHud(this).Text(FText::FromString("SOverlay"));
 	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(OverlayMenu.ToSharedRef()));
