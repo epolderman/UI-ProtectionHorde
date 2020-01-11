@@ -10,6 +10,7 @@
 #include "UI/Components/STotalScoresWidget.h"
 #include "UI/Components/SGameOverlay.h"
 #include "HMGameState.h"
+#include "UI/Components/SKillContentContainer.h"
 
 
 AHMHUD::AHMHUD()
@@ -70,20 +71,23 @@ void AHMHUD::InitializeTotalScoresWidget()
 */
 
 void AHMHUD::InitializeOverlayMenu() {
-	OverlayMenu = SNew(SGameOverlay).OwnerHud(this).Text(FText::FromString("SOverlay"));
-	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(OverlayMenu.ToSharedRef()));
+	// OverlayMenu = SNew(SGameOverlay).OwnerHud(this).Text(FText::FromString("SOverlay"));
+	// GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(OverlayMenu.ToSharedRef()));
+	KillList = SNew(SKillContentContainer).OwnerHud(this);
+	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(KillList.ToSharedRef()));
 }
 
 void AHMHUD::ToggleGameMenu()
 {
-	if (bisOverlayMenuVisible) {
+	KillList->SetVisibility(EVisibility::Visible);
+	/*if (bisOverlayMenuVisible) {
 		OverlayMenu->TransitionOut();
 		bisOverlayMenuVisible = false;
 	}
 	else {
 		bisOverlayMenuVisible = true;
 		OverlayMenu->TransitionIn();
-	}
+	}*/
 }
 void AHMHUD::ShowWaveTitle(int WaveNumber) {
 

@@ -23,6 +23,7 @@ class STitleWidget;
 class SKillWidget;
 class STotalScoresWidget;
 class SGameOverlay;
+class SKillContentContainer;
 
 UCLASS()
 class HORDEMODE_API AHMHUD : public AHUD
@@ -52,6 +53,8 @@ protected:
 	TSharedPtr<STotalScoresWidget> TotalScoresWidget;
 
 	TSharedPtr<SGameOverlay> OverlayMenu;
+
+	TSharedPtr<SKillContentContainer> KillList;
 
 	bool bIsTitleVisible;
 
