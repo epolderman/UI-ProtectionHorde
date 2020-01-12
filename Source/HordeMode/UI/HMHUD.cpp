@@ -79,7 +79,6 @@ void AHMHUD::InitializeOverlayMenu() {
 
 void AHMHUD::ToggleGameMenu()
 {
-	KillList->SetVisibility(EVisibility::Visible);
 	/*if (bisOverlayMenuVisible) {
 		OverlayMenu->TransitionOut();
 		bisOverlayMenuVisible = false;

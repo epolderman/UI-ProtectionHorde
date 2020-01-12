@@ -35,8 +35,8 @@ class HORDEMODE_API SGameOverlay : public SCompoundWidget
 public:
 	SLATE_BEGIN_ARGS(SGameOverlay)
 	{}
-	SLATE_ATTRIBUTE(FText, Text)
-	SLATE_ARGUMENT(class AHMHUD*, OwnerHud)
+	SLATE_ARGUMENT(FText, TextToShow)
+	// SLATE_ARGUMENT(class AHMHUD*, OwnerHud)
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs);
@@ -45,8 +45,9 @@ public:
 
 	void TransitionOut();
 
+	FText TextToShow;
 protected:
-	AHMHUD * OwnerHud;
+	// AHMHUD * OwnerHud;
 
 	EVisibleState CurrentState;
 
@@ -58,7 +59,6 @@ protected:
 
 	FVector2D GetItemScale() const;
 
-	TAttribute<FText> Text;
 private:
 	virtual void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;
 };
