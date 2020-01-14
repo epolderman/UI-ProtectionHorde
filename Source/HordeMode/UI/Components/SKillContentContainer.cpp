@@ -20,12 +20,6 @@ void SKillContentContainer::Construct(const FArguments& InArgs)
 
 	OwnerHud = InArgs._OwnerHud;
 	FontForKills = FSlateFontInfo(FPaths::ProjectContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 24);
-	/* Dummy Data First */
-	Items.Add(MakeShareable(new FString("Erik Killed Enemy 1")));
-	Items.Add(MakeShareable(new FString("Erik Killed Enemy 2")));
-
-
-
 	ChildSlot.HAlign(HAlign_Right).VAlign(VAlign_Center)
 		[
 			SNew(SWrapBox)
@@ -40,6 +34,12 @@ void SKillContentContainer::Construct(const FArguments& InArgs)
 		]
 		];
 	
+}
+
+void SKillContentContainer::AddSlot(FString Value)
+{
+	Items.Add(MakeShareable(new FString(Value)));
+	ListViewWidget->RequestListRefresh();
 }
 
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION

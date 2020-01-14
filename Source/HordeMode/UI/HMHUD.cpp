@@ -137,6 +137,8 @@ void AHMHUD::UpdateTotalScores()
 	if (GameState == nullptr)
 	return;
 
+	KillList->AddSlot("Erik Killed Enemy");
+
 	TotalScoresWidget->SetVisibility(EVisibility::Visible);
 	TotalScoresWidget->SetPlayerScores(GameState->PlayerArray);
 }

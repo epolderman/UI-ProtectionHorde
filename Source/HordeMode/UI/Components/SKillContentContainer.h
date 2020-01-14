@@ -23,7 +23,7 @@ public:
 
 	void Construct(const FArguments& InArgs);
 
-	// void AddKill(SGameOverlay Kill);
+	void AddSlot(FString Value);
 
 protected:
 	AHMHUD * OwnerHud;
