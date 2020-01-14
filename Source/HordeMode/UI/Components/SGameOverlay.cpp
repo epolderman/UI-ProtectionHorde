@@ -23,6 +23,7 @@ void SGameOverlay::Construct(const FArguments& InArgs)
 	VisibleAnimation = FCurveSequence();
 	ScaleCurveX = VisibleAnimation.AddCurve(0.2f, 0.3f, ECurveEaseFunction::QuadOut);
 	ScaleCurveY = VisibleAnimation.AddCurve(0.0f, 0.2f);
+	hasShownAndFaded = false;
 
 		ChildSlot
 		.VAlign(VAlign_Top)
@@ -34,6 +35,7 @@ void SGameOverlay::Construct(const FArguments& InArgs)
 		]
 	];
 
+	// starting animation ->
 	this->TransitionIn();
 
 }
@@ -47,6 +49,8 @@ void SGameOverlay::TransitionIn()
 	this->SetVisibility(EVisibility::Visible);
 	VisibleAnimation.Play(this->AsShared());
 	CurrentState = EVisibleState::VS_Animating;
+	
+	
 }
 
 void SGameOverlay::TransitionOut()
@@ -54,7 +58,11 @@ void SGameOverlay::TransitionOut()
 	if (CurrentState == EVisibleState::VS_Hidden)
 		return;
 
+	ScaleCurveX = VisibleAnimation.AddCurve(0.9f, 1.5f, ECurveEaseFunction::QuadOut);
+	ScaleCurveY = VisibleAnimation.AddCurve(0.0f, 0.9f);
+
 	VisibleAnimation.PlayReverse(this->AsShared());
+
 	CurrentState = EVisibleState::VS_Animating;
 }
 
@@ -70,12 +78,19 @@ void SGameOverlay::Tick(const FGeometry& AllottedGeometry, const double InCurren
 
 	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
 
+	// animating to end -> this code is nasty and technically works but needs a better solid animation state changes
+	// and updates the top level container of when the animation is done
 	if (VisibleAnimation.IsAtStart() && CurrentState == EVisibleState::VS_Animating)
 	{
 		SetVisibility(EVisibility::Collapsed);
 		CurrentState = EVisibleState::VS_Hidden;
+		hasShownAndFaded = true;
+		UE_LOG(LogTemp, Warning, TEXT("DROPPING BOMBSSSS ----->"));
 	}
 
-	if (VisibleAnimation.IsAtEnd() && CurrentState == EVisibleState::VS_Animating)
+	// animating to show -> 
+	if (VisibleAnimation.IsAtEnd() && CurrentState == EVisibleState::VS_Animating) {
 		CurrentState = EVisibleState::VS_Visible;
+		TransitionOut();
+	}
 }

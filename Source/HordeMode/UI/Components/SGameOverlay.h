@@ -6,6 +6,7 @@
 #include "Widgets/SCompoundWidget.h"
 #include <CurveHandle.h>
 #include "Animation/CurveSequence.h"
+#include <Engine/EngineTypes.h>
 
 class AHMHUD;
 
@@ -58,6 +59,10 @@ protected:
 	FCurveHandle ScaleCurveY;
 
 	FVector2D GetItemScale() const;
+
+	FTimerHandle TimeAnimationHandler;
+
+	bool hasShownAndFaded;
 
 private:
 	virtual void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;
