@@ -49,8 +49,6 @@ void SGameOverlay::TransitionIn()
 	this->SetVisibility(EVisibility::Visible);
 	VisibleAnimation.Play(this->AsShared());
 	CurrentState = EVisibleState::VS_Animating;
-	
-	
 }
 
 void SGameOverlay::TransitionOut()
@@ -58,8 +56,8 @@ void SGameOverlay::TransitionOut()
 	if (CurrentState == EVisibleState::VS_Hidden)
 		return;
 
-	ScaleCurveX = VisibleAnimation.AddCurve(0.9f, 1.5f, ECurveEaseFunction::QuadOut);
-	ScaleCurveY = VisibleAnimation.AddCurve(0.0f, 0.9f);
+	ScaleCurveX = VisibleAnimation.AddCurve(0.0f, 2.5f, ECurveEaseFunction::QuadOut);
+	ScaleCurveY = VisibleAnimation.AddCurve(0.0f, 2.0f);
 
 	VisibleAnimation.PlayReverse(this->AsShared());
 

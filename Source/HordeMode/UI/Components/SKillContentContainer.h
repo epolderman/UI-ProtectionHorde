@@ -28,15 +28,11 @@ public:
 protected:
 	AHMHUD * OwnerHud;
 
-	// list of strings
 	TArray<TSharedPtr<FString>> Items;
 
-	FReply ButtonPressed();
-
-	// new textbox of string to list
 	TSharedRef<ITableRow> OnGenerateRowForList(TSharedPtr<FString> NewItem, const TSharedRef<STableViewBase>& OwnerTable);
 
-	TSharedPtr< SListView< TSharedPtr<FString> > > ListViewWidget;
+	TSharedPtr<SListView<TSharedPtr<FString>>> ListViewWidget;
 
 	FSlateFontInfo FontForKills;
 };

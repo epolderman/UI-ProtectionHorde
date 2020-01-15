@@ -38,17 +38,18 @@ void SKillContentContainer::Construct(const FArguments& InArgs)
 
 void SKillContentContainer::AddSlot(FString Value)
 {
-	Items.Add(MakeShareable(new FString(Value)));
+	Items.Push(MakeShareable(new FString(Value)));
 	ListViewWidget->RequestListRefresh();
-}
-
-END_SLATE_FUNCTION_BUILD_OPTIMIZATION
-
-FReply SKillContentContainer::ButtonPressed()
-{
-	Items.Add(MakeShareable(new FString("Dummy Data")));
-	ListViewWidget->RequestListRefresh();
-	return FReply::Handled();
+	/*
+	
+	clear list depending on predicate (how do we load it, toggle it for removing)
+	for (int32 Index = 0; Index != Items.Num(); ++Index)
+	{
+		if(Items[Index]->)
+	}
+	
+	*/
+	UE_LOG(LogTemp, Warning, TEXT("List Size %i"), Items.Num());
 }
 
 
@@ -57,7 +58,9 @@ TSharedRef<ITableRow> SKillContentContainer::OnGenerateRowForList(TSharedPtr<FSt
 	return SNew(STableRow< TSharedPtr<FString> >, OwnerTable).Padding(2.0f)
 		[
 			SNew(SGameOverlay).TextToShow(FText::FromString(*Item.Get()))
-			// SNew(STextBlock).Text(FText::FromString(*Item.Get())).Font(FontForKills).ColorAndOpacity(FColor::Green)
 		];
 }
+
+END_SLATE_FUNCTION_BUILD_OPTIMIZATION
+
 
