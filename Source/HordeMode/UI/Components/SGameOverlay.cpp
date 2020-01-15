@@ -83,7 +83,7 @@ void SGameOverlay::Tick(const FGeometry& AllottedGeometry, const double InCurren
 		SetVisibility(EVisibility::Collapsed);
 		CurrentState = EVisibleState::VS_Hidden;
 		hasShownAndFaded = true;
-		UE_LOG(LogTemp, Warning, TEXT("DROPPING BOMBSSSS ----->"));
+		UE_LOG(LogTemp, Warning, TEXT("Clearing Visible State of Widget"));
 	}
 
 	// animating to show -> 
