@@ -8,7 +8,7 @@
 #include "Widgets/SWeakWidget.h" 
 #include "UI/Components/SKillWidget.h"
 #include "UI/Components/STotalScoresWidget.h"
-#include "UI/Components/SGameOverlay.h"
+#include "UI/Components/SSlideInText.h"
 #include "HMGameState.h"
 #include "UI/Components/SKillContentContainer.h"
 

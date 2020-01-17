@@ -22,7 +22,7 @@
 class STitleWidget;
 class SKillWidget;
 class STotalScoresWidget;
-class SGameOverlay;
+class SSlideInText;
 class SKillContentContainer;
 
 UCLASS()
@@ -52,7 +52,7 @@ protected:
 
 	TSharedPtr<STotalScoresWidget> TotalScoresWidget;
 
-	TSharedPtr<SGameOverlay> OverlayMenu;
+	TSharedPtr<SSlideInText> OverlayMenu;
 
 	TSharedPtr<SKillContentContainer> KillList;
 

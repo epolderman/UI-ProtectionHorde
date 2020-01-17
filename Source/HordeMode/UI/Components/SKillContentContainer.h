@@ -10,7 +10,7 @@
 #include <STableRow.h>
 
 
-class SGameOverlay;
+class SSlideInText;
 class AHMHUD;
 
 class HORDEMODE_API SKillContentContainer : public SCompoundWidget

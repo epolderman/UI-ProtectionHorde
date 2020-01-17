@@ -12,7 +12,7 @@
 #include <SScrollBox.h>
 #include <SButton.h>
 #include <SharedPointer.h>
-#include "SGameOverlay.h"
+#include "SSlideInText.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SKillContentContainer::Construct(const FArguments& InArgs)
@@ -38,26 +38,19 @@ void SKillContentContainer::Construct(const FArguments& InArgs)
 
 void SKillContentContainer::AddSlot(FString Value)
 {
+	// Do I need to clear items?
 	Items.Push(MakeShareable(new FString(Value)));
 	ListViewWidget->RequestListRefresh();
-	/*
-	
-	clear list depending on predicate (how do we load it, toggle it for removing)
-	for (int32 Index = 0; Index != Items.Num(); ++Index)
-	{
-		if(Items[Index]->)
-	}
-	
-	*/
-	UE_LOG(LogTemp, Warning, TEXT("List Size %i"), Items.Num());
 }
 
 
-TSharedRef<ITableRow> SKillContentContainer::OnGenerateRowForList(TSharedPtr<FString> Item, const TSharedRef<STableViewBase>& OwnerTable)
+TSharedRef<ITableRow> SKillContentContainer::OnGenerateRowForList(TSharedPtr<FString> Item, 
+																  const TSharedRef<STableViewBase>& OwnerTable)
 {
+
 	return SNew(STableRow< TSharedPtr<FString> >, OwnerTable).Padding(2.0f)
 		[
-			SNew(SGameOverlay).TextToShow(FText::FromString(*Item.Get()))
+			SNew(SSlideInText).TextToShow(FText::FromString(*Item.Get()))
 		];
 }
 

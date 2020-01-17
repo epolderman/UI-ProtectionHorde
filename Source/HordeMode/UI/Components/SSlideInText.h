@@ -18,9 +18,6 @@ enum class EVisibleState : uint8 {
 };
 
 /*
-	Overlay to hold in game menu data.
-	Could be: Ammo, Weapons, &Character, Game Settings.
-
 	Reducing the work done every frame:
 	Epic converted some of the HUDs from blueprints to C++. 
 	They added invalidation panels to widgets. Widgets with invalidation panels 
@@ -31,13 +28,12 @@ enum class EVisibleState : uint8 {
 
 	Slate prefers polling over invalidation. 
  */
-class HORDEMODE_API SGameOverlay : public SCompoundWidget
+class HORDEMODE_API SSlideInText : public SCompoundWidget
 {
 public:
-	SLATE_BEGIN_ARGS(SGameOverlay)
+	SLATE_BEGIN_ARGS(SSlideInText)
 	{}
 	SLATE_ARGUMENT(FText, TextToShow)
-	// SLATE_ARGUMENT(class AHMHUD*, OwnerHud)
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs);
@@ -48,7 +44,6 @@ public:
 
 	FText TextToShow;
 protected:
-	// AHMHUD * OwnerHud;
 
 	EVisibleState CurrentState;
 

@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "SGameOverlay.h"
+#include "SSlideInText.h"
 #include "SlateOptMacros.h"
 #include <DeclarativeSyntaxSupport.h>
 #include <SOverlay.h>
@@ -13,7 +13,7 @@
 /* Take a look at FCurveSequence and FCurveHandle */
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
-void SGameOverlay::Construct(const FArguments& InArgs)
+void SSlideInText::Construct(const FArguments& InArgs)
 {
 	// OwnerHud = InArgs._OwnerHud;
 	TextToShow = InArgs._TextToShow;
@@ -29,7 +29,7 @@ void SGameOverlay::Construct(const FArguments& InArgs)
 		.VAlign(VAlign_Top)
 		.HAlign(HAlign_Center)
 	[
-		SNew(SBorder).DesiredSizeScale(this, &SGameOverlay::GetItemScale)
+		SNew(SBorder).DesiredSizeScale(this, &SSlideInText::GetItemScale)
 		[
 			SNew(STextBlock).Font(ResultFont).Text(TextToShow).ColorAndOpacity(FColor::Green)
 		]
@@ -41,7 +41,7 @@ void SGameOverlay::Construct(const FArguments& InArgs)
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
-void SGameOverlay::TransitionIn()
+void SSlideInText::TransitionIn()
 {
 	if (CurrentState == EVisibleState::VS_Visible)
 		return;
@@ -51,7 +51,7 @@ void SGameOverlay::TransitionIn()
 	CurrentState = EVisibleState::VS_Animating;
 }
 
-void SGameOverlay::TransitionOut()
+void SSlideInText::TransitionOut()
 {
 	if (CurrentState == EVisibleState::VS_Hidden)
 		return;
@@ -65,13 +65,13 @@ void SGameOverlay::TransitionOut()
 }
 
 
-FVector2D SGameOverlay::GetItemScale() const
+FVector2D SSlideInText::GetItemScale() const
 {
 	return FVector2D(ScaleCurveX.GetLerp(), ScaleCurveY.GetLerp());
 }
 
 
-void SGameOverlay::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
+void SSlideInText::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
 {
 
 	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
