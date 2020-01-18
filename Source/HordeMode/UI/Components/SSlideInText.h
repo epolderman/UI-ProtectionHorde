@@ -8,6 +8,7 @@
 #include "Animation/CurveSequence.h"
 #include <Engine/EngineTypes.h>
 
+
 class AHMHUD;
 
 enum class EVisibleState : uint8 {
@@ -34,6 +35,7 @@ public:
 	SLATE_BEGIN_ARGS(SSlideInText)
 	{}
 	SLATE_ARGUMENT(FText, TextToShow)
+	SLATE_ARGUMENT(TWeakObjectPtr<class UWorld>, OwnerWorld)
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs);
@@ -45,6 +47,8 @@ public:
 	FText TextToShow;
 protected:
 
+	TWeakObjectPtr<class UWorld> OwnerWorld;
+
 	EVisibleState CurrentState;
 
 	FCurveSequence VisibleAnimation;
@@ -53,9 +57,13 @@ protected:
 
 	FCurveHandle ScaleCurveY;
 
-	FVector2D GetItemScale() const;
+	FCurveSequence FadeAnimation;
 
-	FTimerHandle TimeAnimationHandler;
+	FCurveHandle Fade;
+
+	FLinearColor GetColor() const;
+
+	FVector2D GetItemScale() const;
 
 	bool hasShownAndFaded;
 

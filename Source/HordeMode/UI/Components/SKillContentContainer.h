@@ -8,6 +8,7 @@
 #include <SharedPointer.h>
 #include <SListView.h>
 #include <STableRow.h>
+#include <Engine/World.h>
 
 
 class SSlideInText;
@@ -19,6 +20,7 @@ public:
 	SLATE_BEGIN_ARGS(SKillContentContainer)
 	{}
 	SLATE_ARGUMENT(class AHMHUD *, OwnerHud)
+	SLATE_ARGUMENT(TWeakObjectPtr<class UWorld>, OwnerWorld)
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs);
@@ -27,6 +29,8 @@ public:
 
 protected:
 	AHMHUD * OwnerHud;
+
+	TWeakObjectPtr<class UWorld> OwnerWorld;
 
 	TArray<TSharedPtr<FString>> Items;
 

@@ -71,22 +71,15 @@ void AHMHUD::InitializeTotalScoresWidget()
 */
 
 void AHMHUD::InitializeOverlayMenu() {
-	// OverlayMenu = SNew(SGameOverlay).OwnerHud(this).Text(FText::FromString("SOverlay"));
-	// GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(OverlayMenu.ToSharedRef()));
-	KillList = SNew(SKillContentContainer).OwnerHud(this);
+
+	UWorld* const MyWorld = GetWorld();
+	KillList = SNew(SKillContentContainer).OwnerHud(this).OwnerWorld(MyWorld);
 	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(KillList.ToSharedRef()));
 }
 
 void AHMHUD::ToggleGameMenu()
 {
-	/*if (bisOverlayMenuVisible) {
-		OverlayMenu->TransitionOut();
-		bisOverlayMenuVisible = false;
-	}
-	else {
-		bisOverlayMenuVisible = true;
-		OverlayMenu->TransitionIn();
-	}*/
+	// handle this
 }
 void AHMHUD::ShowWaveTitle(int WaveNumber) {
 
@@ -137,7 +130,7 @@ void AHMHUD::UpdateTotalScores()
 	if (GameState == nullptr)
 	return;
 
-	KillList->AddSlot("Erik Killed Enemy");
+	KillList->AddSlot("Erik Killed Enemy 1");
 
 	TotalScoresWidget->SetVisibility(EVisibility::Visible);
 	TotalScoresWidget->SetPlayerScores(GameState->PlayerArray);
