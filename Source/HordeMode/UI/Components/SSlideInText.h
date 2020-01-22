@@ -13,7 +13,8 @@ class AHMHUD;
 
 enum class EVisibleState : uint8 {
 	VS_None,
-	VS_Animating,
+	VS_Animating_To_Show,
+	VS_Animating_To_Hide,
 	VS_Visible,
 	VS_Hidden,
 };
@@ -35,7 +36,6 @@ public:
 	SLATE_BEGIN_ARGS(SSlideInText)
 	{}
 	SLATE_ARGUMENT(FText, TextToShow)
-	SLATE_ARGUMENT(TWeakObjectPtr<class UWorld>, OwnerWorld)
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs);
@@ -47,8 +47,6 @@ public:
 	FText TextToShow;
 protected:
 
-	TWeakObjectPtr<class UWorld> OwnerWorld;
-
 	EVisibleState CurrentState;
 
 	FCurveSequence VisibleAnimation;
@@ -59,7 +57,7 @@ protected:
 
 	FCurveSequence FadeAnimation;
 
-	FCurveHandle Fade;
+	FCurveHandle FadeValue;
 
 	FLinearColor GetColor() const;
 

@@ -51,7 +51,7 @@ TSharedRef<ITableRow> SKillContentContainer::OnGenerateRowForList(TSharedPtr<FSt
 
 	return SNew(STableRow< TSharedPtr<FString> >, OwnerTable).Padding(2.0f)
 		[
-			SNew(SSlideInText).TextToShow(FText::FromString(*Item.Get())).OwnerWorld(OwnerWorld)
+			SNew(SSlideInText).TextToShow(FText::FromString(*Item.Get()))
 		];
 }
 
