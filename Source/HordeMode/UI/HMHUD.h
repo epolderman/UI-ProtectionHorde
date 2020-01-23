@@ -45,6 +45,8 @@ public:
 
 	void ToggleGameMenu();
 
+	void AddKillToWidget(FString Kill);
+
 protected:
 	TSharedPtr<STitleWidget> TitleWaveWidget;
 
@@ -64,7 +66,7 @@ protected:
 
 	bool bisOverlayMenuVisible;
 
-	void InitializeOverlayMenu();
+	void InitializeKillOverlayWidget();
 
 	void InitializeTotalKillsWidget();
 

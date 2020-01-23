@@ -14,8 +14,6 @@
 /* 
 
 	Take a look at FCurveSequence and FCurveHandle
-	Animation needs a re-work.
-	Remove World for Kill Container, and this.
 
 */
 
@@ -33,7 +31,6 @@ void SSlideInText::Construct(const FArguments& InArgs)
 
 	FadeAnimation = FCurveSequence();
 	FadeValue = FadeAnimation.AddCurve(0.0f, 5.0, ECurveEaseFunction::QuadIn);
-	hasShownAndFaded = false;
 
 		ChildSlot
 		.VAlign(VAlign_Top)
@@ -97,7 +94,5 @@ void SSlideInText::Tick(const FGeometry& AllottedGeometry, const double InCurren
 	if (FadeAnimation.IsAtStart() && CurrentState == EVisibleState::VS_Animating_To_Hide) {
 		CurrentState = EVisibleState::VS_Hidden;
 		this->SetVisibility(EVisibility::Hidden);
-		//@todo: May no need: Look into flag removal
-		hasShownAndFaded = true;
 	}
 }

@@ -19,7 +19,6 @@ void SKillContentContainer::Construct(const FArguments& InArgs)
 {
 
 	OwnerHud = InArgs._OwnerHud;
-	OwnerWorld = InArgs._OwnerWorld;
 	FontForKills = FSlateFontInfo(FPaths::ProjectContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 24);
 	ChildSlot.HAlign(HAlign_Right).VAlign(VAlign_Center)
 		[

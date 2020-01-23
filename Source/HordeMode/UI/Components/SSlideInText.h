@@ -12,7 +12,6 @@
 class AHMHUD;
 
 enum class EVisibleState : uint8 {
-	VS_None,
 	VS_Animating_To_Show,
 	VS_Animating_To_Hide,
 	VS_Visible,
@@ -62,8 +61,6 @@ protected:
 	FLinearColor GetColor() const;
 
 	FVector2D GetItemScale() const;
-
-	bool hasShownAndFaded;
 
 private:
 	virtual void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;

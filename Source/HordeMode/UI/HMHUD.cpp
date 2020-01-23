@@ -30,7 +30,7 @@ void AHMHUD::BeginPlay()
 	Super::BeginPlay();
 	InitializeTotalKillsWidget();
 	InitializeTotalScoresWidget();
-	InitializeOverlayMenu();
+	InitializeKillOverlayWidget();
 }
 
 void AHMHUD::InitializeTotalKillsWidget()
@@ -66,21 +66,28 @@ void AHMHUD::InitializeTotalScoresWidget()
 	TotalScoresWidget->SetVisibility(EVisibility::Visible);
 }
 
-/* @todo This needs to be a bigger container component that holds a list of these SGameOverlay
-	Widgets so in case 2 enemies die at the same time, it displays in a list.
-*/
+void AHMHUD::InitializeKillOverlayWidget() {
 
-void AHMHUD::InitializeOverlayMenu() {
-
-	UWorld* const MyWorld = GetWorld();
-	KillList = SNew(SKillContentContainer).OwnerHud(this).OwnerWorld(MyWorld);
+	KillList = SNew(SKillContentContainer).OwnerHud(this);
 	GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(KillList.ToSharedRef()));
 }
 
 void AHMHUD::ToggleGameMenu()
 {
-	// handle this
+	// @todo this will be the game menu to hold all in game inventory, char, weapons
 }
+
+/*  
+	1. Set up some type of naming scheme. (Enemies, User Characters)
+	2. Going to need to get information of instigator and victim. 
+	2.This needs to be called from GameMode when a death takes place. 
+*/
+void AHMHUD::AddKillToWidget(FString Kill)
+{
+	/* Should be for example: "Erik Killed Enemy #1 */
+	KillList->AddSlot(Kill);
+}
+
 void AHMHUD::ShowWaveTitle(int WaveNumber) {
 
 	UWorld* const MyWorld = GetWorld();
@@ -129,8 +136,6 @@ void AHMHUD::UpdateTotalScores()
 	AHMGameState * GameState = MyWorld != nullptr ? Cast<AHMGameState>(MyWorld->GetGameState()) : nullptr;
 	if (GameState == nullptr)
 	return;
-
-	KillList->AddSlot("Erik Killed Enemy 1");
 
 	TotalScoresWidget->SetVisibility(EVisibility::Visible);
 	TotalScoresWidget->SetPlayerScores(GameState->PlayerArray);
