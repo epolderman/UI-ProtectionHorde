@@ -77,7 +77,7 @@ void AHMHUD::ToggleGameMenu()
 	// @todo this will be the game menu to hold all in game inventory, char, weapons
 }
 
-/*  
+/*  alt + click select multiple lines ---->
 	1. Set up some type of naming scheme. (Enemies, User Characters)
 	2. Going to need to get information of instigator and victim. 
 	2.This needs to be called from GameMode when a death takes place. 

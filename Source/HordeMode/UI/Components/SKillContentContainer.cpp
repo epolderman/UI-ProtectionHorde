@@ -1,15 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-//@todo clean up after first iteration
 #include "SKillContentContainer.h"
 #include "SlateOptMacros.h"
 #include <SWrapBox.h>
-#include <STextBlock.h>
-#include <SOverlay.h>
 #include <SListView.h>
-#include <SHeaderRow.h>
-#include <Text.h>
-#include <SScrollBox.h>
 #include <SButton.h>
 #include <SharedPointer.h>
 #include "SSlideInText.h"
@@ -38,7 +30,8 @@ void SKillContentContainer::Construct(const FArguments& InArgs)
 
 void SKillContentContainer::AddSlot(FString Value)
 {
-	// Do I need to clear items?
+	// @todo Do I need to clear items? 
+	// Do I need to clear after every round? Performance implications?
 	Items.Push(MakeShareable(new FString(Value)));
 	ListViewWidget->RequestListRefresh();
 }
